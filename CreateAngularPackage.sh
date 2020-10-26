@@ -1,3 +1,5 @@
+set -e
+
 specurl=$1
 packageversion=$2
 
