@@ -8,7 +8,14 @@ echo Version $packageversion
 
 mkdir -p ./service
 
-curl $specurl > ./spec.json
+case $specurl in
+    "http"*) 
+		echo Downloading spec file
+		curl $specurl > ./spec.json	;;
+    *) 
+		echo Copying spec file
+		cp $specurl ./spec.json ;;
+esac
 
 #apt-get update -y && apt-get upgrade -y
 if java -version 2>&1 >/dev/null | egrep -q "\S+\s+version" ; then
