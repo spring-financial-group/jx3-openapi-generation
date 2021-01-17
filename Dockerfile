@@ -1,5 +1,4 @@
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine
+FROM node:alpine
 
-RUN dotnet tool install --global --version 5.6.2 Swashbuckle.AspNetCore.Cli
-
-ENV PATH="${PATH}:/root/.dotnet/tools"
+RUN npm install @openapitools/openapi-generator-cli@1.0.18-4.3.1 -g
+RUN npm install -g @angular/compiler-cli@8.2.14 @angular/platform-server@8.2.14 @angular/compiler@8.2.14
