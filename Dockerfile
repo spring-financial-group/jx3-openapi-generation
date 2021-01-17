@@ -8,4 +8,4 @@ RUN apt-get -y install default-jre
 
 ADD CreateAngularPackageV2.sh ./registry/CreateAngularPackage.sh
 
-RUN chmod +x ./CreateAngularPackage.sh
+RUN chmod +x ./registry/CreateAngularPackage.sh
