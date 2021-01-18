@@ -6,6 +6,6 @@ RUN npm install -g @angular/compiler-cli@8.2.14 @angular/platform-server@8.2.14 
 RUN apt-get update
 RUN apt-get -y install default-jre
 
-ADD CreateAngularPackageV2.sh CreateAngularPackage.sh
+ADD CreateAngularPackageV2.sh CreateAngularPackageV2.sh
 
-RUN chmod +x CreateAngularPackage.sh
+RUN chmod +x CreateAngularPackageV2.sh

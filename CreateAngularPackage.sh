@@ -46,8 +46,8 @@ ngc
 
 cd ..
 
-cp ./.npmrc ./dist/.npmrc 
-cp ./package.json ./dist/package.json 
+cp ./.npmrc ./dist/.npmrc
+cp ./package.json ./dist/package.json
 
 cd dist
 
