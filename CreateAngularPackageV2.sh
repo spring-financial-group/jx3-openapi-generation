@@ -1,10 +1,5 @@
 set -e
 
-cd registry
-
-echo $PWD
-ls
-
 specurl=$1
 packageversion=$2
 
