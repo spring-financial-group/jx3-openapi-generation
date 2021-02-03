@@ -11,7 +11,7 @@ mkdir -p ./service
 case $specurl in
     "http"*) 
 		echo Downloading spec file
-		curl $specurl > ./spec.json	;;
+		curl --max-time 300 $specurl > ./spec.json	;;
     *) 
 		echo Copying spec file
 		cp $specurl ./spec.json ;;
