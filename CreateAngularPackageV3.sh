@@ -1,14 +1,3 @@
-download_spec() {
-	case $specurl in
-    "http"*) 
-		echo Downloading spec file
-		curl --max-time 300 $specurl > ./spec.json	;;
-    *) 
-		echo Copying spec file
-		cp $specurl ./spec.json ;;
-	esac
-}
-
 set -e
 
 specurl=$1
@@ -19,9 +8,14 @@ echo Version $packageversion
 
 mkdir -p ./service
 
-for i in {1..5};
-do download_spec && break || sleep 15;
-done
+case $specurl in
+    "http"*) 
+		echo Downloading spec file
+		curl --connect-timeout 30 --retry 300 --retry-delay 5 $specurl > ./spec.json	;;
+    *) 
+		echo Copying spec file
+		cp $specurl ./spec.json ;;
+	esac
 
 npx openapi-generator generate -i ./spec.json -g typescript-angular -o service --additional-properties=fileNaming=camelCase --enable-post-process-file
 
