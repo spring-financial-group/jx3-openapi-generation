@@ -7,7 +7,5 @@ RUN apt-get update
 RUN apt-get -y install default-jre
 
 ADD CreateAngularPackageV2.sh CreateAngularPackageV2.sh
-ADD CreateAngularPackageV3.sh CreateAngularPackageV3.sh
 
 RUN chmod +x CreateAngularPackageV2.sh
-RUN chmod +x CreateAngularPackageV3.sh
