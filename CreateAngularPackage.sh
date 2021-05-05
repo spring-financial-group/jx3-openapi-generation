@@ -35,7 +35,7 @@ cp ./tsconfig.json ./service/tsconfig.json
 
 cd service
 
-npm install --save rxjs
+npm install --save rxjs@6.6.7
 npm install --save zone.js@0.9.1
 npm install --save @angular/core@8.2.14 
 npm install --save @angular/common@8.2.14 
