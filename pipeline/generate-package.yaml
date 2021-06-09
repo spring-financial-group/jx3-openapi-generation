@@ -27,12 +27,14 @@ spec:
       echo $(kubectl get services -A | grep jx-$REPO_OWNER-$APP_NAME-pr-$PULL_NUMBER | awk '$2 == "'$APP_NAME'" {print $4}') > pod_ip
       echo "0.0.$PULL_NUMBER-rc.$BUILD_ID"
       echo "0.0.$PULL_NUMBER-rc.$BUILD_ID" > package_version
+      ls
     workingDir: /workspace/source
   - image: craggs/openapi-angular-builder
     name: moves-like-swagger
     resources: {}
     script: |
       #!/usr/bin/env sh
+      ls
       source .jx/variables.sh
       source  swagger-gen-variables.sh
       export PACKAGE_VERSION=$(cat package_version)
