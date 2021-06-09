@@ -23,24 +23,18 @@ spec:
       source /workspace/source/.jx/variables.sh
       jx secret copy --create-namespace --selector "secret.jenkins-x.io/replica-source=true" -n preview-secrets --to jx-$REPO_OWNER-$APP_NAME-pr-$PULL_NUMBER
       jx preview create
-      echo $(kubectl get services -A | grep jx-$REPO_OWNER-$APP_NAME-pr-$PULL_NUMBER | awk '$2 == "'$APP_NAME'" {print $4}')
+      echo "POD_IP $(kubectl get services -A | grep jx-$REPO_OWNER-$APP_NAME-pr-$PULL_NUMBER | awk '$2 == "'$APP_NAME'" {print $4}')"
       echo $(kubectl get services -A | grep jx-$REPO_OWNER-$APP_NAME-pr-$PULL_NUMBER | awk '$2 == "'$APP_NAME'" {print $4}') > pod_ip
-      echo "0.0.$PULL_NUMBER-rc.$BUILD_ID"
+      echo "PACKAGE VERSION: 0.0.$PULL_NUMBER-rc.$BUILD_ID"
       echo "0.0.$PULL_NUMBER-rc.$BUILD_ID" > package_version
-      ls
     workingDir: /workspace/source
   - image: craggs/openapi-angular-builder
     name: moves-like-swagger
     resources: {}
     script: |
-      #!/usr/bin/env sh
-      ls
-      source .jx/variables.sh
-      source  swagger-gen-variables.sh
-      export POD_IP=$(cat pod_ip)
-      export PACKAGE_VERSION=$(cat package_version)
+      #!/usr/bin/env bash
       cd ./registry
-      /CreateAngularPackageV2.sh http://$POD_IP:5000/swagger/v1/swagger.json $PACKAGE_VERSION
+      /CreateAngularPackageV2.sh http://$(cat pod_ip):5000/swagger/v1/swagger.json $(cat package_version)
     workingDir: /workspace/source
   workspaces:
   - description: The git repo will be cloned onto the volume backing this workspace
