@@ -32,6 +32,7 @@ spec:
     script: |
       #!/usr/bin/env sh
       source .jx/variables.sh
+      source  swagger-gen-variables.sh
       export PACKAGE_VERSION=$(cat package_version)
       cd ./registry
       /CreateAngularPackageV2.sh $SWAGGERURL $PACKAGE_VERSION
