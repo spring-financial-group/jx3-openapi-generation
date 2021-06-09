@@ -33,14 +33,14 @@ spec:
     name: moves-like-swagger
     resources: {}
     script: |
-        #!/usr/bin/env sh
-        ls
-        source .jx/variables.sh
-        source  swagger-gen-variables.sh
-        export POD_IP=$(cat pod_ip)
-        export PACKAGE_VERSION=$(cat package_version)
-        cd ./registry
-        /CreateAngularPackageV2.sh http://$POD_IP:5000/swagger/v1/swagger.json $PACKAGE_VERSION
+      #!/usr/bin/env sh
+      ls
+      source .jx/variables.sh
+      source  swagger-gen-variables.sh
+      export POD_IP=$(cat pod_ip)
+      export PACKAGE_VERSION=$(cat package_version)
+      cd ./registry
+      /CreateAngularPackageV2.sh http://$POD_IP:5000/swagger/v1/swagger.json $PACKAGE_VERSION
     workingDir: /workspace/source
   workspaces:
   - description: The git repo will be cloned onto the volume backing this workspace
