@@ -40,7 +40,7 @@ spec:
       export PACKAGE_VERSION=$(cat package_version)
       cd ./registry
       /CreateAngularPackageV2.sh $SWAGGERURL $PACKAGE_VERSION
-    workingDir: /workspace
+    workingDir: /workspace/source
   workspaces:
   - description: Swagger generation will occur on the staging url once it has been built.
     mountPath: /workspace

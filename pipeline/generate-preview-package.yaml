@@ -41,7 +41,7 @@ spec:
         export PACKAGE_VERSION=$(cat package_version)
         cd ./registry
         /CreateAngularPackageV2.sh http://$POD_IP:5000/swagger/v1/swagger.json $PACKAGE_VERSION
-    workingDir: /workspace
+    workingDir: /workspace/source
   workspaces:
   - description: The git repo will be cloned onto the volume backing this workspace
     mountPath: /workspace
