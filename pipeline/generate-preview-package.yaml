@@ -23,7 +23,7 @@ spec:
       #!/usr/bin/env sh
       source /workspace/source/.jx/variables.sh
       echo $(kubectl get services -A | grep jx-$REPO_OWNER-$APP_NAME-pr-$PULL_NUMBER | awk '$2 == "'$APP_NAME'" {print $4}') > pod_ip
-      echo 0.0.$PULL_NUMBER-rc.$BUILD_ID > package_version
+      sed -i 's/0.0.0/0.0.$PULL_NUMBER-rc.'$BUILD_ID'/g' ../registry/package.json
     workingDir: /workspace/source
   - image: craggs/openapi-angular-builder
     name: moves-like-swagger
@@ -32,7 +32,7 @@ spec:
       #!/usr/bin/env sh
       source /workspace/source/.jx/variables.sh
       cd ./registry
-      /CreateAngularPackageV2.sh http://$(cat ../pod_ip):5000/swagger/v1/swagger.json $(cat ../package_version)
+      /CreateAngularPackageV2.sh http://$(cat ../pod_ip):5000/swagger/v1/swagger.json
     workingDir: /workspace/source
   workspaces:
   - description: The git repo will be cloned onto the volume backing this workspace
