@@ -25,7 +25,7 @@ spec:
       echo version $version
       cd ./registry
       /CreateAngularPackageV2.sh https://api-staging.jx.mqube.build/swagger/docs/v1/$SwaggerServiceName $VERSION
-    workingDir: /workspace
+    workingDir: /workspace/source
   workspaces:
   - description: Swagger generation will occur on the staging url once it has been built.
     mountPath: /workspace
