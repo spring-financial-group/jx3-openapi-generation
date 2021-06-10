@@ -33,6 +33,7 @@ spec:
     resources: {}
     script: |
       #!/usr/bin/env sh
+      source /workspace/source/.jx/variables.sh
       cd ./registry
       echo $PACKAGE_VERSION
       /CreateAngularPackageV2.sh http://$(cat pod_ip):5000/swagger/v1/swagger.json $(cat package_version)
