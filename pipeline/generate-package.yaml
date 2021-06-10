@@ -29,6 +29,7 @@ spec:
     script: |
       #!/usr/bin/env sh
       source /workspace/source/.jx/variables.sh
+      cd ./registry
       /CreateAngularPackageV2.sh https://api-staging.jx.mqube.build/swagger/docs/v1/$SwaggerServiceName
     workingDir: /workspace/source
   workspaces:
