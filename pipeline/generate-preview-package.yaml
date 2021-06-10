@@ -31,8 +31,9 @@ spec:
     script: |
       #!/usr/bin/env sh
       source /workspace/source/.jx/variables.sh
+      cd ./registry
       /CreateAngularPackageV2.sh http://$(cat ../pod_ip):5000/swagger/v1/swagger.json $(cat ../package_version)
-    workingDir: /workspace/source/registry
+    workingDir: /workspace/source
   workspaces:
   - description: The git repo will be cloned onto the volume backing this workspace
     mountPath: /workspace
