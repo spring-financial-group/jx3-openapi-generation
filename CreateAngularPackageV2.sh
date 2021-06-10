@@ -3,7 +3,6 @@ set -e
 specurl=$1
 
 echo Spec Url $specurl
-echo Version $packageversion
 
 mkdir -p ./service
 
