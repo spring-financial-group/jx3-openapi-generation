@@ -14,6 +14,7 @@ spec:
         optional: true
     name: ""
     resources: {}
+    workingDir: /workspace/source
   steps:
   - image: ghcr.io/jenkins-x/jx-promote:0.0.234
     name: get-pod-ip
@@ -21,18 +22,17 @@ spec:
     script: |
       #!/usr/bin/env sh
       source /workspace/source/.jx/variables.sh
-      echo "POD_IP $(kubectl get services -A | grep jx-$REPO_OWNER-$APP_NAME-pr-$PULL_NUMBER | awk '$2 == "'$APP_NAME'" {print $4}')"
       echo $(kubectl get services -A | grep jx-$REPO_OWNER-$APP_NAME-pr-$PULL_NUMBER | awk '$2 == "'$APP_NAME'" {print $4}') > pod_ip
-      echo "PACKAGE VERSION: 0.0.$PULL_NUMBER-rc.$BUILD_ID"
-      echo "0.0.$PULL_NUMBER-rc.$BUILD_ID" > package_version
+      echo 0.0.$PULL_NUMBER-rc.$BUILD_ID > package_version
     workingDir: /workspace/source
   - image: craggs/openapi-angular-builder
     name: moves-like-swagger
     resources: {}
     script: |
       #!/usr/bin/env sh
+      source /workspace/source/.jx/variables.sh
       cd ./registry
-      /CreateAngularPackageV2.sh http://$(cat pod_ip):5000/swagger/v1/swagger.json $(cat package_version)
+      /CreateAngularPackageV2.sh http://$(cat ../pod_ip):5000/swagger/v1/swagger.json $(cat ../package_version)
     workingDir: /workspace/source
   workspaces:
   - description: The git repo will be cloned onto the volume backing this workspace
