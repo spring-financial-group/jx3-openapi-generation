@@ -16,7 +16,7 @@ spec:
     resources: {}
   steps:
   - image: ghcr.io/jenkins-x/jx-promote:0.0.234
-    name: promote-jx-preview
+    name: get-pod-ip
     resources: {}
     script: |
       #!/usr/bin/env sh
