@@ -1,0 +1,41 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  creationTimestamp: null
+  name: git-clone-pr
+spec:
+  stepTemplate:
+    env:
+    - name: HOME
+      value: /tekton/home
+    envFrom:
+    - secretRef:
+        name: jx-boot-job-env-vars
+        optional: true
+    name: ""
+    resources: {}
+    workingDir: /workspace/source
+  steps:
+  - image: ghcr.io/jenkins-x/jx-promote:0.0.234
+    name: get-pod-ip
+    resources: {}
+    script: |
+      #!/usr/bin/env sh
+      source /workspace/source/.jx/variables.sh
+      echo $(kubectl get services -A | grep jx-$REPO_OWNER-$APP_NAME-pr-$PULL_NUMBER | awk '$2 == "'$APP_NAME'" {print $4}') > pod_ip
+      sed -i 's/0.0.0/0.0.'$PULL_NUMBER'-rc.'$BUILD_ID'/g' ./registry/package.json
+    workingDir: /workspace/source
+  - image: craggs/openapi-angular-builder
+    name: moves-like-swagger
+    resources: {}
+    script: |
+      #!/usr/bin/env sh
+      source /workspace/source/.jx/variables.sh
+      yarn global add @openapitools/openapi-generator-cli
+      cd ./registry
+      /CreateAngularPackageV3.sh http://$(cat ../pod_ip):5000/swagger/v1/swagger.json
+    workingDir: /workspace/source
+  workspaces:
+  - description: The git repo will be cloned onto the volume backing this workspace
+    mountPath: /workspace
+    name: output

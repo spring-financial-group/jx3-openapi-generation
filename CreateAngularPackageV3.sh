@@ -1,10 +1,8 @@
 set -e
 
 specurl=$1
-packageversion=$2
 
 echo Spec Url $specurl
-echo Version $packageversion
 
 mkdir -p ./service
 
@@ -19,11 +17,9 @@ esac
 
 npx openapi-generator-cli generate -i ./spec.json -g typescript-angular -o service --additional-properties=fileNaming=camelCase --enable-post-process-file
 
-sed -i 's/0.0.0/'$packageversion'/g' ./package.json
-
 cp ./package.json ./service/package.json 
 cp ./tsconfig.json ./service/tsconfig.json 
-cp ./configuration.ts ./service/configuration.ts
+cp /configuration.ts ./service/configuration.ts
 
 cd service
 
