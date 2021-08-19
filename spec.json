@@ -1,0 +1,1800 @@
+{
+  "swagger": "2.0",
+  "basePath": "/",
+  "paths": {
+    "/CalculatedValues/affordability/overall_metrics": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "$ref": "#/definitions/AffordabilityOutput"
+            }
+          }
+        },
+        "operationId": "Calculate affordability",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/AffordabilityRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "affordability"
+        ]
+      }
+    },
+    "/CalculatedValues/general/distance_to_security_address": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate distance to security address",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/GeneralCalculationsDistanceToSecurityAddressRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "general-calculations"
+        ]
+      }
+    },
+    "/CalculatedValues/general/interest_cover_ratio": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate interest cover ratio",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/GeneralCalculationsInterestCoverRatioRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "general-calculations"
+        ]
+      }
+    },
+    "/CalculatedValues/general/loan_to_income": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate the loan to income ratio",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/GeneralCalculationsLoanToIncomeRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "general-calculations"
+        ]
+      }
+    },
+    "/CalculatedValues/general/loan_to_value": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate loan to value",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/GeneralCalculationsLTVRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "general-calculations"
+        ]
+      }
+    },
+    "/CalculatedValues/interest_only/apr": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate interest only APR",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterestOnlyAPRRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "interest-only"
+        ]
+      }
+    },
+    "/CalculatedValues/interest_only/end_of_fixed_period_balance": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate interest only end of fixed period balance",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterestOnlyEndOfFixedPeriodBalanceRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "interest-only"
+        ]
+      }
+    },
+    "/CalculatedValues/interest_only/end_of_fixed_period_cumulative_interest": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate interest-only cumulative interest over fixed period",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterestOnlyEndOfPeriodCumulativeInterestRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "interest-only"
+        ]
+      }
+    },
+    "/CalculatedValues/interest_only/fixed_period_monthly_payment": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate interest only fixed period monthly payment",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterestOnlyFixedPeriodMonthlyRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "interest-only"
+        ]
+      }
+    },
+    "/CalculatedValues/interest_only/illustrative_apr": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate interest only illustrative APR",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterestOnlyIllustrativeAPRRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "interest-only"
+        ]
+      }
+    },
+    "/CalculatedValues/interest_only/illustrative_reversion_period_monthly_payment": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate interest only illustrative reversion period monthly payment",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterestOnlyReversionPeriodMonthlyPaymentRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "interest-only"
+        ]
+      }
+    },
+    "/CalculatedValues/interest_only/max_early_repayment_charges": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate the maximum early repayment charge for the given years",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterestOnlyEarlyRepaymentChargeRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "interest-only"
+        ]
+      }
+    },
+    "/CalculatedValues/interest_only/monthly_rent_required": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate interest only monthly rent required",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterestOnlyRequiredRent"
+            }
+          }
+        ],
+        "tags": [
+          "interest-only"
+        ]
+      }
+    },
+    "/CalculatedValues/interest_only/price_per_pound": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate price per pound for interest-only",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterestOnlyPricePerPoundRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "interest-only"
+        ]
+      }
+    },
+    "/CalculatedValues/interest_only/reversion_period_monthly_payment": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate interest only reversion period monthly payment",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterestOnlyReversionPeriodMonthlyPaymentRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "interest-only"
+        ]
+      }
+    },
+    "/CalculatedValues/interest_only/total_cumulative_interest": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate interest-only cumulative interest over entire term",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterestOnlyTotalCumulativeInterestRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "interest-only"
+        ]
+      }
+    },
+    "/CalculatedValues/interest_only/total_payments": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate total payments made over entire term",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/InterestOnlyTotalPaymentsOverTermRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "interest-only"
+        ]
+      }
+    },
+    "/CalculatedValues/repayment/apr": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate repayment APR",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RepaymentAPRRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "repayment"
+        ]
+      }
+    },
+    "/CalculatedValues/repayment/end_of_fixed_term_balance": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate loan balance at end of fixed period",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RepaymentEndOfFixedTermBalancePostRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "repayment"
+        ]
+      }
+    },
+    "/CalculatedValues/repayment/erc_max_charges": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate the maximum early repayment charges for the given years",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/MaximumEarlyRepaymentChargePostRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "repayment"
+        ]
+      }
+    },
+    "/CalculatedValues/repayment/fixed_period_monthly_payment": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate repayment fixed period payment",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RepaymentFixedPeriodMonthlyPaymentPostRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "repayment"
+        ]
+      }
+    },
+    "/CalculatedValues/repayment/illustrative_apr": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate repayment illustrative APR",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RepaymentIllustrativeAPRRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "repayment"
+        ]
+      }
+    },
+    "/CalculatedValues/repayment/illustrative_reversion_period_monthly_payment": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate illustrative reversion period monthly payment",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RepaymentIllustrativeReversionPeriodMonthlyPaymentPostRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "repayment"
+        ]
+      }
+    },
+    "/CalculatedValues/repayment/monthly_rent_required": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate repayment monthly rent required",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RepaymentRequiredRent"
+            }
+          }
+        ],
+        "tags": [
+          "repayment"
+        ]
+      }
+    },
+    "/CalculatedValues/repayment/price_per_pound": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate the amount paid back per pound borrowed",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/PricePerPoundPostRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "repayment"
+        ]
+      }
+    },
+    "/CalculatedValues/repayment/reversion_period_monthly_payment": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate repayment reversion period payment",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RepaymentReversionMonthlyPaymentPostRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "repayment"
+        ]
+      }
+    },
+    "/CalculatedValues/repayment/total_amount_repaid": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate total amount repaid over total term",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RepaymentTotalRepaidPostRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "repayment"
+        ]
+      }
+    },
+    "/CalculatedValues/repayment/total_cumulative_interest": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate total interest paid over entire term",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RepaymentTotalInterestPostRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "repayment"
+        ]
+      }
+    },
+    "/CalculatedValues/repayment/total_interest_fixed_period": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "Success"
+          }
+        },
+        "operationId": "Calculate interest paid during fixed period",
+        "parameters": [
+          {
+            "name": "payload",
+            "required": true,
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/RepaymentTotalInterestFixedPeriodPostRequestModel"
+            }
+          }
+        ],
+        "tags": [
+          "repayment"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "Calculated Values API",
+    "version": "1.0",
+    "description": "Set of API endpoints for affordability and finance calculations"
+  },
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "tags": [
+    {
+      "name": "repayment",
+      "description": "Repayment mortgage calculations"
+    },
+    {
+      "name": "interest-only",
+      "description": "Interest-only mortgage calculations"
+    },
+    {
+      "name": "general-calculations",
+      "description": "General mortgage calculations"
+    },
+    {
+      "name": "affordability",
+      "description": "Affordability calculations"
+    }
+  ],
+  "definitions": {
+    "RepaymentAPRRequestModel": {
+      "required": [
+        "bbr",
+        "capitalized_fees",
+        "initial_rate",
+        "initial_term",
+        "loan_amount",
+        "redemption_fees",
+        "reversion_margin",
+        "total_term",
+        "upfront_fees"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "upfront_fees": {
+          "type": "number",
+          "description": "Non-capitalized Upfront Fees"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "redemption_fees": {
+          "type": "number",
+          "description": "Non-capitalized Redemption Fees"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "reversion_margin": {
+          "type": "number",
+          "description": "Reversion Rate"
+        },
+        "bbr": {
+          "type": "number",
+          "description": "BBR"
+        }
+      },
+      "type": "object"
+    },
+    "RepaymentIllustrativeAPRRequestModel": {
+      "required": [
+        "bbr_illustrative",
+        "capitalized_fees",
+        "initial_rate",
+        "initial_term",
+        "loan_amount",
+        "redemption_fees",
+        "reversion_margin",
+        "total_term",
+        "upfront_fees"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "upfront_fees": {
+          "type": "number",
+          "description": "Non-capitalized Upfront Fees"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "redemption_fees": {
+          "type": "number",
+          "description": "Non-capitalized Redemption Fees"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "reversion_margin": {
+          "type": "number",
+          "description": "Reversion Rate"
+        },
+        "bbr_illustrative": {
+          "type": "number",
+          "description": "Illustrative BBR"
+        }
+      },
+      "type": "object"
+    },
+    "RepaymentFixedPeriodMonthlyPaymentPostRequestModel": {
+      "required": [
+        "capitalized_fees",
+        "initial_rate",
+        "loan_amount",
+        "total_term"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        }
+      },
+      "type": "object"
+    },
+    "RepaymentReversionMonthlyPaymentPostRequestModel": {
+      "required": [
+        "bbr",
+        "capitalized_fees",
+        "initial_rate",
+        "initial_term",
+        "loan_amount",
+        "reversion_margin",
+        "total_term"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "reversion_margin": {
+          "type": "number",
+          "description": "Reversion Rate"
+        },
+        "bbr": {
+          "type": "number",
+          "description": "BBR"
+        }
+      },
+      "type": "object"
+    },
+    "RepaymentIllustrativeReversionPeriodMonthlyPaymentPostRequestModel": {
+      "required": [
+        "bbr_illustrative",
+        "capitalized_fees",
+        "initial_rate",
+        "initial_term",
+        "loan_amount",
+        "reversion_margin",
+        "total_term"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "reversion_margin": {
+          "type": "number",
+          "description": "Reversion Rate"
+        },
+        "bbr_illustrative": {
+          "type": "number",
+          "description": "Illustrative BBR"
+        }
+      },
+      "type": "object"
+    },
+    "RepaymentRequiredRent": {
+      "required": [
+        "basic_tax_payer",
+        "loan_amount",
+        "rate",
+        "total_term"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "rate": {
+          "type": "number",
+          "description": "Interest Rate"
+        },
+        "basic_tax_payer": {
+          "type": "boolean",
+          "description": "Basic Tax Bracket Status"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        }
+      },
+      "type": "object"
+    },
+    "RepaymentTotalInterestFixedPeriodPostRequestModel": {
+      "required": [
+        "capitalized_fees",
+        "initial_rate",
+        "initial_term",
+        "loan_amount",
+        "total_term"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        }
+      },
+      "type": "object"
+    },
+    "RepaymentTotalInterestPostRequestModel": {
+      "required": [
+        "bbr",
+        "capitalized_fees",
+        "initial_rate",
+        "initial_term",
+        "loan_amount",
+        "reversion_margin",
+        "total_term"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "reversion_margin": {
+          "type": "number",
+          "description": "Reversion Rate"
+        },
+        "bbr": {
+          "type": "number",
+          "description": "BBR"
+        }
+      },
+      "type": "object"
+    },
+    "RepaymentTotalRepaidPostRequestModel": {
+      "required": [
+        "bbr",
+        "capitalized_fees",
+        "initial_rate",
+        "initial_term",
+        "loan_amount",
+        "redemption_fees",
+        "reversion_margin",
+        "total_term",
+        "upfront_fees"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "upfront_fees": {
+          "type": "number",
+          "description": "Non-capitalized Upfront Fees"
+        },
+        "redemption_fees": {
+          "type": "number",
+          "description": "Non-capitalized Redemption Fees"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "reversion_margin": {
+          "type": "number",
+          "description": "Reversion Rate"
+        },
+        "bbr": {
+          "type": "number",
+          "description": "BBR"
+        }
+      },
+      "type": "object"
+    },
+    "RepaymentEndOfFixedTermBalancePostRequestModel": {
+      "required": [
+        "capitalized_fees",
+        "initial_rate",
+        "initial_term",
+        "loan_amount",
+        "total_term"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        }
+      },
+      "type": "object"
+    },
+    "MaximumEarlyRepaymentChargePostRequestModel": {
+      "required": [
+        "bbr",
+        "capitalized_fees",
+        "erc_percentage_year_1",
+        "initial_rate",
+        "initial_term",
+        "loan_amount",
+        "reversion_margin",
+        "total_term"
+      ],
+      "properties": {
+        "erc_percentage_year_1": {
+          "type": "number",
+          "description": "First Year Early Repayment Charge Percentage"
+        },
+        "erc_percentage_year_2": {
+          "type": "number",
+          "description": "Second Year Early Repayment Charge Percentage"
+        },
+        "erc_percentage_year_3": {
+          "type": "number",
+          "description": "Third Year Early Repayment Charge Percentage"
+        },
+        "erc_percentage_year_4": {
+          "type": "number",
+          "description": "Fourth Year Early Repayment Charge Percentage"
+        },
+        "erc_percentage_year_5": {
+          "type": "number",
+          "description": "Fifth Year Early Repayment Charge Percentage"
+        },
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "reversion_margin": {
+          "type": "number",
+          "description": "Reversion Rate"
+        },
+        "bbr": {
+          "type": "number",
+          "description": "BBR"
+        }
+      },
+      "type": "object"
+    },
+    "PricePerPoundPostRequestModel": {
+      "required": [
+        "bbr",
+        "capitalized_fees",
+        "initial_rate",
+        "initial_term",
+        "loan_amount",
+        "redemption_fees",
+        "reversion_margin",
+        "total_term",
+        "upfront_fees"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "upfront_fees": {
+          "type": "number",
+          "description": "Non-capitalized Upfront Fees"
+        },
+        "redemption_fees": {
+          "type": "number",
+          "description": "Non-capitalized Redemption Fees"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "reversion_margin": {
+          "type": "number",
+          "description": "Reversion Rate"
+        },
+        "bbr": {
+          "type": "number",
+          "description": "BBR"
+        }
+      },
+      "type": "object"
+    },
+    "InterestOnlyAPRRequestModel": {
+      "required": [
+        "bbr",
+        "capitalized_fees",
+        "initial_rate",
+        "initial_term",
+        "loan_amount",
+        "redemption_fees",
+        "reversion_margin",
+        "total_term",
+        "upfront_fees"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "upfront_fees": {
+          "type": "number",
+          "description": "Non-capitalized Upfront Fees"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "redemption_fees": {
+          "type": "number",
+          "description": "Non-capitalized Redemption Fees"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "reversion_margin": {
+          "type": "number",
+          "description": "Reversion Rate"
+        },
+        "bbr": {
+          "type": "number",
+          "description": "BBR"
+        }
+      },
+      "type": "object"
+    },
+    "InterestOnlyIllustrativeAPRRequestModel": {
+      "required": [
+        "bbr_illustrative",
+        "capitalized_fees",
+        "initial_rate",
+        "initial_term",
+        "loan_amount",
+        "redemption_fees",
+        "reversion_margin",
+        "total_term",
+        "upfront_fees"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "upfront_fees": {
+          "type": "number",
+          "description": "Non-capitalized Upfront Fees"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "redemption_fees": {
+          "type": "number",
+          "description": "Non-capitalized Redemption Fees"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "reversion_margin": {
+          "type": "number",
+          "description": "Reversion Rate"
+        },
+        "bbr_illustrative": {
+          "type": "number",
+          "description": "Illustrative BBR"
+        }
+      },
+      "type": "object"
+    },
+    "InterestOnlyFixedPeriodMonthlyRequestModel": {
+      "required": [
+        "capitalized_fees",
+        "initial_rate",
+        "loan_amount"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        }
+      },
+      "type": "object"
+    },
+    "InterestOnlyReversionPeriodMonthlyPaymentRequestModel": {
+      "required": [
+        "bbr_illustrative",
+        "capitalized_fees",
+        "loan_amount",
+        "reversion_margin"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "reversion_margin": {
+          "type": "number",
+          "description": "Reversion Rate"
+        },
+        "bbr_illustrative": {
+          "type": "number",
+          "description": "Illustrative BBR"
+        }
+      },
+      "type": "object"
+    },
+    "InterestOnlyRequiredRent": {
+      "required": [
+        "basic_tax_payer",
+        "loan_amount",
+        "rate"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "rate": {
+          "type": "number",
+          "description": "Interest Rate"
+        },
+        "basic_tax_payer": {
+          "type": "boolean",
+          "description": "Basic Tax Bracket Status"
+        }
+      },
+      "type": "object"
+    },
+    "InterestOnlyEndOfFixedPeriodBalanceRequestModel": {
+      "required": [
+        "capitalized_fees",
+        "loan_amount"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        }
+      },
+      "type": "object"
+    },
+    "InterestOnlyEndOfPeriodCumulativeInterestRequestModel": {
+      "required": [
+        "capitalized_fees",
+        "initial_rate",
+        "initial_term",
+        "loan_amount"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        }
+      },
+      "type": "object"
+    },
+    "InterestOnlyTotalCumulativeInterestRequestModel": {
+      "required": [
+        "bbr",
+        "capitalized_fees",
+        "initial_rate",
+        "initial_term",
+        "loan_amount",
+        "reversion_margin",
+        "total_term"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "reversion_margin": {
+          "type": "number",
+          "description": "Reversion Rate"
+        },
+        "bbr": {
+          "type": "number",
+          "description": "BBR"
+        }
+      },
+      "type": "object"
+    },
+    "InterestOnlyTotalPaymentsOverTermRequestModel": {
+      "required": [
+        "bbr",
+        "capitalized_fees",
+        "initial_rate",
+        "initial_term",
+        "loan_amount",
+        "redemption_fees",
+        "reversion_margin",
+        "total_term",
+        "upfront_fees"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "upfront_fees": {
+          "type": "number",
+          "description": "Non-capitalized Upfront Fees"
+        },
+        "redemption_fees": {
+          "type": "number",
+          "description": "Non-capitalized Redemption Fees"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "reversion_margin": {
+          "type": "number",
+          "description": "Reversion Rate"
+        },
+        "bbr": {
+          "type": "number",
+          "description": "BBR"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        }
+      },
+      "type": "object"
+    },
+    "InterestOnlyPricePerPoundRequestModel": {
+      "required": [
+        "bbr",
+        "capitalized_fees",
+        "initial_rate",
+        "initial_term",
+        "loan_amount",
+        "redemption_fees",
+        "reversion_margin",
+        "total_term",
+        "upfront_fees"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "upfront_fees": {
+          "type": "number",
+          "description": "Non-capitalized Upfront Fees"
+        },
+        "redemption_fees": {
+          "type": "number",
+          "description": "Non-capitalized Redemption Fees"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        },
+        "initial_rate": {
+          "type": "number",
+          "description": "Initial Rate"
+        },
+        "reversion_margin": {
+          "type": "number",
+          "description": "Reversion Rate"
+        },
+        "bbr": {
+          "type": "number",
+          "description": "BBR"
+        },
+        "initial_term": {
+          "type": "integer",
+          "description": "Initial Term Length"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total Term"
+        }
+      },
+      "type": "object"
+    },
+    "InterestOnlyEarlyRepaymentChargeRequestModel": {
+      "required": [
+        "capitalized_fees",
+        "erc_percentage_year_1",
+        "loan_amount"
+      ],
+      "properties": {
+        "erc_percentage_year_1": {
+          "type": "number",
+          "description": "First Year Early Repayment Charge Percentage"
+        },
+        "erc_percentage_year_2": {
+          "type": "number",
+          "description": "Second Year Early Repayment Charge Percentage"
+        },
+        "erc_percentage_year_3": {
+          "type": "number",
+          "description": "Third Year Early Repayment Charge Percentage"
+        },
+        "erc_percentage_year_4": {
+          "type": "number",
+          "description": "Fourth Year Early Repayment Charge Percentage"
+        },
+        "erc_percentage_year_5": {
+          "type": "number",
+          "description": "Fifth Year Early Repayment Charge Percentage"
+        },
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "capitalized_fees": {
+          "type": "number",
+          "description": "Capitalized Fees"
+        }
+      },
+      "type": "object"
+    },
+    "GeneralCalculationsLTVRequestModel": {
+      "required": [
+        "loan_amount"
+      ],
+      "properties": {
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount"
+        },
+        "market_value": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Market value of the property",
+          "example": 0
+        },
+        "purchase_price": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Purchase price of the property",
+          "example": 0
+        },
+        "purpose": {
+          "type": "string",
+          "description": "Mortgage type"
+        }
+      },
+      "type": "object"
+    },
+    "GeneralCalculationsInterestCoverRatioRequestModel": {
+      "required": [
+        "is_buy_to_let",
+        "property_market_rent",
+        "stressed_monthly_payment"
+      ],
+      "properties": {
+        "property_market_rent": {
+          "type": "number",
+          "description": "Property Market Rent"
+        },
+        "stressed_monthly_payment": {
+          "type": "number",
+          "description": "Stressed Monthly Payments"
+        },
+        "is_buy_to_let": {
+          "type": "boolean",
+          "description": "Is Buy to Let"
+        }
+      },
+      "type": "object"
+    },
+    "GeneralCalculationsDistanceToSecurityAddressRequestModel": {
+      "required": [
+        "applicant_latitude",
+        "applicant_longitude",
+        "property_latitude",
+        "property_longitude"
+      ],
+      "properties": {
+        "applicant_latitude": {
+          "type": "number",
+          "description": "Applicant Latitude"
+        },
+        "applicant_longitude": {
+          "type": "number",
+          "description": "Applicant Longitude"
+        },
+        "property_latitude": {
+          "type": "number",
+          "description": "Property Latitude"
+        },
+        "property_longitude": {
+          "type": "number",
+          "description": "Property Longitude"
+        }
+      },
+      "type": "object"
+    },
+    "GeneralCalculationsLoanToIncomeRequestModel": {
+      "required": [
+        "gross_income",
+        "loan_amount"
+      ],
+      "properties": {
+        "gross_income": {
+          "type": "number",
+          "description": "Gross income of applicant(s)"
+        },
+        "loan_amount": {
+          "type": "number",
+          "description": "The loan value requested."
+        }
+      },
+      "type": "object"
+    },
+    "AffordabilityRequestModel": {
+      "required": [
+        "fixed_period",
+        "gross_income",
+        "loan_amount",
+        "property_value",
+        "total_term"
+      ],
+      "properties": {
+        "gross_income": {
+          "type": "number",
+          "description": "Gross Income (£)"
+        },
+        "loan_amount": {
+          "type": "number",
+          "description": "Loan Amount (£)"
+        },
+        "property_value": {
+          "type": "number"
+        },
+        "fixed_period": {
+          "type": "integer",
+          "description": "Initial term Length (years)"
+        },
+        "total_term": {
+          "type": "integer",
+          "description": "Total term Length (years)"
+        }
+      },
+      "type": "object"
+    },
+    "AffordabilityOutput": {
+      "properties": {
+        "debt_to_income": {
+          "type": "number",
+          "description": "The amount of debt (excluding the mortgage) as a ratio of the income (unitless)"
+        },
+        "max_loan": {
+          "type": "number",
+          "description": "The maximum loan that the applicant can afford to take (£)"
+        },
+        "loan_to_income": {
+          "type": "number",
+          "description": "The ratio of max_loan to the gross income of the applicant (unitless)"
+        },
+        "requested_loan_affordable": {
+          "type": "boolean",
+          "description": "Whether the requested loan amount is affordable."
+        },
+        "remaining_income_abs": {
+          "type": "number",
+          "description": "How much disposable income the applicant has remaining with the maximum loan (£)"
+        },
+        "remaining_income_perc": {
+          "type": "number",
+          "description": "How much disposable income the applicant has remaining with the maximum loan as a percentage of net pay (%)"
+        }
+      },
+      "type": "object"
+    }
+  },
+  "responses": {
+    "ParseError": {
+      "description": "When a mask can't be parsed"
+    },
+    "MaskError": {
+      "description": "When any error occurs on mask"
+    }
+  },
+  "host": "api-staging.jx.mqube.build"
+}
