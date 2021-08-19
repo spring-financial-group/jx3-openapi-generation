@@ -19,10 +19,9 @@ esac
 
 npx openapi-generator generate -i ./spec.json -g csharp-netcore -o csharp_service --additional-properties=targetFramework=netcoreapp3.1,packageName=$name,packageVersion=$version
 
-cp ./nuget.config ./csharp_service/src/nuget.config
+cp ./nuget.config ./csharp_service/nuget.config
 
 cd ./csharp_service/
 dotnet pack -c Release
 
-cd ./src/$name/bin/Debug/
-dotnet nuget push **/*.nupkg -s mqube.packages --skip-duplicate
+dotnet nuget push ./src/$name/bin/Release/**/*.nupkg -s mqube.packages --skip-duplicate
