@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   creationTimestamp: null
-  name: moves-like-swagger
+  name: csharp-swagger
 spec:
   stepTemplate:
     env:
