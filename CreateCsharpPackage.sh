@@ -5,6 +5,8 @@ version=$2
 name=$3
 
 echo Spec Url $specurl
+echo Version $version
+echo Name $version
 
 mkdir -p ./csharp_service
 
