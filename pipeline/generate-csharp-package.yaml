@@ -1,0 +1,38 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  creationTimestamp: null
+  name: moves-like-swagger
+spec:
+  stepTemplate:
+    env:
+    - name: HOME
+      value: /tekton/home
+    envFrom:
+    - secretRef:
+        name: jx-boot-job-env-vars
+        optional: true
+    name: ""
+    resources: {}
+  steps:
+  - image: ghcr.io/jenkins-x/jx-promote:0.0.234
+    name: set-version
+    resources: {}
+    script: |
+      #!/usr/bin/env sh
+      source /workspace/source/.jx/variables.sh
+      sed -i 's/0.0.0/'$VERSION'/g' ./registry/package.json
+    workingDir: /workspace/source
+  - image: spring-financial-group/jx3-openapi-generation:0.0.2
+    name: moves-like-swagger
+    resources: {}
+    script: |
+      #!/usr/bin/env sh
+      source /workspace/source/.jx/variables.sh
+      cd ./registry
+      /CreateCsharpPackage.sh https://api-staging.jx.mqube.build/swagger/docs/v1/$SwaggerServiceName $VERSION Mqube.$SwaggerServiceName.Client
+    workingDir: /workspace/source
+  workspaces:
+  - description: Swagger generation will occur on the staging url once it has been built.
+    mountPath: /workspace
+    name: output
