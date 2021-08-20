@@ -17,7 +17,7 @@ case $specurl in
 		cp $specurl ./spec.json ;;
 esac
 
-npx openapi-generator generate -i ./spec.json -g csharp-netcore -o csharp_service --additional-properties=targetFramework=netcoreapp3.1,packageName=$name,packageVersion=$version
+npx openapi-generator generate -i ./spec.json -g csharp-netcore -o csharp_service --additional-properties=targetFramework=netcoreapp3.1,packageName=$name,packageVersion=$version,optionalProjectFile=$name
 
 cp ./nuget.config ./csharp_service/nuget.config
 
