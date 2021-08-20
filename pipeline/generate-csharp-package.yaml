@@ -24,7 +24,7 @@ spec:
       sed -i 's/0.0.0/'$VERSION'/g' ./registry/package.json
     workingDir: /workspace/source
   - image: spring-financial-group/jx3-openapi-generation:0.0.2
-    name: moves-like-swagger
+    name: csharp-swagger
     resources: {}
     script: |
       #!/usr/bin/env sh
