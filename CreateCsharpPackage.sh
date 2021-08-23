@@ -1,5 +1,3 @@
-#!/bin/bash
-
 set -e
 
 specurl=$1
@@ -21,11 +19,15 @@ case $specurl in
 		cp $specurl ./spec.json ;;
 esac
 
+echo Generating API
 npx openapi-generator generate -i ./spec.json -g csharp-netcore -o csharp_service --additional-properties=targetFramework=netcoreapp3.1,packageName=$name,packageVersion=$version,netCoreProjectFile=true
 
+echo Copying Nuget file
 cp ./nuget.config ./csharp_service/nuget.config
 
+echo Packing Solution
 cd ./csharp_service/
 dotnet pack -c Release
 
+echo Pushing Package
 dotnet nuget push ./src/$name/bin/Release/**/*.nupkg -s mqube.packages --skip-duplicate
