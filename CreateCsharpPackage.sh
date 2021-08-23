@@ -3,6 +3,8 @@ set -e
 specurl=$1
 version=$2
 name=$3
+repoOwner=$4
+repoId=$5
 
 echo Spec Url $specurl
 echo Version $version
@@ -20,7 +22,7 @@ case $specurl in
 esac
 
 echo Generating API
-npx openapi-generator generate -i ./spec.json -g csharp-netcore -o csharp_service --additional-properties=targetFramework=netcoreapp3.1,packageName=$name,packageVersion=$version,netCoreProjectFile=true
+npx openapi-generator generate -i ./spec.json -g csharp-netcore -o csharp_service --git-user-id $repoOwner --git-repo-id $repoId --additional-properties=targetFramework=netcoreapp3.1,packageName=$name,packageVersion=$version,netCoreProjectFile=true
 
 echo Copying Nuget file
 cp ./nuget.config ./csharp_service/nuget.config
