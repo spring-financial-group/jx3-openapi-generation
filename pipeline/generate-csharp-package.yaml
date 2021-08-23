@@ -19,7 +19,8 @@ spec:
     name: set-version-csharp
     resources: {}
     script: |
-      #!/usr/bin/env sh
+      #!/bin/bash
+      echo "Hello World!"
       pwd
       source /workspace/source/.jx/variables.sh
       sed -i 's/0.0.0/'$VERSION'/g' ./registry/package.json
@@ -28,7 +29,8 @@ spec:
     name: csharp-swagger
     resources: {}
     script: |
-      #!/usr/bin/env sh
+      #!/bin/bash
+      echo "Hello World!"
       pwd
       source /workspace/source/.jx/variables.sh
       cd ./registry
