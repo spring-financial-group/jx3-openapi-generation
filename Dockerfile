@@ -1,8 +1,8 @@
 FROM node:14
 
 RUN npm install -g @openapitools/openapi-generator-cli@2.3.9
-RUN npm install -g @angular/compiler-cli@10.2.4 @angular/platform-server@10.2.4 @angular/compiler@10.2.4
-RUN npm install -g typescript@4.3.4
+RUN npm install -g @angular/compiler-cli@8.2.14 @angular/platform-server@8.2.14 @angular/compiler@8.2.14
+RUN npm install -g typescript@3.4.5
 
 RUN wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 RUN dpkg -i packages-microsoft-prod.deb

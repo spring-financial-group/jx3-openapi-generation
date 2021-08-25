@@ -30,9 +30,9 @@ cp /configuration.ts ./service/configuration.ts
 cd service
 
 npm install --save rxjs@6.6.7
-npm install --save zone.js@0.10.3
-npm install --save @angular/core@10.2.4
-npm install --save @angular/common@10.2.4
+npm install --save zone.js@0.9.1
+npm install --save @angular/core@8.2.14 
+npm install --save @angular/common@8.2.14
 
 ngc 
 
