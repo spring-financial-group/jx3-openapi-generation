@@ -15,10 +15,10 @@ case $specurl in
 		cp $specurl ./spec.json ;;
 esac
 
-npx openapi-generator generate -i ./spec.json -g typescript-angular -o service --additional-properties=fileNaming=camelCase --enable-post-process-file
+npx openapi-generator-cli generate -i ./spec.json -g typescript-angular -o service --additional-properties=fileNaming=camelCase --enable-post-process-file
 
-cp ./package.json ./service/package.json 
-cp ./tsconfig.json ./service/tsconfig.json 
+cp ./package.json ./service/package.json
+cp ./tsconfig.json ./service/tsconfig.json
 
 cd service
 
