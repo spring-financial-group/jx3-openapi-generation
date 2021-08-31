@@ -15,6 +15,7 @@ case $specurl in
 		cp $specurl ./spec.json ;;
 esac
 
+npx openapi-generator-cli version-manager set 5.1.0
 npx openapi-generator-cli generate -i ./spec.json -g typescript-angular -o service --additional-properties=fileNaming=camelCase --enable-post-process-file
 
 cp ./package.json ./service/package.json
@@ -24,7 +25,7 @@ cd service
 
 npm install --save rxjs@6.6.7
 npm install --save zone.js@0.9.1
-npm install --save @angular/core@8.2.14 
+npm install --save @angular/core@8.2.14
 npm install --save @angular/common@8.2.14
 
 echo ngc
