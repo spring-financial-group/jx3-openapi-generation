@@ -27,6 +27,7 @@ npm install --save zone.js@0.9.1
 npm install --save @angular/core@8.2.14 
 npm install --save @angular/common@8.2.14
 
+echo ngc
 ngc
 
 cd ..
@@ -36,4 +37,5 @@ cp ./package.json ./dist/package.json
 
 cd dist
 
+echo npm publish
 npm publish
