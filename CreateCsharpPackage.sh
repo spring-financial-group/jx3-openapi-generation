@@ -29,7 +29,7 @@ cp ./nuget.config ./csharp_service/nuget.config
 
 echo Packing Solution
 cd ./csharp_service/
-dotnet pack -c Release
+dotnet pack -c Release -p:Version=$version
 
 echo Pushing Package
 dotnet nuget push ./src/$name/bin/Release/**/*.nupkg -s mqube.packages --skip-duplicate
