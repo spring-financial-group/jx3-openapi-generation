@@ -20,7 +20,7 @@ spec:
     resources: {}
     script: |
       #!/usr/bin/env sh
-      source /workspace/source/.jx/variables.sh
+      . /workspace/source/.jx/variables.sh
       sed -i 's/0.0.0/'$VERSION'/g' ./registry/package.json
     workingDir: /workspace/source
   - image: jx3mqubebuild.azurecr.io/spring-financial-group/jx3-openapi-generation:0.0.36
@@ -28,7 +28,7 @@ spec:
     resources: {}
     script: |
       #!/usr/bin/env sh
-      source /workspace/source/.jx/variables.sh
+      . /workspace/source/.jx/variables.sh
       yarn global add @openapitools/openapi-generator-cli
       /CreateAngularPackageV3.sh https://api-staging.jx.mqube.build/swagger/docs/v1/$SwaggerServiceName
     workingDir: /workspace/source
