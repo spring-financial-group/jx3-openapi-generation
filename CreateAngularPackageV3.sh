@@ -11,7 +11,7 @@ mkdir -p ./service
 case $specurl in
     "http"*) 
 		echo Downloading spec file
-		curl --connect-timeout 30 --retry 300 --retry-delay 5 --retry-connrefused $specurl > ./spec.json
+		curl --http1.1 --connect-timeout 30 --retry 300 --retry-delay 5 --retry-connrefused $specurl > ./spec.json
 		;;
     *) 
 		echo Copying spec file
