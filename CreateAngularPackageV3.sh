@@ -21,7 +21,7 @@ esac
 
 cp /openapitools.json ./openapitools.json 
 
-npx openapi-generator-cli generate -i ./spec.json -g typescript-angular -o service --additional-properties=fileNaming=camelCase,ngVersion=10.0.0 --enable-post-process-file
+npx openapi-generator-cli generate -i ./spec.json -g typescript-angular -o service --additional-properties=fileNaming=camelCase,ngVersion=10.0.0 --enable-post-process-file --remove-operation-id-prefix
 
 cp ./package.json ./service/package.json 
 cp ./tsconfig.json ./service/tsconfig.json 
