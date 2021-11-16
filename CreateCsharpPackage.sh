@@ -21,8 +21,10 @@ case $specurl in
 		cp $specurl ./spec.json ;;
 esac
 
+cp /openapitools.json ./openapitools.json 
+
 echo Generating API
-npx openapi-generator generate -i ./spec.json -g csharp-netcore -o csharp_service --git-user-id $repoOwner --git-repo-id $repoId --additional-properties=targetFramework=netcoreapp3.1,packageName=$name,packageVersion=$version,netCoreProjectFile=true
+npx openapi-generator-cli generate -i ./spec.json -g csharp-netcore -o csharp_service --git-user-id $repoOwner --git-repo-id $repoId --additional-properties=targetFramework=netstandard2.1,packageName=$name,packageVersion=$version,netCoreProjectFile=true,optionalEmitDefaultValues=true
 
 echo Copying Nuget file
 cp ./nuget.config ./csharp_service/nuget.config
