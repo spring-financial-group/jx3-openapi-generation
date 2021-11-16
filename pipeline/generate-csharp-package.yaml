@@ -23,7 +23,7 @@ spec:
       . /workspace/source/.jx/variables.sh
       sed -i 's/0.0.0/'$VERSION'/g' ./registry/package.json
     workingDir: /workspace/source
-  - image: jx3mqubebuild.azurecr.io/spring-financial-group/jx3-openapi-generation:0.0.62
+  - image: jx3mqubebuild.azurecr.io/spring-financial-group/jx3-openapi-generation:0.0.32
     name: csharp-swagger
     resources: {}
     script: |
