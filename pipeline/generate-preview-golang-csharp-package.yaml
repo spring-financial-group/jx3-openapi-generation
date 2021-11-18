@@ -32,7 +32,7 @@ spec:
       source /workspace/source/.jx/variables.sh
       cd ./registry
       export PREVIEW_TIMESTAMP=$(date +%s)
-      /CreateCsharpPackage.sh http://$(cat ../pod_ip)/doc.json 0.0.$PULL_NUMBER-preview-$PREVIEW_TIMESTAMP Mqube.$SwaggerServiceName.Client $REPO_OWNER $REPO_NAME
+      /CreateCsharpPackage.sh http://$(cat ../pod_ip):5000/swagger/v1/doc.json 0.0.$PULL_NUMBER-preview-$PREVIEW_TIMESTAMP Mqube.$SwaggerServiceName.Client $REPO_OWNER $REPO_NAME
     workingDir: /workspace/source
   workspaces:
   - description: The git repo will be cloned onto the volume backing this workspace
