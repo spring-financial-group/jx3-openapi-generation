@@ -24,7 +24,7 @@ esac
 cp /openapitools.json ./openapitools.json
 
 echo Generating API
-npx openapi-generator generate -i ./spec.json -g java --global-property models,modelTests=false,modelDocs=false -p modelPackage=mqube.models -o java_service --git-user-id $repoOwner --git-repo-id $repoId -p dateLibrary=java8 -p java8=true
+npx openapi-generator generate -i ./spec.json -g java -o java_service --git-user-id $repoOwner --git-repo-id $repoId --global-property models,modelTests=false,modelDocs=false -p basePackage=mqube.caseService -p modelPackage=mqube.caseService.models -p dateLibrary=java8
 
 echo Copying Gradle file
 cp ./build.gradle ./java_service/build.gradle
