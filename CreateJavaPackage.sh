@@ -27,5 +27,5 @@ echo Generating API
 npx openapi-generator generate -i ./spec.json -g java -o java_service --git-user-id $repoOwner --git-repo-id $repoId --global-property models,modelTests=false,modelDocs=false -p basePackage=mqube.caseService -p modelPackage=mqube.caseService.models -p dateLibrary=java8
 
 echo "Set version to build.gradle" && sed -i "s|version = '0.0.0'|version = '${version}'|" ./build.gradle
-echo "Copying Gradle file" && cp ./build.gradle ../java_service/build.gradle
+echo "Copying Gradle file" && cp ./build.gradle ./java_service/build.gradle
 echo "Pushing Package" && cd ../java_service && gradle publish

@@ -12,7 +12,8 @@ RUN apt-get update && apt-get install -y apt-transport-https dotnet-sdk-3.1 defa
 
 RUN wget https://services.gradle.org/distributions/gradle-7.3.2-bin.zip \
     && mkdir /opt/gradle \
-    && unzip -d /opt/gradle gradle-7.3.2-bin.zip
+    && unzip -d /opt/gradle gradle-7.3.2-bin.zip \
+    && rm gradle-7.3.2-bin.zip
 
 ENV PATH=$PATH:/opt/gradle/gradle-7.3.2/bin
 
