@@ -28,3 +28,4 @@ RUN chmod +x CreateAngularPackageV2.sh \
     && chmod +x CreateAngularPackageV3.sh \
     && chmod +x CreateCsharpPackage.sh \
     && chmod +x CreateJavaPackage.sh
+    
