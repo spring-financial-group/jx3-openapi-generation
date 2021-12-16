@@ -24,7 +24,7 @@ spec:
         echo $(kubectl get services -A | grep jx-$REPO_OWNER-$APP_NAME-pr-$PULL_NUMBER | awk '$2 == "'$APP_NAME'" {print $4}') > pod_ip
         sed -i 's/0.0.0/0.0.'$PULL_NUMBER'-rc.'$BUILD_ID'/g' ./registry/package.json
       workingDir: /workspace/source
-    - image: jx3mqubebuild.azurecr.io/spring-financial-group/jx3-openapi-generation:0.0.64
+    - image: jx3mqubebuild.azurecr.io/spring-financial-group/jx3-openapi-generation:0.1.0
       name: java-swagger
       resources: {}
       script: |
