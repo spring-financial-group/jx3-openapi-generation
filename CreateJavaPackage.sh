@@ -28,4 +28,4 @@ npx openapi-generator-cli generate -i ./spec.json -g java -o java_service --git-
 
 echo "Set version to build.gradle" && sed -i "s|version = '0.0.0'|version = '${version}'|" ./build.gradle
 echo "Copying Gradle file" && cp ./build.gradle ./java_service/build.gradle
-echo "Pushing Package" && cd ../java_service && gradle publish
+echo "Pushing Package" && cd ./java_service && gradle publish
