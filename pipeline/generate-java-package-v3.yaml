@@ -1,0 +1,38 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  creationTimestamp: null
+  name: java-swagger
+spec:
+  stepTemplate:
+    env:
+      - name: HOME
+        value: /tekton/home
+    envFrom:
+      - secretRef:
+          name: jx-boot-job-env-vars
+          optional: true
+    name: ""
+    resources: {}
+  steps:
+    - image: ghcr.io/jenkins-x/jx-promote:0.0.234
+      name: set-version-java
+      resources: {}
+      script: |
+        #!/usr/bin/env sh
+        . /workspace/source/.jx/variables.sh
+        sed -i 's/0.0.0/'$VERSION'/g' ./registry/package.json
+      workingDir: /workspace/source
+    - image: jx3mqubebuild.azurecr.io/spring-financial-group/jx3-openapi-generation:0.1.4
+      name: java-swagger
+      resources: {}
+      script: |
+        #!/bin/bash
+        source /workspace/source/.jx/variables.sh
+        cd ./registry
+        /CreateJavaPackage.sh https://api-staging.jx.mqube.build/swagger/docs/v1/$SwaggerServiceName $VERSION Mqube.$SwaggerServiceName.Client $REPO_OWNER $REPO_NAME
+      workingDir: /workspace/source
+  workspaces:
+    - description: The git repo will be cloned onto the volume backing this workspace
+      mountPath: /workspace
+      name: output
