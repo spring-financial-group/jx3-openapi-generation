@@ -28,7 +28,8 @@ spec:
           resources: {}
         - name: check-registry
           resources: {}
-        - name: build-container-build
+        - image: uses:spring-financial-group/DevOps/pipelines/build-push-rules.yaml@main
+          name: ""
           resources: {}
         - name: promote-changelog
           resources: {}
