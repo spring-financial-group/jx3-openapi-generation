@@ -1,6 +1,6 @@
 FROM node:14
 
-RUN npm install -g @openapitools/openapi-generator-cli@5.4.0
+RUN npm install -g @openapitools/openapi-generator-cli@2.4.6
 RUN npm install -g @angular/compiler-cli@13.3.1 @angular/platform-server@13.3.1 @angular/compiler@13.3.1
 RUN npm install -g typescript@4.6.3
 
