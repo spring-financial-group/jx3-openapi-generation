@@ -35,10 +35,10 @@ spec:
       
       SWAG_PATH=$(find /workspace/source -type f -name "swagger.json")
       if test $SWAG_PATH ; then
-        echo "Swagger docs found in repository"
+        echo Swagger docs found in repository
       else
         SWAG_PATH=http://$(cat ./pod_ip):5000/swagger/v1/swagger.json
-        echo "Swagger docs not found in repository, using staging"
+        echo Swagger docs not found in repository, using staging
       fi
       /CreateAngularPackageV3.sh "$SWAG_PATH"
     workingDir: /workspace/source
