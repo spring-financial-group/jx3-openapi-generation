@@ -33,12 +33,12 @@ spec:
       cd ./registry
       export PREVIEW_TIMESTAMP=$(date +%s)
       
-      SWAG_PATH=$(find /workspace/source -type f -name "swagger.json")
+      SWAG_PATH=$(find /workspace/source -type f -name "openapi.json")
       if test $SWAG_PATH ; then
-        echo Swagger docs found in repository
+        echo OpenAPI docs found in repository
       else
-        SWAG_PATH=http://$(cat ../pod_ip):5000/swagger/v1/swagger.json
-        echo Swagger docs not found in repository, using staging
+        SWAG_PATH=http://$(cat ../pod_ip)/openapi.json
+        echo OpenAPI docs not found in repository, using staging
       fi
       
       /CreateCsharpPackage.sh $SWAG_PATH Mqube.$SwaggerServiceName.Client $REPO_OWNER $REPO_NAME
