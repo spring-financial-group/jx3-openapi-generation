@@ -32,7 +32,16 @@ spec:
       #!/usr/bin/env sh
       source /workspace/source/.jx/variables.sh
       yarn global add @openapitools/openapi-generator-cli
-      /CreateAngularPackageV3.sh http://$(cat ./pod_ip):5000/swagger/v1/swagger.json
+      
+      SWAG_PATH=$(find /workspace/source -type f -name "swagger.json")
+      if test $SWAG_PATH ; then
+        echo Swagger docs found in repository
+      else
+        SWAG_PATH=http://$(cat ./pod_ip):5000/swagger/v1/swagger.json
+        echo Swagger docs not found in repository, using staging
+      fi
+      
+      /CreateAngularPackageV3.sh $SWAG_PATH
     workingDir: /workspace/source
   workspaces:
   - description: The git repo will be cloned onto the volume backing this workspace
