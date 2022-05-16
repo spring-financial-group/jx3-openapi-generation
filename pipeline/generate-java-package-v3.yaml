@@ -33,10 +33,10 @@ spec:
 
         SWAG_PATH=$(find /workspace/source -type f -name "swagger.json")
         if test $SWAG_PATH ; then
-        echo Swagger docs found in repository
+          echo Swagger docs found in repository
         else
-        SWAG_PATH=https://api-staging.jx.mqube.build/swagger/docs/v1/$SwaggerServiceName
-        echo Swagger docs not found in repository, using staging
+          SWAG_PATH=https://api-staging.jx.mqube.build/swagger/docs/v1/$SwaggerServiceName
+          echo Swagger docs not found in repository, using staging
         fi
         
         /CreateJavaPackage.sh $SWAG_PATH $VERSION Mqube.$SwaggerServiceName.Client $REPO_OWNER $REPO_NAME
