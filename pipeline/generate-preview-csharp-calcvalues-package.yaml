@@ -41,7 +41,7 @@ spec:
         echo OpenAPI docs not found in repository, using staging
       fi
       
-      /CreateCsharpPackage.sh $SWAG_PATH Mqube.$SwaggerServiceName.Client $REPO_OWNER $REPO_NAME
+      /CreateCsharpPackage.sh $SWAG_PATH 0.0.$PULL_NUMBER-preview-$PREVIEW_TIMESTAMP Mqube.$SwaggerServiceName.Client $REPO_OWNER $REPO_NAME
     workingDir: /workspace/source
   workspaces:
   - description: The git repo will be cloned onto the volume backing this workspace
