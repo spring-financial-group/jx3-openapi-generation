@@ -32,7 +32,15 @@ spec:
       source /workspace/source/.jx/variables.sh
       cd ./registry
       export PREVIEW_TIMESTAMP=$(date +%s)
-      SWAG_PATH=http://$(cat ../pod_ip)/swagger.json
+      
+      SWAG_PATH=$(find /workspace/source -type f -name "swagger.json")
+      if test $SWAG_PATH ; then
+        echo Swagger docs found in repository
+      else
+        SWAG_PATH=http://$(cat ../pod_ip)/swagger.json
+        echo Swagger docs not found in repository, using staging
+      fi
+      
       /CreateCsharpPackage.sh $SWAG_PATH Mqube.$SwaggerServiceName.Client $REPO_OWNER $REPO_NAME
     workingDir: /workspace/source
   workspaces:
