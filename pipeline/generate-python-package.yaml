@@ -24,7 +24,7 @@ spec:
         jx gitops variables
         kubectl get secrets github-config -n jx-staging -o jsonpath={.data.github-token} | base64 -d > /workspace/source/gittoken.gt
     - image: ghcr.io/spring-financial-group/python38:latest
-      name: moves-like-swagger
+      name: python-swagger
       resources: {}
       script: |
         #!/usr/bin/env sh
