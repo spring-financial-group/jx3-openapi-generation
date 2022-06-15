@@ -40,7 +40,18 @@ spec:
           exit 1
         fi
         
-        /CreatePythonPackage.sh $SWAG_PATH $APP_NAME $VERSION $(cat /workspace/source/gittoken.gt)
+        gitUrl=https://mqube-bot:"$(cat /workspace/source/gittoken.gt)"@github.com/spring-financial-group/mqube-ml-doc-pipeline-schemas.git
+        git clone "$gitUrl"
+        cd mqube-ml-doc-pipeline-schemas
+        git remote set-url origin "$gitUrl"
+        
+        echo Generating python package
+        datamodel-codegen  --input "$SWAG_PATH" --input-file-type openapi --output "$APP_NAME".py
+        
+        git add "$serviceName".py
+        git commit -m "chore(deps): upgrade $serviceName.py -> v$VERSION"
+        git push origin master
+        
         rm /workspace/source/gittoken.gt
       workingDir: /workspace/source
   workspaces:
