@@ -1,0 +1,49 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  creationTimestamp: null
+  name: git-clone-pr
+spec:
+  stepTemplate:
+    env:
+      - name: HOME
+        value: /tekton/home
+    envFrom:
+      - secretRef:
+          name: jx-boot-job-env-vars
+          optional: true
+    name: ""
+    resources: {}
+    workingDir: /workspace/source
+  steps:
+    - image: ghcr.io/jenkins-x/jx-boot:3.2.197
+      name: git-token-export
+      resources: {}
+      script: |
+        #!/usr/bin/env sh
+        jx gitops variables
+        kubectl get secrets github-config -n jx-staging -o jsonpath={.data.github-token} | base64 -d > /workspace/source/gittoken.gt
+    - image: ghcr.io/spring-financial-group/python38:latest
+      name: moves-like-swagger
+      resources: {}
+      script: |
+        #!/usr/bin/env sh
+        source /workspace/source/.jx/variables.sh
+        apt-get update && apt-get -y install gcc make git gfortran ffmpeg libsm6 libxext6 libopenblas-dev liblapack-dev poppler-utils libgl1-mesa-dev
+        pip install datamodel-code-generator
+        
+        SWAG_PATH=$(find /workspace/source -type f -name "openapi.json")
+        if test $SWAG_PATH ; then
+          echo Swagger docs found in repository
+        else
+          echo Swagger docs not found in repository
+          exit 1
+        fi
+        
+        /CreatePythonPackage.sh $SWAG_PATH $APP_NAME $VERSION $(cat /workspace/source/gittoken.gt)
+        rm /workspace/source/gittoken.gt
+      workingDir: /workspace/source
+  workspaces:
+    - description: The git repo will be cloned onto the volume backing this workspace
+      mountPath: /workspace
+      name: output
