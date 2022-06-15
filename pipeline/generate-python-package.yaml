@@ -29,14 +29,13 @@ spec:
       script: |
         #!/usr/bin/env sh
         source /workspace/source/.jx/variables.sh
-        apt-get update && apt-get -y install gcc make git gfortran ffmpeg libsm6 libxext6 libopenblas-dev liblapack-dev poppler-utils libgl1-mesa-dev
         pip install datamodel-code-generator
         
         SWAG_PATH=$(find /workspace/source -type f -name "openapi.json")
         if test $SWAG_PATH ; then
-          echo Swagger docs found in repository
+          echo openapi.json found in repository
         else
-          echo Swagger docs not found in repository
+          echo openapi.json not found in repository
           exit 1
         fi
         
@@ -46,10 +45,11 @@ spec:
         git remote set-url origin "$gitUrl"
         
         echo Generating python package
-        datamodel-codegen  --input "$SWAG_PATH" --input-file-type openapi --output "$APP_NAME".py
+        mkdir -p "$REPO_NAME"
+        datamodel-codegen  --input "$SWAG_PATH" --input-file-type openapi --output "$REPO_NAME"/model.py
         
         git add "$serviceName".py
-        git commit -m "chore(deps): upgrade $serviceName.py -> v$VERSION"
+        git commit -m "chore(deps): upgrade $REPO_NAME package -> v$VERSION"
         git push origin master
         
         rm /workspace/source/gittoken.gt
