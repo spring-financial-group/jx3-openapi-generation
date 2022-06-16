@@ -29,28 +29,35 @@ spec:
       script: |
         #!/usr/bin/env sh
         source /workspace/source/.jx/variables.sh
+        set -e
         pip install datamodel-code-generator
+        apt-get update && apt-get -y install gh
         
         SWAG_PATH=$(find /workspace/source -type f -name "openapi.json")
-        if test $SWAG_PATH ; then
-          echo openapi.json found in repository
+        if test "$SWAG_PATH" ; then
+        echo openapi.json found in repository
         else
-          echo openapi.json not found in repository
-          exit 1
+        echo openapi.json not found in repository
+        exit 1
         fi
         
         gitUrl=https://mqube-bot:"$(cat /workspace/source/gittoken.gt)"@github.com/spring-financial-group/mqube-ml-doc-pipeline-schemas.git
-        git clone "$gitUrl"
-        cd mqube-ml-doc-pipeline-schemas
+        serviceName=$(echo "$REPO_NAME" | sed 's/\-/_/g' )
+        testVersion=0.0.1
+        branch=update/"$serviceName"/v"$testVersion"
+        
+        git clone "$gitUrl" && cd mqube-ml-doc-pipeline-schemas
         git remote set-url origin "$gitUrl"
+        git checkout -b update/"$serviceName"/v"$testVersion"
         
         echo Generating python package
         mkdir -p "$REPO_NAME"
-        datamodel-codegen  --input "$SWAG_PATH" --input-file-type openapi --output "$REPO_NAME"/model.py
+        datamodel-codegen  --input "$SWAG_PATH" --input-file-type openapi --output "$serviceName"/model.py
         
         git add "$REPO_NAME"/model.py
-        git commit -m "chore(deps): upgrade $REPO_NAME package -> v$VERSION"
-        git push origin master
+        git commit -m "chore(deps): upgrade $serviceName package -> v$testVersion"
+        git push --set-upstream origin "$branch"
+        gh pr create --title "Upgrade $serviceName package -> v$testVersion"
         
         rm /workspace/source/gittoken.gt
       workingDir: /workspace/source
