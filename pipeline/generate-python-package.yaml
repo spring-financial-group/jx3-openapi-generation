@@ -31,14 +31,17 @@ spec:
         source /workspace/source/.jx/variables.sh
         set -e
         pip install datamodel-code-generator
-        apt-get update && apt-get -y install gh
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+        sudo apt update
+        sudo apt install gh
         
         SWAG_PATH=$(find /workspace/source -type f -name "openapi.json")
-        if test "$SWAG_PATH" ; then
-        echo openapi.json found in repository
+        if test "$SWAG_PATH"; then
+          echo openapi.json found in repository
         else
-        echo openapi.json not found in repository
-        exit 1
+          echo openapi.json not found in repository
+          exit
         fi
         
         gitUrl=https://mqube-bot:"$(cat /workspace/source/gittoken.gt)"@github.com/spring-financial-group/mqube-ml-doc-pipeline-schemas.git
@@ -57,7 +60,7 @@ spec:
         git add "$REPO_NAME"/model.py
         git commit -m "chore(deps): upgrade $serviceName package -> v$testVersion"
         git push --set-upstream origin "$branch"
-        gh pr create --title "Upgrade $serviceName package -> v$testVersion"
+        gh pr create --title "Upgrade $serviceName package -> v$testVersion" --label updatebot
         
         rm /workspace/source/gittoken.gt
       workingDir: /workspace/source
