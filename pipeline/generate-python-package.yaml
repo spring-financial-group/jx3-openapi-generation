@@ -29,13 +29,9 @@ spec:
       script: |
         #!/usr/bin/env sh
         source /workspace/source/.jx/variables.sh
-        set -e
+        set -e 
         
         pip install datamodel-code-generator
-        apt install gnupg
-        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-        apt update && apt install -y gh
         
         SWAG_PATH=$(find /workspace/source -type f -name "openapi.json")
         if test "$SWAG_PATH"; then
@@ -61,7 +57,6 @@ spec:
         git add "$REPO_NAME"/model.py
         git commit -m "chore(deps): upgrade $serviceName package -> v$testVersion"
         git push --set-upstream origin "$branch"
-        gh pr create --title "Upgrade $serviceName package -> v$testVersion" --label updatebot
         
         rm /workspace/source/gittoken.gt
       workingDir: /workspace/source
