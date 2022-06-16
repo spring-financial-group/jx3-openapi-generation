@@ -17,7 +17,7 @@ spec:
     workingDir: /workspace/source
   steps:
     - image: ghcr.io/jenkins-x/jx-boot:3.2.197
-      name: git-token-export
+      name: git-token-export-package
       resources: {}
       script: |
         #!/usr/bin/env sh
