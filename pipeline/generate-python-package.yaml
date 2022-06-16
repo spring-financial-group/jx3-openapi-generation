@@ -54,7 +54,7 @@ spec:
         mkdir -p "$REPO_NAME"
         datamodel-codegen  --input "$SWAG_PATH" --input-file-type openapi --output "$serviceName"/model.py
         
-        git add "$REPO_NAME"/model.py
+        git add "$serviceName"/model.py
         git commit -m "chore(deps): upgrade $serviceName package -> v$testVersion"
         git push --set-upstream origin "$branch"
         
