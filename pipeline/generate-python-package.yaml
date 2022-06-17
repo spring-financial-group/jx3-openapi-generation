@@ -64,6 +64,9 @@ spec:
 
         datamodel-codegen  --input "$SWAG_PATH" --input-file-type openapi --output "$serviceName"/model.py
         echo from "$serviceName".model import "*" > "$serviceName"/__init__.py
+
+        new_packages_json=`cat packages.json | python3 -c "import sys, json; packages=json.load(sys.stdin); packages['$REPO_NAME']={'dir':'$serviceName','name':'$REPO_NAME','version':'$testVersion'}; print(json.dumps(packages,indent=4))"`
+        echo "$new_packages_json" > packages.json
         
         git add "$serviceName"/model.py "$serviceName"/__init__.py
         git commit -m "chore(deps): upgrade $serviceName package -> v$testVersion"
