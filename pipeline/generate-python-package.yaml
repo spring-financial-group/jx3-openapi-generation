@@ -69,7 +69,7 @@ spec:
         git commit -m "chore(deps): upgrade $serviceName package -> v$testVersion"
         git push --set-upstream origin "$branch"
 
-        gh pr create --title "chore(deps): upgrade $serviceName package -> v$testVersion"" --body "Automated python schemas update for $serviceName"
+        gh pr create --title "chore(deps): upgrade $serviceName package -> v$testVersion" --body "Automated python schemas update for $serviceName"
         gh pr create --reviewer Reton2,stelios93
         gh pr create --base master --head "$branch"
         
