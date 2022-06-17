@@ -16,6 +16,13 @@ spec:
     resources: {}
     workingDir: /workspace/source
   steps:
+    - image: ghcr.io/jenkins-x/jx-boot:3.2.197
+      name: git-token-export-package
+      resources: {}
+      script: |
+        #!/usr/bin/env sh
+        jx gitops variables
+        kubectl get secrets github-config -n jx-staging -o jsonpath={.data.github-token} | base64 -d > /workspace/source/gittoken.gt
     - image: ghcr.io/spring-financial-group/python38:latest
       name: python-swagger
       resources: {}
@@ -29,7 +36,7 @@ spec:
         apt update
         apt install gh
 
-        export GH_TOKEN=$GIT_TOKEN
+        export GH_TOKEN=$(cat /workspace/source/gittoken.gt)
         
         pip install datamodel-code-generator
         
@@ -41,7 +48,7 @@ spec:
           exit
         fi
         
-        gitUrl=https://mqube-bot:"$GIT_TOKEN"@github.com/spring-financial-group/mqube-ml-doc-pipeline-schemas.git
+        gitUrl=https://mqube-bot:"$(cat /workspace/source/gittoken.gt)"@github.com/spring-financial-group/mqube-ml-doc-pipeline-schemas.git
         serviceName=$(echo "$REPO_NAME" | sed 's/\-/_/g' )
         branch=update/"$serviceName"/v"$VERSION"
         
@@ -62,6 +69,8 @@ spec:
         git commit -m "chore(deps): upgrade $serviceName package -> v$VERSION"
         git push --set-upstream origin "$branch"
         gh pr create --title "chore(deps): upgrade $serviceName package -> v$VERSION" --body "Automated python schemas update for $serviceName" --reviewer Reton2,stelios93 --base master --head "$branch"
+        
+        rm /workspace/source/gittoken.gt
       workingDir: /workspace/source
   workspaces:
     - description: The git repo will be cloned onto the volume backing this workspace
