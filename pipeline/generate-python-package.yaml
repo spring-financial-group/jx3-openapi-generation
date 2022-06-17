@@ -50,6 +50,8 @@ spec:
         git remote set-url origin "$gitUrl"
         git checkout -b update/"$serviceName"/v"$testVersion"
 
+        echo $serviceName
+
         packageDirName="${serviceName//-/_}"
         
         echo Generating python package
