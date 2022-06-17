@@ -1,0 +1,78 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task
+metadata:
+  creationTimestamp: null
+  name: git-clone-pr
+spec:
+  stepTemplate:
+    env:
+      - name: HOME
+        value: /tekton/home
+    envFrom:
+      - secretRef:
+          name: jx-boot-job-env-vars
+          optional: true
+    name: ""
+    resources: {}
+    workingDir: /workspace/source
+  steps:
+    - image: ghcr.io/jenkins-x/jx-boot:3.2.197
+      name: git-token-export-package
+      resources: {}
+      script: |
+        #!/usr/bin/env sh
+        jx gitops variables
+        kubectl get secrets github-config -n jx-staging -o jsonpath={.data.github-token} | base64 -d > /workspace/source/gittoken.gt
+    - image: ghcr.io/spring-financial-group/python38:latest
+      name: python-swagger
+      resources: {}
+      script: |
+        #!/usr/bin/env bash
+        source /workspace/source/.jx/variables.sh
+        set -e 
+
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+        apt update
+        apt install gh
+
+        export GH_TOKEN=$(cat /workspace/source/gittoken.gt)
+        
+        pip install datamodel-code-generator
+        
+        SWAG_PATH=$(find /workspace/source -type f -name "openapi.json")
+        if test "$SWAG_PATH"; then
+          echo openapi.json found in repository
+        else
+          echo openapi.json not found in repository
+          exit
+        fi
+        
+        gitUrl=https://mqube-bot:"$(cat /workspace/source/gittoken.gt)"@github.com/spring-financial-group/mqube-ml-doc-pipeline-schemas.git
+        serviceName=$(echo "$REPO_NAME" | sed 's/\-/_/g' )
+        branch=update/"$serviceName"/v"$VERSION"
+        
+        git clone "$gitUrl" && cd mqube-ml-doc-pipeline-schemas
+        git remote set-url origin "$gitUrl"
+        git checkout -b update/"$serviceName"/v"$VERSION"
+        
+        echo Generating python package
+        mkdir -p "$serviceName"
+        
+        datamodel-codegen  --input "$SWAG_PATH" --input-file-type openapi --output "$serviceName"/model.py
+        echo from "$serviceName".model import "*" > "$serviceName"/__init__.py
+
+        new_packages_json=`cat packages.json | python3 -c "import sys, json; packages=json.load(sys.stdin); packages['$REPO_NAME']={'dir':'$serviceName','name':'$REPO_NAME','version':'$VERSION'}; print(json.dumps(packages,indent=4))"`
+        echo "$new_packages_json" > packages.json
+        
+        git add "$serviceName"/model.py "$serviceName"/__init__.py packages.json
+        git commit -m "chore(deps): upgrade $serviceName package -> v$VERSION"
+        git push --set-upstream origin "$branch"
+        gh pr create --title "chore(deps): upgrade $serviceName package -> v$VERSION" --body "Automated python schemas update for $serviceName" --reviewer Reton2,stelios93 --base master --head "$branch"
+        
+        rm /workspace/source/gittoken.gt
+      workingDir: /workspace/source
+  workspaces:
+    - description: The git repo will be cloned onto the volume backing this workspace
+      mountPath: /workspace
+      name: output
