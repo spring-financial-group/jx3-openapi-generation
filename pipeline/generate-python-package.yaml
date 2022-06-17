@@ -51,12 +51,12 @@ spec:
         git checkout -b update/"$serviceName"/v"$testVersion"
         
         echo Generating python package
-        mkdir -p "$REPO_NAME"
+        mkdir -p "$serviceName"
         datamodel-codegen  --input "$SWAG_PATH" --input-file-type openapi --output "$serviceName"/model.py
         
         git add "$serviceName"/model.py
         git commit -m "chore(deps): upgrade $serviceName package -> v$testVersion"
-        git push --set-upstream origin "$branch"
+        git push --set-upstream origin
         
         rm /workspace/source/gittoken.gt
       workingDir: /workspace/source
