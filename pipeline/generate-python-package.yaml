@@ -50,16 +50,16 @@ spec:
         git remote set-url origin "$gitUrl"
         git checkout -b update/"$serviceName"/v"$testVersion"
 
-        let dirName="${serviceName//-/_}"
+        packageDirName="${serviceName//-/_}"
         
         echo Generating python package
-        mkdir "$dirName"
+        mkdir "$packageDirName"
 
-        datamodel-codegen  --input "$SWAG_PATH" --input-file-type openapi --output "$dirName"/model.py
+        datamodel-codegen  --input "$SWAG_PATH" --input-file-type openapi --output "$packageDirName"/model.py
         echo "from $dirName."
-        echo "from $dirName.model import *" >> "$dirName"/__init__.py
+        echo "from $dirName.model import *" >> "$packageDirName"/__init__.py
         
-        git add "$dirName"/model.py "$dirName"/__init__.py
+        git add "$packageDirName"/model.py "$packageDirName"/__init__.py
         git commit -m "chore(deps): upgrade $serviceName package -> v$testVersion"
         git push --set-upstream origin "$branch"
         
