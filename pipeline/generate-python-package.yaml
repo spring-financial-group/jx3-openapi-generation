@@ -51,19 +51,15 @@ spec:
         git checkout -b update/"$serviceName"/v"$testVersion"
 
         echo $serviceName
-
-        echo ${serviceName//-/_}
-
-        packageDirName=${serviceName//-/_}
         
         echo Generating python package
-        mkdir "$packageDirName"
+        mkdir "$serviceName"
 
-        datamodel-codegen  --input "$SWAG_PATH" --input-file-type openapi --output "$packageDirName"/model.py
-        echo "from $packageDirName."
-        echo "from $packageDirName.model import *" >> "$packageDirName"/__init__.py
+        datamodel-codegen  --input "$SWAG_PATH" --input-file-type openapi --output "$serviceName"/model.py
+        echo "from $serviceName."
+        echo "from $serviceName.model import *" >> "$serviceName"/__init__.py
         
-        git add "$packageDirName"/model.py "$packageDirName"/__init__.py
+        git add "$serviceName"/model.py "$serviceName"/__init__.py
         git commit -m "chore(deps): upgrade $serviceName package -> v$testVersion"
         git push --set-upstream origin "$branch"
         
