@@ -58,8 +58,8 @@ spec:
         mkdir "$packageDirName"
 
         datamodel-codegen  --input "$SWAG_PATH" --input-file-type openapi --output "$packageDirName"/model.py
-        echo "from $dirName."
-        echo "from $dirName.model import *" >> "$packageDirName"/__init__.py
+        echo "from $packageDirName."
+        echo "from $packageDirName.model import *" >> "$packageDirName"/__init__.py
         
         git add "$packageDirName"/model.py "$packageDirName"/__init__.py
         git commit -m "chore(deps): upgrade $serviceName package -> v$testVersion"
