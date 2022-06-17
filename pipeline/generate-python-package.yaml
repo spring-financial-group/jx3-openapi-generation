@@ -53,11 +53,11 @@ spec:
         echo $serviceName
         
         echo Generating python package
-        mkdir "$serviceName"
+        mkdir -p "$serviceName"
 
         datamodel-codegen  --input "$SWAG_PATH" --input-file-type openapi --output "$serviceName"/model.py
         echo "from $serviceName."
-        echo "from $serviceName.model import *" >> "$serviceName"/__init__.py
+        echo from "$serviceName".model import "*"" >> "$serviceName"/__init__.py
         
         git add "$serviceName"/model.py "$serviceName"/__init__.py
         git commit -m "chore(deps): upgrade $serviceName package -> v$testVersion"
