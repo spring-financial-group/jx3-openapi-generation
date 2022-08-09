@@ -17,6 +17,7 @@ RUN wget https://services.gradle.org/distributions/gradle-7.3.2-bin.zip \
 
 ENV PATH=$PATH:/opt/gradle/gradle-7.3.2/bin
 
+
 ADD openapitools.json openapitools.json
 ADD configuration.ts configuration.ts
 ADD CreateAngularPackageV2.sh CreateAngularPackageV2.sh
