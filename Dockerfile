@@ -8,7 +8,7 @@ RUN wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-p
     && dpkg -i packages-microsoft-prod.deb \
     && rm packages-microsoft-prod.deb
 
-RUN apt-get update && apt-get install -y apt-transport-https dotnet-sdk-3.1 openjdk-8-jdk default-jre zip
+RUN apt-get update && apt-get install -y apt-transport-https dotnet-sdk-3.1 openjdk-11-jdk default-jre zip
 
 RUN wget https://services.gradle.org/distributions/gradle-7.3.2-bin.zip \
     && mkdir /opt/gradle \
