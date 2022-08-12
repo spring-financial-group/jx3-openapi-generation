@@ -32,14 +32,19 @@ spec:
       cd ./registry
       
       SWAG_PATH=$(find /workspace/source -type f -name "swagger.json")
+      OPENAPI_PATH=$(find /workspace/source -type f -name "openapi.json")
+      DOC_PATH=https://api-staging.jx.mqube.build/swagger/docs/v1/$SwaggerServiceName
       if test $SWAG_PATH ; then
         echo Swagger docs found in repository
+        DOC_PATH=$SWAG_PATH
+      elif test $OPENAPI_PATH ; then
+        echo OpenAPI docs found in repository
+        DOC_PATH=$OPENAPI_PATH
       else
-        SWAG_PATH=https://api-staging.jx.mqube.build/swagger/docs/v1/$SwaggerServiceName
-        echo Swagger docs not found in repository, using staging
+        echo Docs not found in repository, using staging
       fi
       
-      /CreateCsharpPackage.sh $SWAG_PATH $VERSION Mqube.$SwaggerServiceName.Client $REPO_OWNER $REPO_NAME
+      /CreateCsharpPackage.sh $DOC_PATH $VERSION Mqube.$SwaggerServiceName.Client $REPO_OWNER $REPO_NAME
     workingDir: /workspace/source
   workspaces:
   - description: Swagger generation will occur on the staging url once it has been built.
