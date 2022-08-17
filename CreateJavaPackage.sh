@@ -2,7 +2,7 @@ set -e
 
 specurl=$1
 version=$2
-name=$3
+name=${3,}
 repoOwner=$4
 repoId=$5
 
