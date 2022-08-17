@@ -44,7 +44,7 @@ spec:
           echo Docs not found in repository, using staging
         fi
         
-        /CreateJavaPackage.sh $DOC_PATH $VERSION Mqube.$SwaggerServiceName $REPO_OWNER $REPO_NAME
+        /CreateJavaPackage.sh $DOC_PATH $VERSION mqube.${SwaggerServiceName,} $REPO_OWNER $REPO_NAME
       workingDir: /workspace/source
   workspaces:
     - description: The git repo will be cloned onto the volume backing this workspace
