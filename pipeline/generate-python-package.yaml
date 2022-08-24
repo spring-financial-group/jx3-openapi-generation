@@ -68,7 +68,7 @@ spec:
         git add "$serviceName"/schemas.py "$serviceName"/__init__.py packages.json
         git commit -m "chore(deps): upgrade $serviceName package -> v$VERSION"
         git push --set-upstream origin "$branch"
-        gh pr create --title "chore(deps): upgrade $serviceName package -> v$VERSION" --body "Automated python schemas update for $serviceName" --reviewer Reton2,stelios93 --base master --head "$branch"
+        gh pr create --title "chore(deps): upgrade $serviceName package -> v$VERSION" --body "Automated python schemas update for $serviceName" --reviewer Reton2,stelios93 --base master --head "$branch" -l updatebot
         
         rm /workspace/source/gittoken.gt
       workingDir: /workspace/source
