@@ -38,7 +38,7 @@ spec:
 
         export GH_TOKEN=$(cat /workspace/source/gittoken.gt)
 
-        pip install datamodel-code-generator
+        pip install --upgrade pip && pip install datamodel-code-generator
 
         SWAG_PATH=$(find /workspace/source -type f -name "swagger.json")
         OPENAPI_PATH=$(find /workspace/source -type f -name "openapi.json")
