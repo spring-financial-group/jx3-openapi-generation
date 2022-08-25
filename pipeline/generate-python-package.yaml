@@ -44,8 +44,14 @@ spec:
         if test "$SWAG_PATH"; then
           echo openapi.json found in repository
         else
-          echo openapi.json not found in repository
-          exit
+          case $specurl in
+              "http"*) 
+              echo Downloading spec file
+              curl -k --http1.1 --connect-timeout 30 --retry 300 --retry-delay 5 --retry-connrefused $specurl > ./openapi.json	;;
+              *) 
+              echo Copying spec file
+              cp $specurl ./openapi.json ;;
+          esac
         fi
         
         gitUrl=https://mqube-bot:"$(cat /workspace/source/gittoken.gt)"@github.com/spring-financial-group/mqube-ml-doc-pipeline-schemas.git
