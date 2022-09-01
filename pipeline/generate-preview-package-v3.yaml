@@ -42,7 +42,7 @@ spec:
         echo OpenAPI docs found in repository
         DOC_PATH=$OPENAPI_PATH
       else
-        SWAG_PATH=http://$(cat ./pod_ip):5000/swagger/v1/swagger.json
+        DOC_PATH=http://$(cat ./pod_ip):5000/swagger/v1/swagger.json
         echo Swagger docs not found in repository, using staging
       fi
       
