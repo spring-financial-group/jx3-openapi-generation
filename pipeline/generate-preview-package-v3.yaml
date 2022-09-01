@@ -34,14 +34,19 @@ spec:
       yarn global add @openapitools/openapi-generator-cli
       
       SWAG_PATH=$(find /workspace/source -type f -name "swagger.json")
+      OPENAPI_PATH=$(find /workspace/source -type f -name "openapi.json")
       if test $SWAG_PATH ; then
         echo Swagger docs found in repository
+        DOC_PATH=$SWAG_PATH
+      elif test $OPENAPI_PATH ; then
+        echo OpenAPI docs found in repository
+        DOC_PATH=$OPENAPI_PATH
       else
         SWAG_PATH=http://$(cat ./pod_ip):5000/swagger/v1/swagger.json
         echo Swagger docs not found in repository, using staging
       fi
       
-      /CreateAngularPackageV3.sh $SWAG_PATH
+      /CreateAngularPackageV3.sh $DOC_PATH
     workingDir: /workspace/source
   workspaces:
   - description: The git repo will be cloned onto the volume backing this workspace

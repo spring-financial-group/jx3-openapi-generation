@@ -34,14 +34,19 @@ spec:
         export PREVIEW_TIMESTAMP=$(date +%s)
       
         SWAG_PATH=$(find /workspace/source -type f -name "swagger.json")
+        OPENAPI_PATH=$(find /workspace/source -type f -name "openapi.json")
         if test $SWAG_PATH ; then
           echo Swagger docs found in repository
+          DOC_PATH=$SWAG_PATH
+        elif test $OPENAPI_PATH ; then
+          echo OpenAPI docs found in repository
+          DOC_PATH=$OPENAPI_PATH
         else
-          SWAG_PATH=http://$(cat ../pod_ip):5000/swagger/v1/swagger.json
+          DOC_PATH=http://$(cat ../pod_ip):5000/swagger/v1/swagger.json
           echo Swagger docs not found in repository, using staging
         fi
         
-        /CreateJavaPackage.sh $SWAG_PATH 0.0.$PULL_NUMBER-preview-$PREVIEW_TIMESTAMP mqube.${SwaggerServiceName,} $REPO_OWNER $REPO_NAME
+        /CreateJavaPackage.sh $DOC_PATH 0.0.$PULL_NUMBER-preview-$PREVIEW_TIMESTAMP mqube.${SwaggerServiceName,} $REPO_OWNER $REPO_NAME
       workingDir: /workspace/source
   workspaces:
     - description: The git repo will be cloned onto the volume backing this workspace
