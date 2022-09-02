@@ -19,11 +19,11 @@ RUN ./dotnet-install.sh -c 6.0 --install-dir /usr/share/dotnet
 
 # Java install
 RUN apk add openjdk17
-RUN wget https://services.gradle.org/distributions/gradle-7.4.2-bin.zip \
+RUN wget https://services.gradle.org/distributions/gradle-7.5-bin.zip \
     && mkdir /opt/gradle \
-    && unzip -d /opt/gradle gradle-7.4.2-bin.zip \
-    && rm gradle-7.4.2-bin.zip
-ENV PATH=$PATH:/opt/gradle/gradle-7.4.2/bin
+    && unzip -d /opt/gradle gradle-7.5-bin.zip \
+    && rm gradle-7.5-bin.zip
+ENV PATH=$PATH:/opt/gradle/gradle-7.5/bin
 
 ADD openapitools.json openapitools.json
 ADD configuration.ts configuration.ts
