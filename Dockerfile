@@ -1,20 +1,28 @@
-FROM node:14
+FROM node:14-alpine3.16
 
-RUN npm install -g @openapitools/openapi-generator-cli@2.4.6
-RUN npm install -g @angular/compiler-cli@13.3.1 @angular/platform-server@13.3.1 @angular/compiler@13.3.1
-RUN npm install -g typescript@4.6.3
+# Alpine does not contain dpkg by default
+RUN apk update && apk upgrade
 
-RUN wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
-    && dpkg -i packages-microsoft-prod.deb \
-    && rm packages-microsoft-prod.deb
+# OpenAPI tools install
+RUN npm install -g @openapitools/openapi-generator-cli@2.5.1
+RUN npm install -g @angular/compiler-cli@13.3.11 @angular/platform-server@13.3.11 @angular/compiler@13.3.11
+RUN npm install -g typescript@4.8.2
 
-RUN apt-get update && apt-get install -y apt-transport-https dotnet-sdk-3.1 openjdk-11-jdk default-jre zip
+# Dotnet install
+RUN apk add bash icu-libs krb5-libs libgcc libintl libssl1.1 libstdc++ zlib \
+    && apk add libgdiplus --repository https://dl-3.alpinelinux.org/alpine/edge/testing/
+RUN mkdir -p /usr/share/dotnet \
+    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
+RUN wget https://dot.net/v1/dotnet-install.sh
+RUN chmod +x dotnet-install.sh
+RUN ./dotnet-install.sh -c 6.0 --install-dir /usr/share/dotnet
 
+# Java install
+RUN apk add openjdk11
 RUN wget https://services.gradle.org/distributions/gradle-7.3.2-bin.zip \
     && mkdir /opt/gradle \
     && unzip -d /opt/gradle gradle-7.3.2-bin.zip \
     && rm gradle-7.3.2-bin.zip
-
 ENV PATH=$PATH:/opt/gradle/gradle-7.3.2/bin
 
 ADD openapitools.json openapitools.json
