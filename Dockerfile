@@ -18,7 +18,7 @@ RUN chmod +x dotnet-install.sh
 RUN ./dotnet-install.sh -c 6.0 --install-dir /usr/share/dotnet
 
 # Java install
-RUN apk add openjdk17
+RUN apk add openjdk16
 RUN wget https://services.gradle.org/distributions/gradle-7.5-bin.zip \
     && mkdir /opt/gradle \
     && unzip -d /opt/gradle gradle-7.5-bin.zip \
