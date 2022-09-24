@@ -31,8 +31,11 @@ spec:
         source /workspace/source/.jx/variables.sh
         set -e
 
-        apt update
-        t="/tmp/gh-$$.deb"; curl -sSLo "$t" "https://github.com$(curl -sSL "https://github.com/cli/cli/releases/latest" | grep -Po "(?<=href=\")/cli/cli/releases/download/[^\"]*$(dpkg --print-architecture)[.]deb(?=\")")"; apt install "$t"; rm "$t"
+        curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+        && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+        && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+        && apt update \
+        && apt install gh -y
 
         export GH_TOKEN=$(cat /workspace/source/gittoken.gt)
 
