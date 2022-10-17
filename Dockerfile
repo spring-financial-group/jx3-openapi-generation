@@ -19,11 +19,11 @@ RUN ./dotnet-install.sh -c 6.0 --install-dir /usr/share/dotnet
 
 # Java install
 RUN apk add openjdk16
-RUN wget https://services.gradle.org/distributions-snapshots/gradle-7.6-20221014231703+0000-bin.zip \
+RUN wget https://services.gradle.org/distributions-snapshots/gradle-8.0-20221015221816+0000-bin.zip \
     && mkdir /opt/gradle \
-    && unzip -d /opt/gradle gradle-7.6-20221014231703+0000-bin.zip \
-    && rm gradle-7.6-20221014231703+0000-bin.zip
-ENV PATH=$PATH:/opt/gradle/gradle-7.6-20221014231703+0000/bin
+    && unzip -d /opt/gradle gradle-8.0-20221015221816+0000-bin.zip \
+    && rm gradle-8.0-20221015221816+0000-bin.zip
+ENV PATH=$PATH:/opt/gradle/gradle-8.0-20221015221816+0000/bin
 
 ADD openapitools.json openapitools.json
 ADD configuration.ts configuration.ts
