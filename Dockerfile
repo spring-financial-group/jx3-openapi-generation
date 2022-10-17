@@ -1,7 +1,7 @@
 FROM node:14-alpine3.16
 
 # Alpine does not contain dpkg by default
-RUN apk update && apk upgrade
+RUN apk update && apk upgrade --ignore alpine-baselayout
 
 # OpenAPI tools install
 RUN npm install -g @openapitools/openapi-generator-cli@2.5.1
