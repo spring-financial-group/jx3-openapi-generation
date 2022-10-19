@@ -74,7 +74,7 @@ spec:
         echo Generating python package
         mkdir -p "$serviceName"
 
-        datamodel-codegen  --input /workspace/source/spec.json --input-file-type openapi --output "$serviceName"/schemas.py
+        datamodel-codegen  --input /workspace/source/spec.json --input-file-type auto --output "$serviceName"/schemas.py
         echo > "$serviceName"/__init__.py
 
         new_packages_json=`cat packages.json | python3 -c "import sys, json; packages=json.load(sys.stdin); packages['$REPO_NAME']={'dir':'$serviceName','name':'$REPO_NAME','version':'$VERSION'}; print(json.dumps(packages,indent=4))"`
