@@ -32,7 +32,9 @@ spec:
       yarn global add @openapitools/openapi-generator-cli
       
       SWAG_PATH=$(find /workspace/source -type f -name "swagger.json")
+      echo SWAG_PATH
       OPENAPI_PATH=$(find /workspace/source -type f -name "openapi.json")
+      echo OPENAPI_PATH
       DOC_PATH=https://api-staging.jx.mqube.build/swagger/docs/v1/$SwaggerServiceName
       if test $SWAG_PATH ; then
         echo Swagger docs found in repository
