@@ -24,7 +24,6 @@ spec:
       source /workspace/source/.jx/variables.sh
       echo $(kubectl get services -A | grep jx-$REPO_OWNER-$APP_NAME-pr-$PULL_NUMBER | awk '$2 == "'$APP_NAME'" {print $4}') > pod_ip
       sed -i 's/0.0.0/0.0.'$PULL_NUMBER'-rc.'$BUILD_ID'/g' ./registry/package.json
-    workingDir: /workspace/source
   - image: jx3mqubebuild.azurecr.io/spring-financial-group/jx3-openapi-generation:0.2.9
     name: moves-like-swagger
     resources: {}
@@ -33,21 +32,7 @@ spec:
       source /workspace/source/.jx/variables.sh
       yarn global add @openapitools/openapi-generator-cli
       
-      SWAG_PATH=$(find /workspace/source -type f -name "swagger.json")
-      OPENAPI_PATH=$(find /workspace/source -type f -name "openapi.json")
-      if test $SWAG_PATH ; then
-        echo Swagger docs found in repository
-        DOC_PATH=$SWAG_PATH
-      elif test $OPENAPI_PATH ; then
-        echo OpenAPI docs found in repository
-        DOC_PATH=$OPENAPI_PATH
-      else
-        DOC_PATH=http://$(cat ./pod_ip):5000/swagger/v1/swagger.json
-        echo Swagger docs not found in repository, using staging
-      fi
-      
-      /CreateAngularPackageV3.sh $DOC_PATH
-    workingDir: /workspace/source
+      /CreateAngularPackageV3.sh $(/FindOpenAPISpec.sh http://$(cat ./pod_ip):5000/swagger/v1/swagger.json)
   workspaces:
   - description: The git repo will be cloned onto the volume backing this workspace
     mountPath: /workspace

@@ -14,6 +14,7 @@ spec:
         optional: true
     name: ""
     resources: {}
+    workingDir: /workspace/source
   steps:
   - image: ghcr.io/jenkins-x/jx-promote:0.0.234
     name: set-version-typescript
@@ -22,30 +23,16 @@ spec:
       #!/usr/bin/env sh
       source /workspace/source/.jx/variables.sh
       sed -i 's/0.0.0/'$VERSION'/g' ./registry/package.json
-    workingDir: /workspace/source
   - image: jx3mqubebuild.azurecr.io/spring-financial-group/jx3-openapi-generation:0.1.8
     name: moves-like-swagger
     resources: {}
     script: |
       #!/usr/bin/env sh
       source /workspace/source/.jx/variables.sh
+      
+      SPEC_PATH=$(/FindOpenAPISpec.sh https://api-staging.jx.mqube.build/swagger/docs/v1/$SwaggerServiceName)
       cd ./registry
-      
-      SWAG_PATH=$(find /workspace/source -type f -name "swagger.json")
-      OPENAPI_PATH=$(find /workspace/source -type f -name "openapi.json")
-      DOC_PATH=https://api-staging.jx.mqube.build/swagger/docs/v1/$SwaggerServiceName
-      if test $SWAG_PATH ; then
-        echo Swagger docs found in repository
-        DOC_PATH=$SWAG_PATH
-      elif test $OPENAPI_PATH ; then
-        echo OpenAPI docs found in repository
-        DOC_PATH=$OPENAPI_PATH
-      else
-        echo Docs not found in repository, using staging
-      fi
-      
-      /CreateAngularPackageV2.sh $DOC_PATH
-    workingDir: /workspace/source
+      /CreateAngularPackageV2.sh $SPEC_PATH
   workspaces:
   - description: Swagger generation will occur on the staging url once it has been built.
     mountPath: /workspace

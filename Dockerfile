@@ -23,8 +23,10 @@ ADD CreateAngularPackageV2.sh CreateAngularPackageV2.sh
 ADD CreateAngularPackageV3.sh CreateAngularPackageV3.sh
 ADD CreateCsharpPackage.sh CreateCsharpPackage.sh
 ADD CreateJavaPackage.sh CreateJavaPackage.sh
+ADD FindOpenAPISpec.sh FindOpenAPISpec.sh
 
 RUN chmod +x CreateAngularPackageV2.sh \
     && chmod +x CreateAngularPackageV3.sh \
     && chmod +x CreateCsharpPackage.sh \
-    && chmod +x CreateJavaPackage.sh
+    && chmod +x CreateJavaPackage.sh \
+    && chmod +x FindOpenAPISpec.sh
