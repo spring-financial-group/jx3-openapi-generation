@@ -26,7 +26,7 @@ spec:
           resources: {}
         - name: check-registry
           resources: {}
-        - image: uses:spring-financial-group/DevOps/pipelines/build-push-rules.yaml@main
+        - image: uses:spring-financial-group/DevOps/pipelines/build-push-DANGER.yaml@main
           name: ""
           resources: {}
   podTemplate: {}
