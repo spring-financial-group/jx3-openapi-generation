@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Find the spec file from the current directory and all subdirectories
+# Finds the spec file from the current directory and all subdirectories
 # If none is found, return the default path
 DEFAULT_PATH=$1
 
