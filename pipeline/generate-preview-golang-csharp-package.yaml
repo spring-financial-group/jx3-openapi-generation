@@ -32,7 +32,7 @@ spec:
       source /workspace/source/.jx/variables.sh
       export PREVIEW_TIMESTAMP=$(date +%s)
       
-      SPEC_PATH=$(/FindOpenAPISpec.sh http://$(cat ../pod_ip):5000/swagger/v1/swagger.json)
+      SPEC_PATH=$(/FindOpenAPISpec.sh http://"$(cat ../pod_ip)":5000/swagger/v1/swagger.json)
       cd ./registry
       /CreateCsharpPackage.sh $SPEC_PATH 0.1.$PULL_NUMBER-preview-$PREVIEW_TIMESTAMP Mqube.$SwaggerServiceName.Client $REPO_OWNER $REPO_NAME
   workspaces:

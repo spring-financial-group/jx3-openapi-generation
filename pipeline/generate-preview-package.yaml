@@ -31,7 +31,7 @@ spec:
       #!/usr/bin/env sh
       source /workspace/source/.jx/variables.sh
       
-      SPEC_PATH=$(/FindOpenAPISpec.sh http://$(cat ../pod_ip):5000/swagger/v1/swagger.json)
+      SPEC_PATH=$(/FindOpenAPISpec.sh http://"$(cat ../pod_ip)":5000/swagger/v1/swagger.json)
       cd ./registry
       /CreateAngularPackageV2.sh $SPEC_PATH
   workspaces:
