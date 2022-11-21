@@ -4,8 +4,8 @@
 # If none is found, return the default path
 DEFAULT_PATH=$1
 
-SWAG_PATH=$(find ~+ -type f -name "swagger.json")
-OPENAPI_PATH=$(find ~+ -type f -name "openapi.json")
+SWAG_PATH=$(find ~+ -type f -name "swagger.json" | grep -v "bin")
+OPENAPI_PATH=$(find ~+ -type f -name "openapi.json" | grep -v "bin")
 if test "$SWAG_PATH" ; then
   >&2 echo "Swagger specification found at $SWAG_PATH"
   SPEC_PATH=$SWAG_PATH
