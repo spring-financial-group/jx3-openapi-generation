@@ -1,0 +1,41 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Mock Swagger specification for using in openapi-generation tests",
+    "title": "Mock Openapi-Generation API",
+    "contact": {},
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/MockEndpoint": {
+      "post": {
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ],
+        "description": "Mock endpoint for testing",
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Push"
+        ],
+        "summary": "Does absolutely nothing",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
