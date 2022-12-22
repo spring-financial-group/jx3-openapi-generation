@@ -42,9 +42,9 @@ func (g *Generator) GeneratePackage(specificationPath, outputDir string) (string
 
 	// Generate Package
 	err = g.Cmd.ExecuteAndLog(outputDir, "npx", "openapi-generator-cli", "generate",
-		"-i", specificationPath, "-g", "csharp-netcore", "-o", packageDir, "--git-user-id", g.RepoOwner,
+		"-i", specificationPath, "--generator-key", "csharp", "-o", packageDir, "--git-user-id", g.RepoOwner,
 		"--git-repo-id", g.RepoName,
-		fmt.Sprintf("--additional-properties=targetFramework=netstandard2.1,packageName=%s,packageVersion=%s,netCoreProjectFile=true,optionalEmitDefaultValues=true,validatable=false", g.GetPackageName(), g.Version))
+		fmt.Sprintf("--additional-properties=packageName=%s,packageVersion=%s", g.GetPackageName(), g.Version))
 	if err != nil {
 		return "", errors.Wrap(err, "failed to generate package")
 	}

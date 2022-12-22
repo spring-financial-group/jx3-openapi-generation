@@ -2,6 +2,17 @@
   "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "5.4.0"
+    "version": "5.4.0",
+    "generators": {
+      "csharp": {
+        "generatorName": "csharp-netcore",
+        "additionalProperties": {
+          "targetFramework": "netstandard2.1",
+          "netCoreProjectFile": true,
+          "optionalEmitDefaultValues": true,
+          "validatable": false
+        }
+      }
+    }
   }
 }
