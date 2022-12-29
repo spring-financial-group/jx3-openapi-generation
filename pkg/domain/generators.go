@@ -6,7 +6,7 @@ const (
 	CSharp  = "csharp"
 	Java    = "java"
 	Angular = "angular"
-	Python = "python"
+	Python  = "python"
 )
 
 type PackageGeneratorFactory interface {

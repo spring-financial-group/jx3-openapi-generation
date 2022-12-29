@@ -4,33 +4,22 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"path/filepath"
-	"spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
 	"spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"spring-financial-group/jx3-openapi-generation/pkg/file"
+	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
 )
 
 const (
+	csharp          = "csharp"
 	NugetConfigPath = "./registry/nuget.config"
 )
 
 type Generator struct {
-	Version     string
-	ServiceName string
-	RepoOwner   string
-	RepoName    string
-
-	Cmd    domain.CommandRunner
-	FileIO domain.FileIO
+	*packageGenerator.BaseGenerator
 }
 
-func NewGenerator(version, name, repoOwner, repoName string) domain.PackageGenerator {
+func NewGenerator(baseGenerator *packageGenerator.BaseGenerator) domain.PackageGenerator {
 	return &Generator{
-		Version:     version,
-		ServiceName: name,
-		RepoOwner:   repoOwner,
-		RepoName:    repoName,
-		Cmd:         commandRunner.NewCommandRunner(),
-		FileIO:      file.NewFileIO(),
+		BaseGenerator: baseGenerator,
 	}
 }
 
@@ -41,14 +30,7 @@ func (g *Generator) GeneratePackage(specificationPath, outputDir string) (string
 	}
 
 	// Generate Package
-	err = g.Cmd.ExecuteAndLog(outputDir, "npx", "openapi-generator-cli", "generate",
-		"-i", specificationPath, "--generator-key", "csharp", "-o", packageDir, "--git-user-id", g.RepoOwner,
-		"--git-repo-id", g.RepoName,
-		fmt.Sprintf("--additional-properties=packageName=%s,packageVersion=%s", g.GetPackageName(), g.Version))
-	if err != nil {
-		return "", errors.Wrap(err, "failed to generate package")
-	}
-
+	err = g.BaseGenerator.GeneratePackage(outputDir, csharp)
 	// Copy nuget.config
 	_, _, err = g.FileIO.CopyToDir(NugetConfigPath, packageDir)
 	if err != nil {
