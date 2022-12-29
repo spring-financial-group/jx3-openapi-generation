@@ -14,7 +14,7 @@ const (
 )
 
 var (
-	configPath = "/" + OpenAPIConfigFileName
+	initialConfigPath = "/" + OpenAPIConfigFileName
 )
 
 type Config struct {
@@ -24,8 +24,8 @@ type Config struct {
 }
 
 type GeneratorCLI struct {
-	Version    string               `json:"version"`
-	Generators map[string]Generator `json:"generators"`
+	Version    string                `json:"version"`
+	Generators map[string]*Generator `json:"generators"`
 }
 
 type Generator struct {
@@ -40,9 +40,16 @@ type Generator struct {
 
 func GetConfig() (*Config, error) {
 	cfg := new(Config)
-	err := cfg.readFromFile(configPath)
+	err := cfg.readFromFile(initialConfigPath)
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to read config from %s", configPath)
+		return nil, errors.Wrapf(err, "failed to read config from %s", initialConfigPath)
+	}
+
+	// Openapi-generator reads the config from the current working directory so when we first get the config we should
+	// move it to the cwd.
+	_, err = cfg.WriteToCurrentWorkingDirectory()
+	if err != nil {
+		return nil, errors.Wrap(err, "failed to write config to file")
 	}
 	return cfg, nil
 }
@@ -52,7 +59,6 @@ func (c *Config) readFromFile(path string) error {
 	if err != nil {
 		return errors.Wrap(err, "failed to read openapitools.json")
 	}
-	fmt.Println(string(data))
 	err = json.Unmarshal(data, c)
 	if err != nil {
 		return errors.Wrap(err, "failed to unmarshal config")
@@ -60,12 +66,13 @@ func (c *Config) readFromFile(path string) error {
 	return nil
 }
 
-func (c *Config) WriteToDirectory(dir string) (string, error) {
+func (c *Config) WriteToCurrentWorkingDirectory() (string, error) {
 	data, err := utils.MarshalJSON(c)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to marshal config")
 	}
-	path := filepath.Join(dir, OpenAPIConfigFileName)
+	fmt.Println(string(data))
+	path := filepath.Join("./", OpenAPIConfigFileName)
 	err = os.WriteFile(path, data, 0755)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to write config to directory")

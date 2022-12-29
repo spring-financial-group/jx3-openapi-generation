@@ -1,7 +1,6 @@
 package packageGenerator
 
 import (
-	"fmt"
 	"github.com/pkg/errors"
 	"spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
 	"spring-financial-group/jx3-openapi-generation/pkg/domain"
@@ -51,16 +50,16 @@ func (g *BaseGenerator) setDynamicConfigVariables() (err error) {
 
 // GeneratePackage generates the package for the given language using the openapi-generator-cli. The config is written
 // to the directory before running the command.
-func (g *BaseGenerator) GeneratePackage(dir, language string) error {
-	cfgPath, err := g.Cfg.WriteToDirectory(dir)
+func (g *BaseGenerator) GeneratePackage(outputDir, language string) error {
+	g.Cfg.GeneratorCLI.Generators[language].Output = outputDir
+	cfgPath, err := g.Cfg.WriteToCurrentWorkingDirectory()
 	if err != nil {
 		return err
 	}
 	defer g.FileIO.DeferRemove(cfgPath)
 
 	// Generate Package
-	err = g.Cmd.ExecuteAndLog(dir, "npm", "exec", fmt.Sprintf("--prefix %s", dir),
-		"openapi-generator-cli", "generate", "--generator-key", language)
+	err = g.Cmd.ExecuteAndLog("", "npx", "openapi-generator-cli", "generate", "--generator-key", language)
 	if err != nil {
 		return errors.Wrap(err, "failed to generate package")
 	}
