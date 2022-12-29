@@ -9,7 +9,9 @@ import (
 	"path/filepath"
 	"spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
 	"spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"spring-financial-group/jx3-openapi-generation/pkg/openapitools"
 	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
+	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/csharp"
 	"spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"strings"
 )
@@ -23,8 +25,8 @@ const (
 type PackageOptions struct {
 	*Options
 
-	GeneratorFactory domain.PackageGeneratorFactory
-	CmdRunner        domain.CommandRunner
+	languageGenerators map[string]domain.PackageGenerator
+	CmdRunner          domain.CommandRunner
 }
 
 var (
@@ -42,14 +44,7 @@ var (
 // packages from an OpenAPI specification
 func NewCmdGeneratePackages(opts *Options) *cobra.Command {
 	o := &PackageOptions{
-		Options: opts,
-		GeneratorFactory: packageGenerator.NewFactory(
-			opts.Version,
-			opts.SwaggerServiceName,
-			opts.RepoOwner,
-			opts.RepoName,
-			opts.GitToken,
-		),
+		Options:   opts,
 		CmdRunner: commandRunner.NewCommandRunner(),
 	}
 
@@ -79,25 +74,28 @@ func (o *PackageOptions) Run(languages []string) error {
 	}
 	defer o.FileIO.DeferRemove(tmpDir)
 
+	if err := o.InitialiseGenerators(); err != nil {
+		return errors.Wrap(err, "failed to initialise generators")
+	}
+
+	if err := o.ValidateLanguages(languages); err != nil {
+		return errors.Wrap(err, "failed to validate languages")
+	}
+
 	for _, l := range languages {
 		log.Logger().Infof("%sGenerating %s client package%s", utils.Green, l, utils.Reset)
-		gen, err := o.GeneratorFactory.NewGenerator(l)
-		if err != nil {
-			return errors.Wrapf(err, "failed to create generator for %s", l)
-		}
-
 		outputDir, err := o.FileIO.MkdirAll(filepath.Join(tmpDir, l), 0700)
 		if err != nil {
 			return errors.Wrapf(err, "failed to make output dir for %s", l)
 		}
 
-		packageDir, err := gen.GeneratePackage(o.SpecPath, outputDir)
+		packageDir, err := o.languageGenerators[l].GeneratePackage(outputDir)
 		if err != nil {
 			return errors.Wrapf(err, "failed to generate %s package", l)
 		}
 
 		log.Logger().Infof("%sPushing %s package%s", utils.Green, l, utils.Reset)
-		err = gen.PushPackage(packageDir)
+		err = o.languageGenerators[l].PushPackage(packageDir)
 		if err != nil {
 			return errors.Wrapf(err, "failed to push %s package", l)
 		}
@@ -107,17 +105,38 @@ func (o *PackageOptions) Run(languages []string) error {
 	return nil
 }
 
+func (o *PackageOptions) ValidateLanguages(languages []string) error {
+	for _, l := range languages {
+		if _, ok := o.languageGenerators[l]; !ok {
+			return errors.Errorf("language %s is not supported", l)
+		}
+	}
+	return nil
+}
+
+func (o *PackageOptions) InitialiseGenerators() error {
+	// Get the config & init base generator
+	config, err := openapitools.GetConfig()
+	if err != nil {
+		return errors.Wrap(err, "failed to get config")
+	}
+	baseGenerator, err := packageGenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.SpecPath, config)
+	if err != nil {
+		return errors.Wrap(err, "failed to create base generator")
+	}
+
+	o.languageGenerators = map[string]domain.PackageGenerator{
+		domain.CSharp: csharp.NewCSharpGenerator(baseGenerator),
+	}
+	return nil
+}
+
 // SetupEnvironment creates the output directory and copies the required files into it
 func (o *PackageOptions) SetupEnvironment() (string, error) {
 	log.Logger().Infof("%sSetting up environment%s", utils.Green, utils.Reset)
 	tmpDir, err := o.FileIO.MkTmpDir("package-generator")
 	if err != nil {
 		return "", errors.Wrap(err, "failed to make tmp dir")
-	}
-
-	_, err = o.FileIO.CopyToWorkingDir(OpenAPIToolsPath)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to copy openapitools.json")
 	}
 	return tmpDir, nil
 }

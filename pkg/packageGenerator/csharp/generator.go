@@ -9,7 +9,6 @@ import (
 )
 
 const (
-	csharp          = "csharp"
 	NugetConfigPath = "./registry/nuget.config"
 )
 
@@ -17,21 +16,25 @@ type Generator struct {
 	*packageGenerator.BaseGenerator
 }
 
-func NewGenerator(baseGenerator *packageGenerator.BaseGenerator) domain.PackageGenerator {
+func NewCSharpGenerator(baseGenerator *packageGenerator.BaseGenerator) *Generator {
 	return &Generator{
 		BaseGenerator: baseGenerator,
 	}
 }
 
-func (g *Generator) GeneratePackage(specificationPath, outputDir string) (string, error) {
+func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 	packageDir, err := g.FileIO.MkdirAll(filepath.Join(outputDir, g.GetPackageName()), 0755)
 	if err != nil {
 		return "", err
 	}
 
-	// Generate Package
-	err = g.BaseGenerator.GeneratePackage(outputDir, csharp)
-	// Copy nuget.config
+	g.setDynamicConfigVariables()
+
+	err = g.BaseGenerator.GeneratePackage(packageDir, domain.CSharp)
+	if err != nil {
+		return "", err
+	}
+
 	_, _, err = g.FileIO.CopyToDir(NugetConfigPath, packageDir)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to copy nuget config")
@@ -42,6 +45,10 @@ func (g *Generator) GeneratePackage(specificationPath, outputDir string) (string
 		return "", errors.Wrap(err, "failed to pack solution")
 	}
 	return packageDir, nil
+}
+
+func (g *Generator) setDynamicConfigVariables() {
+	g.Cfg.GeneratorCLI.Generators[domain.CSharp].AdditionalProperties["packageName"] = g.GetPackageName()
 }
 
 func (g *Generator) GetPackageName() string {

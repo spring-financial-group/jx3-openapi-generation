@@ -4,7 +4,16 @@ import (
 	"encoding/json"
 	"github.com/pkg/errors"
 	"os"
-	"strconv"
+	"path/filepath"
+	"spring-financial-group/jx3-openapi-generation/pkg/utils"
+)
+
+const (
+	OpenAPIConfigFileName = "openapitools.json"
+)
+
+var (
+	configPath = "/" + OpenAPIConfigFileName
 )
 
 type Config struct {
@@ -19,36 +28,25 @@ type GeneratorCLI struct {
 }
 
 type Generator struct {
-	Name                 string                        `json:"generatorName"`
-	AdditionalProperties map[string]AdditionalProperty `json:"additionalProperties"`
+	Name                 string            `json:"generatorName"`
+	Output               string            `json:"output"`
+	InputSpec            string            `json:"inputSpec"`
+	GitRepoID            string            `json:"gitRepoId"`
+	GitUserID            string            `json:"gitUserId"`
+	GlobalProperty       string            `json:"globalProperty"`
+	AdditionalProperties map[string]string `json:"additionalProperties"`
 }
 
-// AdditionalProperty is a type alias for string as it can be either a string or a boolean, but we don't care about the value,
-// so we can just unmarshal it into a string
-type AdditionalProperty string
-
-func (a *AdditionalProperty) UnmarshalJSON(data []byte) error {
-	if data[0] == '"' {
-		return json.Unmarshal(data, (*string)(a))
-	}
-	var b bool
-	if err := json.Unmarshal(data, &b); err != nil {
-		return err
-	}
-	*a = AdditionalProperty(strconv.FormatBool(b))
-	return nil
-}
-
-func GetConfig(path string) (*Config, error) {
+func GetConfig() (*Config, error) {
 	cfg := new(Config)
-	err := cfg.ReadFromFile(path)
+	err := cfg.readFromFile(configPath)
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to read config from %s", path)
+		return nil, errors.Wrapf(err, "failed to read config from %s", configPath)
 	}
 	return cfg, nil
 }
 
-func (c *Config) ReadFromFile(path string) error {
+func (c *Config) readFromFile(path string) error {
 	data, err := os.ReadFile(path)
 	if err != nil {
 		return errors.Wrap(err, "failed to read openapitools.json")
@@ -58,4 +56,17 @@ func (c *Config) ReadFromFile(path string) error {
 		return errors.Wrap(err, "failed to unmarshal config")
 	}
 	return nil
+}
+
+func (c *Config) WriteToDirectory(dir string) (string, error) {
+	data, err := utils.MarshalJSON(c)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to marshal config")
+	}
+	path := filepath.Join(dir, OpenAPIConfigFileName)
+	err = os.WriteFile(path, data, 0755)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to write config to directory")
+	}
+	return path, nil
 }

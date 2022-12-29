@@ -6,11 +6,12 @@
     "generators": {
       "csharp": {
         "generatorName": "csharp-netcore",
+        "output": "#{cwd}",
         "additionalProperties": {
           "targetFramework": "netstandard2.1",
-          "netCoreProjectFile": true,
-          "optionalEmitDefaultValues": true,
-          "validatable": false
+          "netCoreProjectFile": "true",
+          "optionalEmitDefaultValues": "true",
+          "validatable": "false"
         }
       }
     }
