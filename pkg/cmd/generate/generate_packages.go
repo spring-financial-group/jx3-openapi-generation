@@ -118,7 +118,7 @@ func (o *PackageOptions) InitialiseGenerators() error {
 	// Get the config & init base generator
 	config, err := openapitools.GetConfig()
 	if err != nil {
-		return errors.Wrap(err, "failed to get config")
+		return err
 	}
 	baseGenerator, err := packageGenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.SpecPath, config)
 	if err != nil {

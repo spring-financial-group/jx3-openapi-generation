@@ -54,6 +54,7 @@ spec:
                 mv ./build/jx3-openapi-generation ./mocks/jx3-openapi-generation
             - image: jx3mqubebuild.azurecr.io/spring-financial-group/jx3-openapi-generation:latest-preview
               name: test-package-generation
+              imagePullPolicy: Always
               resources: {}
               script: |
                 #!/bin/bash

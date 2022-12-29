@@ -2,6 +2,7 @@ package openapitools
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/pkg/errors"
 	"os"
 	"path/filepath"
@@ -51,6 +52,7 @@ func (c *Config) readFromFile(path string) error {
 	if err != nil {
 		return errors.Wrap(err, "failed to read openapitools.json")
 	}
+	fmt.Println(string(data))
 	err = json.Unmarshal(data, c)
 	if err != nil {
 		return errors.Wrap(err, "failed to unmarshal config")
