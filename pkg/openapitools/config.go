@@ -2,7 +2,6 @@ package openapitools
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/pkg/errors"
 	"os"
 	"path/filepath"
@@ -34,7 +33,7 @@ type Generator struct {
 	InputSpec            string            `json:"inputSpec"`
 	GitRepoID            string            `json:"gitRepoId"`
 	GitUserID            string            `json:"gitUserId"`
-	GlobalProperty       string            `json:"globalProperty"`
+	GlobalProperty       map[string]string `json:"globalProperty"`
 	AdditionalProperties map[string]string `json:"additionalProperties"`
 }
 
@@ -71,7 +70,7 @@ func (c *Config) WriteToCurrentWorkingDirectory() (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err, "failed to marshal config")
 	}
-	fmt.Println(string(data))
+
 	path := filepath.Join("./", OpenAPIConfigFileName)
 	err = os.WriteFile(path, data, 0755)
 	if err != nil {

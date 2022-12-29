@@ -6,12 +6,22 @@
     "generators": {
       "csharp": {
         "generatorName": "csharp-netcore",
-        "output": "#{cwd}",
         "additionalProperties": {
           "targetFramework": "netstandard2.1",
           "netCoreProjectFile": "true",
           "optionalEmitDefaultValues": "true",
           "validatable": "false"
+        }
+      },
+      "java": {
+        "generatorName": "java",
+        "additionalProperties": {
+          "dateLibrary": "java8-localdatetime"
+        },
+        "globalProperty": {
+          "model": "true",
+          "modelTests": "false",
+          "modelDocs": "false"
         }
       }
     }

@@ -12,6 +12,7 @@ import (
 	"spring-financial-group/jx3-openapi-generation/pkg/openapitools"
 	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
 	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/csharp"
+	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/java"
 	"spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"strings"
 )
@@ -63,6 +64,15 @@ func NewCmdGeneratePackages(opts *Options) *cobra.Command {
 		SuggestFor: []string{"p", "pack", "packa", "packag"},
 		Aliases:    []string{"pkg", "pkgs", "packages", "package"},
 	}
+
+	if err := o.InitialiseGenerators(); err != nil {
+		helper.CheckErr(errors.Wrap(err, "failed to initialise generators"))
+		return nil
+	}
+	if err := o.ValidateLanguages(o.Args); err != nil {
+		helper.CheckErr(errors.Wrap(err, "failed to validate languages"))
+		return nil
+	}
 	return cmd
 }
 
@@ -73,14 +83,6 @@ func (o *PackageOptions) Run(languages []string) error {
 		return errors.Wrap(err, "failed to setup environment")
 	}
 	defer o.FileIO.DeferRemove(tmpDir)
-
-	if err := o.InitialiseGenerators(); err != nil {
-		return errors.Wrap(err, "failed to initialise generators")
-	}
-
-	if err := o.ValidateLanguages(languages); err != nil {
-		return errors.Wrap(err, "failed to validate languages")
-	}
 
 	for _, l := range languages {
 		log.Logger().Infof("%sGenerating %s client package%s", utils.Green, l, utils.Reset)
@@ -108,7 +110,7 @@ func (o *PackageOptions) Run(languages []string) error {
 func (o *PackageOptions) ValidateLanguages(languages []string) error {
 	for _, l := range languages {
 		if _, ok := o.languageGenerators[l]; !ok {
-			return errors.Errorf("language %s is not supported", l)
+			return &domain.ErrUnsupportedLanguage{Language: l}
 		}
 	}
 	return nil
@@ -126,14 +128,14 @@ func (o *PackageOptions) InitialiseGenerators() error {
 	}
 
 	o.languageGenerators = map[string]domain.PackageGenerator{
-		domain.CSharp: csharp.NewCSharpGenerator(baseGenerator),
+		domain.CSharp: csharp.NewGenerator(baseGenerator),
+		domain.Java:   java.NewGenerator(baseGenerator),
 	}
 	return nil
 }
 
 // SetupEnvironment creates the output directory and copies the required files into it
 func (o *PackageOptions) SetupEnvironment() (string, error) {
-	log.Logger().Infof("%sSetting up environment%s", utils.Green, utils.Reset)
 	tmpDir, err := o.FileIO.MkTmpDir("package-generator")
 	if err != nil {
 		return "", errors.Wrap(err, "failed to make tmp dir")

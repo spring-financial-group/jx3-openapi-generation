@@ -16,7 +16,7 @@ type Generator struct {
 	*packageGenerator.BaseGenerator
 }
 
-func NewCSharpGenerator(baseGenerator *packageGenerator.BaseGenerator) *Generator {
+func NewGenerator(baseGenerator *packageGenerator.BaseGenerator) *Generator {
 	return &Generator{
 		BaseGenerator: baseGenerator,
 	}
