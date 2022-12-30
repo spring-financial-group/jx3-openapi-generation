@@ -40,7 +40,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	err = g.BaseGenerator.GeneratePackage(packageDir, domain.CSharp)
+	err = g.BaseGenerator.GeneratePackage(packageDir, domain.Angular)
 	if err != nil {
 		return "", err
 	}
