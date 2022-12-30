@@ -34,13 +34,7 @@ func NewGenerator(baseGenerator *packageGenerator.BaseGenerator) *Generator {
 }
 
 func (g *Generator) GeneratePackage(outputDir string) (string, error) {
-	// Make the directory that will contain the final package
-	packageDir, err := g.FileIO.MkdirAll(filepath.Join(outputDir, g.GetPackageName()), 0755)
-	if err != nil {
-		return "", err
-	}
-
-	err = g.BaseGenerator.GeneratePackage(packageDir, domain.Angular)
+	packageDir, err := g.BaseGenerator.GeneratePackage(outputDir, domain.Angular)
 	if err != nil {
 		return "", err
 	}
