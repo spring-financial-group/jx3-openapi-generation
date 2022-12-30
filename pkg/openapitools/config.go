@@ -31,10 +31,10 @@ type Generator struct {
 	Name                 string            `json:"generatorName"`
 	Output               string            `json:"output"`
 	InputSpec            string            `json:"inputSpec"`
-	GitRepoID            string            `json:"gitRepoId"`
-	GitUserID            string            `json:"gitUserId"`
-	GlobalProperty       map[string]string `json:"globalProperty"`
-	AdditionalProperties map[string]string `json:"additionalProperties"`
+	GitRepoID            string            `json:"gitRepoId,omitempty"`
+	GitUserID            string            `json:"gitUserId,omitempty"`
+	GlobalProperty       map[string]string `json:"globalProperty,omitempty"`
+	AdditionalProperties map[string]string `json:"additionalProperties,omitempty"`
 }
 
 func GetConfig() (*Config, error) {
