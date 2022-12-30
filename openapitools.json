@@ -19,7 +19,7 @@
           "dateLibrary": "java8-localdatetime"
         },
         "globalProperty": {
-          "model": "true",
+          "models": "",
           "modelTests": "false",
           "modelDocs": "false"
         }
@@ -33,6 +33,9 @@
           "ngVersion": "10.0.0",
           "stringEnums": "true"
         }
+      },
+      "python": {
+        "generatorName": "python"
       }
     }
   }

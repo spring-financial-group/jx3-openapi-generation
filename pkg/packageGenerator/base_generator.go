@@ -52,13 +52,12 @@ func (g *BaseGenerator) setDynamicConfigVariables() (err error) {
 // GeneratePackage generates the package for the given language using the openapi-generator-cli. The config is written
 // to the directory before running the command.
 func (g *BaseGenerator) GeneratePackage(outputDir, language string) (string, error) {
-	packageDir := g.getPackageDir(outputDir, language)
-	_, err := g.FileIO.MkdirAll(filepath.Join(outputDir, packageDir), 0755)
+	_, err := g.FileIO.MkdirAll(outputDir, 0755)
 	if err != nil {
 		return "", err
 	}
 
-	g.Cfg.GeneratorCLI.Generators[language].Output = packageDir
+	g.Cfg.GeneratorCLI.Generators[language].Output = outputDir
 	cfgPath, err := g.Cfg.WriteToCurrentWorkingDirectory()
 	if err != nil {
 		return "", err
@@ -70,7 +69,7 @@ func (g *BaseGenerator) GeneratePackage(outputDir, language string) (string, err
 	if err != nil {
 		return "", errors.Wrap(err, "failed to generate package")
 	}
-	return packageDir, nil
+	return outputDir, nil
 }
 
 func (g *BaseGenerator) getPackageDir(outputDir, language string) string {

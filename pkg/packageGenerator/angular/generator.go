@@ -34,7 +34,7 @@ func NewGenerator(baseGenerator *packageGenerator.BaseGenerator) *Generator {
 }
 
 func (g *Generator) GeneratePackage(outputDir string) (string, error) {
-	packageDir, err := g.BaseGenerator.GeneratePackage(outputDir, domain.Angular)
+	packageDir, err := g.BaseGenerator.GeneratePackage(filepath.Join(outputDir, g.GetPackageName()), domain.Angular)
 	if err != nil {
 		return "", err
 	}

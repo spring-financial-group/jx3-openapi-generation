@@ -3,6 +3,7 @@ package csharp
 import (
 	"fmt"
 	"github.com/pkg/errors"
+	"path/filepath"
 	"spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
 )
@@ -24,7 +25,7 @@ func NewGenerator(baseGenerator *packageGenerator.BaseGenerator) *Generator {
 func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 	g.setDynamicConfigVariables()
 
-	packageDir, err := g.BaseGenerator.GeneratePackage(outputDir, domain.CSharp)
+	packageDir, err := g.BaseGenerator.GeneratePackage(filepath.Join(outputDir, g.GetPackageName()), domain.CSharp)
 	if err != nil {
 		return "", err
 	}
