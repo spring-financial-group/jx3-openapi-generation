@@ -28,13 +28,15 @@ type GeneratorCLI struct {
 }
 
 type Generator struct {
-	Name                 string            `json:"generatorName"`
-	Output               string            `json:"output"`
-	InputSpec            string            `json:"inputSpec"`
-	GitRepoID            string            `json:"gitRepoId,omitempty"`
-	GitUserID            string            `json:"gitUserId,omitempty"`
-	GlobalProperty       map[string]string `json:"globalProperty,omitempty"`
-	AdditionalProperties map[string]string `json:"additionalProperties,omitempty"`
+	Name                    string            `json:"generatorName"`
+	Output                  string            `json:"output"`
+	InputSpec               string            `json:"inputSpec"`
+	GitRepoID               string            `json:"gitRepoId,omitempty"`
+	GitUserID               string            `json:"gitUserId,omitempty"`
+	EnablePostProcessFile   bool              `json:"enablePostProcessFile,omitempty"`
+	RemoveOperationIdPrefix bool              `json:"removeOperationIdPrefix,omitempty"`
+	GlobalProperty          map[string]string `json:"globalProperty,omitempty"`
+	AdditionalProperties    map[string]string `json:"additionalProperties,omitempty"`
 }
 
 func GetConfig() (*Config, error) {

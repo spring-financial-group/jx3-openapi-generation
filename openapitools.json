@@ -23,6 +23,16 @@
           "modelTests": "false",
           "modelDocs": "false"
         }
+      },
+      "angular": {
+        "generatorName": "typescript-angular",
+        "enablePostProcessFile": true,
+        "removeOperationIdPrefix": true,
+        "additionalProperties": {
+          "fileNaming": "camelCase",
+          "ngVersion": "10.0.0",
+          "stringEnums": "true"
+        }
       }
     }
   }

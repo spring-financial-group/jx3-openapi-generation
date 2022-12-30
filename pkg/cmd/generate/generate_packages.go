@@ -11,6 +11,7 @@ import (
 	"spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"spring-financial-group/jx3-openapi-generation/pkg/openapitools"
 	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
+	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/angular"
 	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/csharp"
 	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/java"
 	"spring-financial-group/jx3-openapi-generation/pkg/utils"
@@ -128,8 +129,9 @@ func (o *PackageOptions) InitialiseGenerators() error {
 	}
 
 	o.languageGenerators = map[string]domain.PackageGenerator{
-		domain.CSharp: csharp.NewGenerator(baseGenerator),
-		domain.Java:   java.NewGenerator(baseGenerator),
+		domain.CSharp:  csharp.NewGenerator(baseGenerator),
+		domain.Java:    java.NewGenerator(baseGenerator),
+		domain.Angular: angular.NewGenerator(baseGenerator),
 	}
 	return nil
 }

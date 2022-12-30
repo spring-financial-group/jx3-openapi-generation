@@ -30,6 +30,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 
 	g.setDynamicConfigVariables()
 
+	fmt.Printf("Generating package with config:\n%+v\n", g.Cfg)
 	err = g.BaseGenerator.GeneratePackage(packageDir, domain.CSharp)
 	if err != nil {
 		return "", err
