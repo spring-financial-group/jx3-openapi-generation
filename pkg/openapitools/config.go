@@ -64,6 +64,16 @@ func (c *Config) readFromFile(path string) error {
 	if err != nil {
 		return errors.Wrap(err, "failed to unmarshal config")
 	}
+
+	// Initialise the maps if they're nil so we can add to them
+	for _, val := range c.GeneratorCLI.Generators {
+		if val.GlobalProperty == nil {
+			val.GlobalProperty = make(map[string]string)
+		}
+		if val.AdditionalProperties == nil {
+			val.AdditionalProperties = make(map[string]string)
+		}
+	}
 	return nil
 }
 
