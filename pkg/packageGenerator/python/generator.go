@@ -23,7 +23,7 @@ const (
 )
 
 var (
-	reviewers = []string{"Reton2", "stelios93", "Skisocks"}
+	reviewers = []string{"Skisocks"}
 )
 
 type Generator struct {
@@ -57,19 +57,18 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	initPy := filepath.Join(packageDir, "__init__.py")
-	err = g.FileIO.Write(initPy, []byte{}, 0755)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to create init file")
-	}
+	//initPy := filepath.Join(packageDir, "__init__.py")
+	//err = g.FileIO.Write(initPy, []byte{}, 0755)
+	//if err != nil {
+	//	return "", errors.Wrap(err, "failed to create init file")
+	//}
 
 	packageJsonPath, err := g.updatePackagesJSON(repoDir)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to update packages.json")
 	}
 
-	schemasPy := filepath.Join(packageDir, "schemas.py")
-	err = g.Git.AddFiles(repoDir, schemasPy, initPy, packageJsonPath)
+	err = g.Git.AddFiles(repoDir, packageJsonPath, packageDir)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to add package to Git")
 	}
