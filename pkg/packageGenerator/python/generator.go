@@ -80,6 +80,10 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 	return packageDir, nil
 }
 
+func (g *Generator) setDynamicConfigVariables() {
+	g.Cfg.GeneratorCLI.Generators[domain.Python].AdditionalProperties["packageName"] = g.GetPackageName()
+}
+
 func (g *Generator) updatePackagesJSON(repoDir string) (string, error) {
 	packagesPath := filepath.Join(repoDir, "packages.json")
 	packages, err := g.getPackages(packagesPath)

@@ -5,6 +5,8 @@
     "version": "5.4.0",
     "generators": {
       "csharp": {
+        "output": "./csharp-service",
+        "inputSpec": "./mocks/swagger.json",
         "generatorName": "csharp-netcore",
         "additionalProperties": {
           "targetFramework": "netstandard2.1",
@@ -14,6 +16,8 @@
         }
       },
       "java": {
+        "output": "./java-service",
+        "inputSpec": "./mocks/swagger.json",
         "generatorName": "java",
         "additionalProperties": {
           "dateLibrary": "java8-localdatetime"
@@ -25,6 +29,8 @@
         }
       },
       "angular": {
+        "output": "./angular-service",
+        "inputSpec": "./mocks/swagger.json",
         "generatorName": "typescript-angular",
         "enablePostProcessFile": true,
         "removeOperationIdPrefix": true,
@@ -35,7 +41,13 @@
         }
       },
       "python": {
-        "generatorName": "python"
+        "output": "./python-service",
+        "inputSpec": "./mocks/swagger.json",
+        "generatorName": "python",
+        "additionalProperties": {
+        },
+        "globalProperty": {
+        }
       }
     }
   }
