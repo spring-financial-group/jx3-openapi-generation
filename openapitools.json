@@ -2,6 +2,53 @@
   "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "5.4.0"
+    "version": "5.4.0",
+    "generators": {
+      "csharp": {
+        "output": "./csharp-service",
+        "inputSpec": "./mocks/swagger.json",
+        "generatorName": "csharp-netcore",
+        "additionalProperties": {
+          "targetFramework": "netstandard2.1",
+          "netCoreProjectFile": "true",
+          "optionalEmitDefaultValues": "true",
+          "validatable": "false"
+        }
+      },
+      "java": {
+        "output": "./java-service",
+        "inputSpec": "./mocks/swagger.json",
+        "generatorName": "java",
+        "additionalProperties": {
+          "dateLibrary": "java8-localdatetime"
+        },
+        "globalProperty": {
+          "models": "",
+          "modelTests": "false",
+          "modelDocs": "false"
+        }
+      },
+      "angular": {
+        "output": "./angular-service",
+        "inputSpec": "./mocks/swagger.json",
+        "generatorName": "typescript-angular",
+        "enablePostProcessFile": true,
+        "removeOperationIdPrefix": true,
+        "additionalProperties": {
+          "fileNaming": "camelCase",
+          "ngVersion": "10.0.0",
+          "stringEnums": "true"
+        }
+      },
+      "python": {
+        "output": "./python-service",
+        "inputSpec": "./mocks/swagger.json",
+        "generatorName": "python",
+        "additionalProperties": {
+        },
+        "globalProperty": {
+        }
+      }
+    }
   }
 }

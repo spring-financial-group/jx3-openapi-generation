@@ -26,11 +26,35 @@ spec:
           resources: {}
         - name: jx-variables
           resources: {}
+        - image: golang:1.18
+          name: build-make-linux
+          resources: {}
+          script: |
+            #!/bin/sh
+            make linux
         - name: check-registry
           resources: {}
-        - image: uses:spring-financial-group/DevOps/pipelines/build-push-DANGER.yaml@main
-          name: ""
+        - image: gcr.io/kaniko-project/executor:v1.8.0-debug
+          name: build-container
           resources: {}
+          script: |
+            #!/busybox/sh
+            source .jx/variables.sh
+            cp /tekton/creds-secrets/tekton-container-registry-auth/.dockerconfigjson /kaniko/.docker/config.json
+            /kaniko/executor $KANIKO_FLAGS --context=/workspace/source --dockerfile=${DOCKERFILE_PATH:-Dockerfile} \
+            --destination=$PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:$VERSION \
+            --destination=$PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:latest \
+            --no-push --tarPath image.tar
+        - image: ghcr.io/spring-financial-group/container-tools:latest
+          name: push
+          resources: {}
+          script: |
+            #!/bin/bash
+            source .jx/variables.sh
+            cp /tekton/creds-secrets/tekton-container-registry-auth/.dockerconfigjson ~/.docker/config.json
+            crane push /workspace/source/image.tar $PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:$VERSION
+            crane push /workspace/source/image.tar $PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:latest
+            rm /workspace/source/image.tar
         - name: promote-changelog
           resources: {}
   podTemplate: {}

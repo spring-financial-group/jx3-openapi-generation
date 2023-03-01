@@ -1,0 +1,72 @@
+package packageGenerator
+
+import (
+	"github.com/pkg/errors"
+	"spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
+	"spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"spring-financial-group/jx3-openapi-generation/pkg/file"
+	"spring-financial-group/jx3-openapi-generation/pkg/openapitools"
+)
+
+type BaseGenerator struct {
+	Version     string
+	ServiceName string
+	RepoOwner   string
+	RepoName    string
+	GitToken    string
+	SpecPath    string
+
+	Cfg    *openapitools.Config
+	Cmd    domain.CommandRunner
+	FileIO domain.FileIO
+}
+
+func NewBaseGenerator(version, serviceName, repoOwner, repoName, gitToken, specPath string, cfg *openapitools.Config) (*BaseGenerator, error) {
+	gen := &BaseGenerator{
+		Version:     version,
+		ServiceName: serviceName,
+		RepoOwner:   repoOwner,
+		RepoName:    repoName,
+		GitToken:    gitToken,
+		SpecPath:    specPath,
+		Cmd:         commandRunner.NewCommandRunner(),
+		FileIO:      file.NewFileIO(),
+		Cfg:         cfg,
+	}
+	return gen, gen.setDynamicConfigVariables()
+}
+
+// setDynamicConfigVariables initializes the config for the generator setting the default values for the generator depending on the
+// environment
+func (g *BaseGenerator) setDynamicConfigVariables() (err error) {
+	for _, val := range g.Cfg.GeneratorCLI.Generators {
+		val.InputSpec = g.SpecPath
+		val.GitRepoID = g.RepoName
+		val.GitUserID = g.RepoOwner
+		val.AdditionalProperties["packageVersion"] = g.Version
+	}
+	return nil
+}
+
+// GeneratePackage generates the package for the given language using the openapi-generator-cli. The config is written
+// to the directory before running the command.
+func (g *BaseGenerator) GeneratePackage(outputDir, language string) (string, error) {
+	_, err := g.FileIO.MkdirAll(outputDir, 0755)
+	if err != nil {
+		return "", err
+	}
+
+	g.Cfg.GeneratorCLI.Generators[language].Output = outputDir
+	cfgPath, err := g.Cfg.WriteToCurrentWorkingDirectory()
+	if err != nil {
+		return "", err
+	}
+	defer g.FileIO.DeferRemove(cfgPath)
+
+	// Generate Package
+	err = g.Cmd.ExecuteAndLog("", "npx", "openapi-generator-cli", "generate", "--generator-key", language)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to generate package")
+	}
+	return outputDir, nil
+}
