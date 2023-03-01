@@ -2,7 +2,6 @@ package packageGenerator
 
 import (
 	"github.com/pkg/errors"
-	"path/filepath"
 	"spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
 	"spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"spring-financial-group/jx3-openapi-generation/pkg/file"
@@ -70,8 +69,4 @@ func (g *BaseGenerator) GeneratePackage(outputDir, language string) (string, err
 		return "", errors.Wrap(err, "failed to generate package")
 	}
 	return outputDir, nil
-}
-
-func (g *BaseGenerator) getPackageDir(outputDir, language string) string {
-	return filepath.Join(outputDir, g.ServiceName+"-"+language)
 }

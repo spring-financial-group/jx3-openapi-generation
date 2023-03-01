@@ -52,16 +52,12 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", errors.Wrap(err, "failed to checkout branch")
 	}
 
+	g.setDynamicConfigVariables()
+
 	packageDir, err := g.BaseGenerator.GeneratePackage(filepath.Join(repoDir, g.GetPackageName()), domain.Python)
 	if err != nil {
 		return "", err
 	}
-
-	//initPy := filepath.Join(packageDir, "__init__.py")
-	//err = g.FileIO.Write(initPy, []byte{}, 0755)
-	//if err != nil {
-	//	return "", errors.Wrap(err, "failed to create init file")
-	//}
 
 	packageJsonPath, err := g.updatePackagesJSON(repoDir)
 	if err != nil {
@@ -174,9 +170,9 @@ func (g *Generator) createPullRequest(currentBranch, defaultBranch string) error
 	if err != nil {
 		return errors.Wrap(err, "failed to add reviewers to pull request")
 	}
-	//_, err = g.Scm.AddLabels(context.Background(), []string{updateBotLabel}, pr.GetNumber())
-	//if err != nil {
-	//	return errors.Wrap(err, "failed to add labels pull request")
-	//}
+	_, err = g.Scm.AddLabels(context.Background(), []string{updateBotLabel}, pr.GetNumber())
+	if err != nil {
+		return errors.Wrap(err, "failed to add labels pull request")
+	}
 	return nil
 }
