@@ -39,6 +39,11 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
+	_, err = g.getPackageJSON(packageDir)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to get package.json")
+	}
+
 	err = g.FileIO.CopyManyToDir(packageDir, TSConfigPath, ConfigurationTSPath)
 	if err != nil {
 		return "", err
@@ -56,7 +61,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 
 	distDir := filepath.Join(outputDir, "dist")
 
-	// Copy the package.json file & replace the version
+	// Copy the original package.json to the dist directory to remove the dependencies
 	_, err = g.getPackageJSON(distDir)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to get package.json")
