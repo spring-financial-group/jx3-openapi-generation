@@ -39,8 +39,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	// Copy the package.json file & replace the version
-	packageJSONPath, err := g.getPackageJSON(packageDir)
+	_, err = g.getPackageJSON(packageDir)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to get package.json")
 	}
@@ -48,11 +47,6 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 	err = g.FileIO.CopyManyToDir(packageDir, TSConfigPath, ConfigurationTSPath)
 	if err != nil {
 		return "", err
-	}
-
-	err = g.installNPMPackages(packageDir)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to install npm packages")
 	}
 
 	err = g.installNPMPackages(packageDir, RXJS, Zone, AngularCore, AngularCommon)
@@ -66,7 +60,14 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 	}
 
 	distDir := filepath.Join(outputDir, "dist")
-	err = g.FileIO.CopyManyToDir(distDir, NPMRCPath, ConfigurationTSPath, packageJSONPath)
+
+	// Copy the original package.json to the dist directory to remove the dependencies
+	_, err = g.getPackageJSON(distDir)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to get package.json")
+	}
+
+	err = g.FileIO.CopyManyToDir(distDir, NPMRCPath, ConfigurationTSPath)
 	if err != nil {
 		return "", err
 	}
