@@ -67,7 +67,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", errors.Wrap(err, "failed to get package.json")
 	}
 
-	err = g.FileIO.CopyManyToDir(distDir, NPMRCPath, ConfigurationTSPath)
+	err = g.FileIO.CopyManyToDir(distDir, NPMRCPath)
 	if err != nil {
 		return "", err
 	}
