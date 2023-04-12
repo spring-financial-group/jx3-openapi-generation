@@ -22,11 +22,11 @@ spec:
     run_if_changed: ^.*\.(go|mod)$
     optional: false
     source: "tests.yaml"
-  - name: generate-packages
-    context: "integration-test"
-    always_run: false
+  - name: generate-test-packages
+    context: "generate-test-packages"
+    always_run: true
     optional: false
-    source: "integration.yaml"
+    source: "generate-test-packages.yaml"
   postsubmits:
   - name: release
     context: "release"

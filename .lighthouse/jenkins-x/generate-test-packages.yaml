@@ -2,7 +2,7 @@ apiVersion: tekton.dev/v1beta1
 kind: PipelineRun
 metadata:
   creationTimestamp: null
-  name: integration-test
+  name: generate-test-packages
 spec:
   pipelineSpec:
     tasks:
