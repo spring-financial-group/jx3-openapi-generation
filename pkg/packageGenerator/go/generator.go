@@ -56,6 +56,11 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
+	err = g.Git.AddFiles(repoDir, packageDir)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to add files to Git")
+	}
+
 	err = g.Git.Commit(repoDir, fmt.Sprintf("chore(deps): upgrade %s package -> %s", g.GetPackageName(), g.Version))
 	if err != nil {
 		return "", errors.Wrap(err, "failed to commit package")
