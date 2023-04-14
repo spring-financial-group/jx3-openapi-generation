@@ -51,7 +51,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", errors.Wrap(err, "failed to checkout branch")
 	}
 
-	packageDir, err := g.BaseGenerator.GeneratePackage(filepath.Join(repoDir, g.GetPackageName()), domain.Python)
+	packageDir, err := g.BaseGenerator.GeneratePackage(filepath.Join(repoDir, g.GetPackageName()), domain.Go)
 	if err != nil {
 		return "", err
 	}
