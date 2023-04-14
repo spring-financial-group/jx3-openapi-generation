@@ -13,6 +13,7 @@ import (
 	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
 	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/angular"
 	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/csharp"
+	_go "spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/go"
 	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/java"
 	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/python"
 	"spring-financial-group/jx3-openapi-generation/pkg/utils"
@@ -134,6 +135,7 @@ func (o *PackageOptions) InitialiseGenerators() error {
 		domain.Java:    java.NewGenerator(baseGenerator),
 		domain.Angular: angular.NewGenerator(baseGenerator),
 		domain.Python:  python.NewGenerator(baseGenerator),
+		domain.Go:      _go.NewGenerator(baseGenerator),
 	}
 	return nil
 }

@@ -48,6 +48,15 @@
         },
         "globalProperty": {
         }
+      },
+      "go": {
+        "output": "./go-service",
+        "inputSpec": "./mocks/swagger.json",
+        "generatorName": "go",
+        "additionalProperties": {
+        },
+        "globalProperty": {
+        }
       }
     }
   }
