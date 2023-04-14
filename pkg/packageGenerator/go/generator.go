@@ -69,7 +69,11 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 }
 
 func (g *Generator) GetPackageName() string {
-	return strings.ReplaceAll(g.RepoName, "-", "_")
+	return strings.ToLower(g.ServiceName)
+}
+
+func (g *Generator) setDynamicConfigVariables() {
+	g.Cfg.GeneratorCLI.Generators[domain.Python].AdditionalProperties["packageName"] = g.GetPackageName()
 }
 
 func (g *Generator) PushPackage(packageDir string) error {

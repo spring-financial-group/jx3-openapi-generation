@@ -54,8 +54,12 @@
         "inputSpec": "./mocks/swagger.json",
         "generatorName": "go",
         "additionalProperties": {
+          "isGoSubmodule": true
         },
         "globalProperty": {
+          "models": "",
+          "modelTests": "false",
+          "modelDocs": "false"
         }
       }
     }
