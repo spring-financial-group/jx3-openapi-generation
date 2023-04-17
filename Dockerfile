@@ -2,6 +2,11 @@ FROM node:14
 
 RUN apt-get update
 
+# Install Go (1.20.3)
+RUN wget -c https://dl.google.com/go/go1.20.3.linux-amd64.tar.gz -O - | tar -xz -C /usr/local
+ENV PATH "$PATH:/usr/local/go/bin"
+RUN go version
+
 # Install python dependencies
 RUN apt-get install python3-pip -y && pip3 install datamodel-code-generator
 
