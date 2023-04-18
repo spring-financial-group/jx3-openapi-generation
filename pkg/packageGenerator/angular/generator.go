@@ -9,10 +9,9 @@ import (
 
 // Paths for use in generating angular packages
 const (
-	PackageJSONPath     = "./registry/package.json"
-	TSConfigPath        = "./registry/tsconfig.json"
-	ConfigurationTSPath = "/configuration.ts"
-	NPMRCPath           = "./registry/.npmrc"
+	PackageJSONPath = "./registry/package.json"
+	TSConfigPath    = "./registry/tsconfig.json"
+	NPMRCPath       = "./registry/.npmrc"
 )
 
 // Packages installed by the generator
