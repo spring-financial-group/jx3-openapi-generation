@@ -24,7 +24,7 @@ spec:
     source: "tests.yaml"
   - name: generate-test-packages
     context: "generate-test-packages"
-    always_run: true
+    always_run: false
     optional: false
     source: "generate-test-packages.yaml"
   postsubmits:
