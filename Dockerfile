@@ -31,7 +31,6 @@ ENV PATH "$PATH:/jx3-openapi-generation"
 
 # Add pipeline scripts & config files
 ADD openapitools.json openapitools.json
-ADD configuration.ts configuration.ts
 ADD CreateAngularPackageV2.sh CreateAngularPackageV2.sh
 ADD CreateAngularPackageV3.sh CreateAngularPackageV3.sh
 ADD CreateCsharpPackage.sh CreateCsharpPackage.sh
