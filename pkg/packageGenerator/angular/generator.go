@@ -9,10 +9,9 @@ import (
 
 // Paths for use in generating angular packages
 const (
-	PackageJSONPath     = "./registry/package.json"
-	TSConfigPath        = "./registry/tsconfig.json"
-	ConfigurationTSPath = "/configuration.ts"
-	NPMRCPath           = "./registry/.npmrc"
+	PackageJSONPath = "./registry/package.json"
+	TSConfigPath    = "./registry/tsconfig.json"
+	NPMRCPath       = "./registry/.npmrc"
 )
 
 // Packages installed by the generator
@@ -44,7 +43,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", errors.Wrap(err, "failed to get package.json")
 	}
 
-	err = g.FileIO.CopyManyToDir(packageDir, TSConfigPath, ConfigurationTSPath)
+	err = g.FileIO.CopyManyToDir(packageDir, TSConfigPath)
 	if err != nil {
 		return "", err
 	}

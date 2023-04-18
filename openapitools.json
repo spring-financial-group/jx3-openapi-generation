@@ -24,6 +24,7 @@
         },
         "globalProperty": {
           "models": "",
+          "supportingFiles": "JSON.java",
           "modelTests": "false",
           "modelDocs": "false"
         }

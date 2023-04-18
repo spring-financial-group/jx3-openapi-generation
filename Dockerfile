@@ -6,7 +6,7 @@ RUN apt-get update
 RUN apt-get install python3-pip -y && pip3 install datamodel-code-generator
 
 # Install node dependencies
-RUN npm install -g @openapitools/openapi-generator-cli@2.4.6
+RUN npm install -g @openapitools/openapi-generator-cli@2.6.0
 RUN npm install -g @angular/compiler-cli@13.3.1 @angular/platform-server@13.3.1 @angular/compiler@13.3.1
 RUN npm install -g typescript@4.6.3
 
@@ -31,7 +31,6 @@ ENV PATH "$PATH:/jx3-openapi-generation"
 
 # Add pipeline scripts & config files
 ADD openapitools.json openapitools.json
-ADD configuration.ts configuration.ts
 ADD CreateAngularPackageV2.sh CreateAngularPackageV2.sh
 ADD CreateAngularPackageV3.sh CreateAngularPackageV3.sh
 ADD CreateCsharpPackage.sh CreateCsharpPackage.sh
