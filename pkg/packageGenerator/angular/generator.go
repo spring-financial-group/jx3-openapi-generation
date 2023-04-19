@@ -36,10 +36,6 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	if err = g.FileIO.TemplateFilesInDir(packagingFilesDir, packageDir, g); err != nil {
-		return "", err
-	}
-
 	err = g.installNPMPackages(packageDir, RXJS, Zone, AngularCore, AngularCommon)
 	if err != nil {
 		return "", err
@@ -51,6 +47,9 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 	}
 
 	distDir := filepath.Join(outputDir, "dist")
+	if err = g.FileIO.TemplateFilesInDir(packagingFilesDir, distDir, g); err != nil {
+		return "", err
+	}
 
 	return distDir, nil
 }
