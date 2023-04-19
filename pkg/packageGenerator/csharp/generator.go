@@ -30,9 +30,8 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	_, _, err = g.FileIO.CopyToDir(NugetConfigPath, packageDir)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to copy nuget config")
+	if err := g.copyNugetConfig(packageDir); err != nil {
+		return "", err
 	}
 
 	err = g.Cmd.ExecuteAndLog(packageDir, "dotnet", "pack", "-c", "Release", fmt.Sprintf("-p:VERSION=%s", g.Version))
@@ -40,6 +39,18 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", errors.Wrap(err, "failed to pack solution")
 	}
 	return packageDir, nil
+}
+
+func (g *Generator) copyNugetConfig(dst string) error {
+	_, nugetPath, err := g.FileIO.CopyToDir(NugetConfigPath, dst)
+	if err != nil {
+		return errors.Wrap(err, "failed to copy nuget config")
+	}
+
+	if err := g.FileIO.ReplaceInFile(nugetPath, "REGISTRY_TOKEN", g.GitToken); err != nil {
+		return errors.Wrap(err, "failed to replace token in nuget config")
+	}
+	return nil
 }
 
 func (g *Generator) setDynamicConfigVariables() {
