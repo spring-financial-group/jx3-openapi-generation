@@ -1,7 +1,7 @@
 {
-  "name": "@spring-financial-group/jx3-openapi-generation-mock",
-  "version": "0.0.0",
-  "description": "Mock Openapi-Generation API Library for Angular",
+  "name": "@spring-financial-group/REPO_NAME",
+  "version": "VERSION",
+  "description": "Dynamically generated REPO_NAME API Library for Angular",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,5 +9,5 @@
   "keywords": [],
   "author": "",
   "license": "ISC",  
-  "repository": "git://github.com/spring-financial-group/jx3-openapi-generation.git"
+  "repository": "git://github.com/spring-financial-group/REPO_NAME.git"
 }
