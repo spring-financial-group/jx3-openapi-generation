@@ -31,9 +31,8 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	err = g.getBuildGradle(packageDir)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to get build.gradle")
+	if err = g.copyBuildGradle(packageDir); err != nil {
+		return "", err
 	}
 
 	return packageDir, nil
@@ -44,12 +43,23 @@ func (g *Generator) setDynamicConfigVariables() {
 	g.Cfg.GeneratorCLI.Generators[domain.Java].AdditionalProperties["modelPackage"] = fmt.Sprintf("%s.models", g.GetPackageName())
 }
 
-func (g *Generator) getBuildGradle(packageDir string) error {
-	_, buildGradlePath, err := g.FileIO.CopyToDir(GradlePath, packageDir)
+// copyBuildGradle copies the build.gradle file and populates the version, registry token, and repo name
+func (g *Generator) copyBuildGradle(dst string) error {
+	_, buildGradlePath, err := g.FileIO.CopyToDir(GradlePath, dst)
 	if err != nil {
 		return errors.Wrap(err, "failed to copy build.gradle file")
 	}
-	err = g.FileIO.ReplaceInFile(buildGradlePath, "0.0.0", g.Version)
+	err = g.FileIO.ReplaceInFile(buildGradlePath, "VERSION", g.Version)
+	if err != nil {
+		return errors.Wrap(err, "failed to populate version in build.gradle")
+	}
+
+	err = g.FileIO.ReplaceInFile(buildGradlePath, "REGISTRY_TOKEN", g.GitToken)
+	if err != nil {
+		return errors.Wrap(err, "failed to replace version in build.gradle")
+	}
+
+	err = g.FileIO.ReplaceInFile(buildGradlePath, "REPO_NAME", g.RepoName)
 	if err != nil {
 		return errors.Wrap(err, "failed to replace version in build.gradle")
 	}

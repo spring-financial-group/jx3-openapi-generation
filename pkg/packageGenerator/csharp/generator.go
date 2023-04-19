@@ -41,6 +41,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 	return packageDir, nil
 }
 
+// copyNugetConfig copies the nuget.config file and populates the registry token
 func (g *Generator) copyNugetConfig(dst string) error {
 	_, nugetPath, err := g.FileIO.CopyToDir(NugetConfigPath, dst)
 	if err != nil {
