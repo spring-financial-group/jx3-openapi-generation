@@ -13,6 +13,11 @@ spec:
         secretKeyRef:
           name: openapi-pkg-gen
           key: auth-token
+    - name: GIT_USER
+      valueFrom:
+        secretKeyRef:
+          name: openapi-pkg-gen
+          key: user
     envFrom:
     - secretRef:
         name: jx-boot-job-env-vars

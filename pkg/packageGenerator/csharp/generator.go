@@ -51,6 +51,10 @@ func (g *Generator) copyNugetConfig(dst string) error {
 	if err := g.FileIO.ReplaceInFile(nugetPath, "REGISTRY_TOKEN", g.GitToken); err != nil {
 		return errors.Wrap(err, "failed to replace token in nuget config")
 	}
+
+	if err := g.FileIO.ReplaceInFile(nugetPath, "REGISTRY_USER", g.GitUser); err != nil {
+		return errors.Wrap(err, "failed to replace token in nuget config")
+	}
 	return nil
 }
 

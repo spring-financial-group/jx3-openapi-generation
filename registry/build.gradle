@@ -24,7 +24,7 @@ publishing {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/spring-financial-group/REPO_NAME")
             credentials {
-                username = "spring-financial-group"
+                username = "REGISTRY_USER"
                 password = "REGISTRY_TOKEN"
             }
         }

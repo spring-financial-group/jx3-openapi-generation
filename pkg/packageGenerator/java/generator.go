@@ -59,6 +59,11 @@ func (g *Generator) copyBuildGradle(dst string) error {
 		return errors.Wrap(err, "failed to replace version in build.gradle")
 	}
 
+	err = g.FileIO.ReplaceInFile(buildGradlePath, "REGISTRY_USER", g.GitUser)
+	if err != nil {
+		return errors.Wrap(err, "failed to replace version in build.gradle")
+	}
+
 	err = g.FileIO.ReplaceInFile(buildGradlePath, "REPO_NAME", g.RepoName)
 	if err != nil {
 		return errors.Wrap(err, "failed to replace version in build.gradle")

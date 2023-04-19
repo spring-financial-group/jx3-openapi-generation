@@ -14,6 +14,7 @@ type BaseGenerator struct {
 	RepoOwner   string
 	RepoName    string
 	GitToken    string
+	GitUser     string
 	SpecPath    string
 
 	Cfg    *openapitools.Config
@@ -21,12 +22,13 @@ type BaseGenerator struct {
 	FileIO domain.FileIO
 }
 
-func NewBaseGenerator(version, serviceName, repoOwner, repoName, gitToken, specPath string, cfg *openapitools.Config) (*BaseGenerator, error) {
+func NewBaseGenerator(version, serviceName, repoOwner, repoName, gitToken, gitUser, specPath string, cfg *openapitools.Config) (*BaseGenerator, error) {
 	gen := &BaseGenerator{
 		Version:     version,
 		ServiceName: serviceName,
 		RepoOwner:   repoOwner,
 		RepoName:    repoName,
+		GitUser:     gitUser,
 		GitToken:    gitToken,
 		SpecPath:    specPath,
 		Cmd:         commandRunner.NewCommandRunner(),

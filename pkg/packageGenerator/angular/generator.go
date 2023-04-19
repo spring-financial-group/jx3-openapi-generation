@@ -77,7 +77,7 @@ func (g *Generator) copyNPMRC(dst string) error {
 		return errors.Wrap(err, "failed to copy .npmrc")
 	}
 
-	err = g.FileIO.ReplaceInFile(npmrcPath, "REGISTRY_AUTH", g.GitToken)
+	err = g.FileIO.ReplaceInFile(npmrcPath, "REGISTRY_TOKEN", g.GitToken)
 	if err != nil {
 		return errors.Wrap(err, "failed to populate registry auth token")
 	}
