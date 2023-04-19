@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	NugetConfigPath = "./registry/nuget.config"
+	NugetConfigPath = "/registry/nuget.config"
 )
 
 type Generator struct {

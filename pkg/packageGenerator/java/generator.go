@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	GradlePath = "./registry/build.gradle"
+	GradlePath = "/registry/build.gradle"
 )
 
 type Generator struct {
