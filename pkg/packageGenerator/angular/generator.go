@@ -9,9 +9,9 @@ import (
 
 // Paths for use in generating angular packages
 const (
-	PackageJSONPath = "/registry/package.json"
-	TSConfigPath    = "/registry/tsconfig.json"
-	NPMRCPath       = "/registry/.npmrc"
+	PackageJSONTmpl = "/templates/angular/package.json"
+	TSConfigTmpl    = "/templates/angular/tsconfig.json"
+	NPMRCTmpl       = "/templates/angular/.npmrc"
 )
 
 // Packages installed by the generator
@@ -38,12 +38,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	if err = g.copyPackageJSON(packageDir); err != nil {
-		return "", errors.Wrap(err, "failed to copy package.json to package directory")
-	}
-
-	err = g.FileIO.CopyManyToDir(packageDir, TSConfigPath)
-	if err != nil {
+	if err = g.FileIO.TemplateFiles(packageDir, g, PackageJSONTmpl, NPMRCTmpl, TSConfigTmpl); err != nil {
 		return "", err
 	}
 
@@ -59,50 +54,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 
 	distDir := filepath.Join(outputDir, "dist")
 
-	if err = g.copyPackageJSON(distDir); err != nil {
-		return "", errors.Wrap(err, "failed to copy package.json to dist directory")
-	}
-
-	if err = g.copyNPMRC(distDir); err != nil {
-		return "", err
-	}
-
 	return distDir, nil
-}
-
-// copyNPMRC copies the file to the destination and populates the auth token
-func (g *Generator) copyNPMRC(dst string) error {
-	_, npmrcPath, err := g.FileIO.CopyToDir(NPMRCPath, dst)
-	if err != nil {
-		return errors.Wrap(err, "failed to copy .npmrc")
-	}
-
-	err = g.FileIO.ReplaceInFile(npmrcPath, "REGISTRY_TOKEN", g.GitToken)
-	if err != nil {
-		return errors.Wrap(err, "failed to populate registry auth token")
-	}
-	return nil
-}
-
-// copyNPMRC copies the file to the destination and populates the version and repo name
-func (g *Generator) copyPackageJSON(dst string) error {
-	_, packageJSONPath, err := g.FileIO.CopyToDir(PackageJSONPath, dst)
-	if err != nil {
-		return errors.Wrap(err, "failed to copy package.json")
-	}
-
-	// Update the version
-	err = g.FileIO.ReplaceInFile(packageJSONPath, "VERSION", g.Version)
-	if err != nil {
-		return errors.Wrap(err, "failed to replace version in package.json")
-	}
-
-	// Update repository naming
-	err = g.FileIO.ReplaceInFile(packageJSONPath, "REPO_NAME", g.RepoName)
-	if err != nil {
-		return errors.Wrap(err, "failed to replace version in package.json")
-	}
-	return nil
 }
 
 func (g *Generator) installNPMPackages(dir string, packages ...string) error {

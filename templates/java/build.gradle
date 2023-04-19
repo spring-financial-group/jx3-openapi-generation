@@ -1,7 +1,7 @@
 apply plugin: 'java'
 
-group = 'mqube.REPO_NAME'
-version = 'VERSION'
+group = '{{ .GetPackageName }}'
+version = '{{ .Version }}'
 
 compileJava.options.encoding = 'UTF-8'
 tasks.withType(JavaCompile) {
@@ -22,10 +22,10 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/spring-financial-group/REPO_NAME")
+            url = uri("https://maven.pkg.github.com/spring-financial-group/{{ .RepoName }}")
             credentials {
-                username = "REGISTRY_USER"
-                password = "REGISTRY_TOKEN"
+                username = "{{ .GitUser }}"
+                password = "{{ .GitToken }}"
             }
         }
     }

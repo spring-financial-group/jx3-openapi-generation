@@ -1,0 +1,13 @@
+{
+  "name": "@spring-financial-group/{{ .RepoName }}",
+  "version": "VERSION",
+  "description": "Dynamically generated {{ .RepoName }} API Library for Angular",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",  
+  "repository": "git://github.com/spring-financial-group/{{ .RepoName }}.git"
+}

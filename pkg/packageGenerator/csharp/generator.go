@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	NugetConfigPath = "/registry/nuget.config"
+	NugetConfigTmpl = "/templates/csharp/nuget.config"
 )
 
 type Generator struct {
@@ -30,7 +30,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	if err := g.copyNugetConfig(packageDir); err != nil {
+	if err = g.FileIO.TemplateFiles(packageDir, g, NugetConfigTmpl); err != nil {
 		return "", err
 	}
 
@@ -39,23 +39,6 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", errors.Wrap(err, "failed to pack solution")
 	}
 	return packageDir, nil
-}
-
-// copyNugetConfig copies the nuget.config file and populates the registry token
-func (g *Generator) copyNugetConfig(dst string) error {
-	_, nugetPath, err := g.FileIO.CopyToDir(NugetConfigPath, dst)
-	if err != nil {
-		return errors.Wrap(err, "failed to copy nuget config")
-	}
-
-	if err := g.FileIO.ReplaceInFile(nugetPath, "REGISTRY_TOKEN", g.GitToken); err != nil {
-		return errors.Wrap(err, "failed to replace token in nuget config")
-	}
-
-	if err := g.FileIO.ReplaceInFile(nugetPath, "REGISTRY_USER", g.GitUser); err != nil {
-		return errors.Wrap(err, "failed to replace token in nuget config")
-	}
-	return nil
 }
 
 func (g *Generator) setDynamicConfigVariables() {

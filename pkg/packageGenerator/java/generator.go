@@ -2,7 +2,6 @@ package java
 
 import (
 	"fmt"
-	"github.com/pkg/errors"
 	"path/filepath"
 	"spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
@@ -10,7 +9,7 @@ import (
 )
 
 const (
-	GradlePath = "/registry/build.gradle"
+	GradleTmpl = "/templates/java/build.gradle"
 )
 
 type Generator struct {
@@ -31,7 +30,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	if err = g.copyBuildGradle(packageDir); err != nil {
+	if err = g.FileIO.TemplateFiles(packageDir, g, GradleTmpl); err != nil {
 		return "", err
 	}
 
@@ -41,34 +40,6 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 func (g *Generator) setDynamicConfigVariables() {
 	g.Cfg.GeneratorCLI.Generators[domain.Java].AdditionalProperties["basePackage"] = g.GetPackageName()
 	g.Cfg.GeneratorCLI.Generators[domain.Java].AdditionalProperties["modelPackage"] = fmt.Sprintf("%s.models", g.GetPackageName())
-}
-
-// copyBuildGradle copies the build.gradle file and populates the version, registry token, and repo name
-func (g *Generator) copyBuildGradle(dst string) error {
-	_, buildGradlePath, err := g.FileIO.CopyToDir(GradlePath, dst)
-	if err != nil {
-		return errors.Wrap(err, "failed to copy build.gradle file")
-	}
-	err = g.FileIO.ReplaceInFile(buildGradlePath, "VERSION", g.Version)
-	if err != nil {
-		return errors.Wrap(err, "failed to populate version in build.gradle")
-	}
-
-	err = g.FileIO.ReplaceInFile(buildGradlePath, "REGISTRY_TOKEN", g.GitToken)
-	if err != nil {
-		return errors.Wrap(err, "failed to replace version in build.gradle")
-	}
-
-	err = g.FileIO.ReplaceInFile(buildGradlePath, "REGISTRY_USER", g.GitUser)
-	if err != nil {
-		return errors.Wrap(err, "failed to replace version in build.gradle")
-	}
-
-	err = g.FileIO.ReplaceInFile(buildGradlePath, "REPO_NAME", g.RepoName)
-	if err != nil {
-		return errors.Wrap(err, "failed to replace version in build.gradle")
-	}
-	return nil
 }
 
 func (g *Generator) GetPackageName() string {
