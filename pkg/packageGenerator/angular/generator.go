@@ -9,9 +9,7 @@ import (
 
 // Paths for use in generating angular packages
 const (
-	PackageJSONTmpl = "/templates/angular/package.json"
-	TSConfigTmpl    = "/templates/angular/tsconfig.json"
-	NPMRCTmpl       = "/templates/angular/.npmrc"
+	packagingFilesDir = "/templates/angular"
 )
 
 // Packages installed by the generator
@@ -38,7 +36,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	if err = g.FileIO.TemplateFiles(packageDir, g, PackageJSONTmpl, NPMRCTmpl, TSConfigTmpl); err != nil {
+	if err = g.FileIO.TemplateFilesInDir(packagingFilesDir, packageDir, g); err != nil {
 		return "", err
 	}
 

@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	GradleTmpl = "/templates/java/build.gradle"
+	packagingFilesDir = "/templates/java"
 )
 
 type Generator struct {
@@ -30,7 +30,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	if err = g.FileIO.TemplateFiles(packageDir, g, GradleTmpl); err != nil {
+	if err = g.FileIO.TemplateFilesInDir(packagingFilesDir, packageDir, g); err != nil {
 		return "", err
 	}
 

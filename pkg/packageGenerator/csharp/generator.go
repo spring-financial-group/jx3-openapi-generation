@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	NugetConfigTmpl = "/templates/csharp/nuget.config"
+	packagingFilesDir = "/templates/csharp/nuget.config"
 )
 
 type Generator struct {
@@ -30,7 +30,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	if err = g.FileIO.TemplateFiles(packageDir, g, NugetConfigTmpl); err != nil {
+	if err = g.FileIO.TemplateFilesInDir(packagingFilesDir, packageDir, g); err != nil {
 		return "", err
 	}
 

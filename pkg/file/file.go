@@ -133,6 +133,24 @@ func (f FileIO) TemplateFiles(dstDir string, obj any, filePaths ...string) error
 	return nil
 }
 
+func (f FileIO) TemplateFilesInDir(srcDir, dstDir string, obj any) error {
+	files, err := os.ReadDir(srcDir)
+	if err != nil {
+		return errors.Wrap(err, "failed to read directory")
+	}
+
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+
+		if err = f.templateFile(dstDir, obj, filepath.Join(srcDir, file.Name())); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 func (f FileIO) templateFile(dstDir string, obj any, filePath string) error {
 	name := filepath.Base(filePath)
 	tmpl, err := template.ParseFiles(filePath)
