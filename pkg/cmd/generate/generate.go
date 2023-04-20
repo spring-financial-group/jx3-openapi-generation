@@ -26,6 +26,7 @@ type Options struct {
 	RepoOwner          string
 	RepoName           string
 	SpecPath           string
+	GitUser            string
 	GitToken           string
 
 	FileIO domain.FileIO
@@ -38,6 +39,7 @@ const (
 	repoNameKey           = "REPO_NAME"
 	swaggerServiceNameKey = "SwaggerServiceName"
 	specPathKey           = "SpecPath"
+	gitUserKey            = "GIT_USER"
 	gitTokenKey           = "GIT_TOKEN"
 )
 
@@ -121,6 +123,9 @@ func (o *Options) getVariablesFromEnvironment() error {
 	}
 	if o.SpecPath = os.Getenv(specPathKey); o.SpecPath == "" {
 		missingVariable = specPathKey
+	}
+	if o.GitUser = os.Getenv(gitUserKey); o.GitUser == "" {
+		missingVariable = gitUserKey
 	}
 	if o.GitToken = os.Getenv(gitTokenKey); o.GitToken == "" {
 		missingVariable = gitTokenKey

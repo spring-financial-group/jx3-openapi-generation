@@ -10,6 +10,7 @@ import (
 	"spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"strings"
+	"text/template"
 )
 
 type FileIO struct{}
@@ -121,4 +122,51 @@ func (f FileIO) DeferRemove(path string) {
 
 func (f FileIO) Remove(path string) error {
 	return os.RemoveAll(path)
+}
+
+func (f FileIO) TemplateFiles(dstDir string, obj any, filePaths ...string) error {
+	for _, path := range filePaths {
+		if err := f.templateFile(dstDir, obj, path); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (f FileIO) TemplateFilesInDir(srcDir, dstDir string, obj any) error {
+	files, err := os.ReadDir(srcDir)
+	if err != nil {
+		return errors.Wrap(err, "failed to read directory")
+	}
+
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+
+		if err = f.templateFile(dstDir, obj, filepath.Join(srcDir, file.Name())); err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (f FileIO) templateFile(dstDir string, obj any, filePath string) error {
+	name := filepath.Base(filePath)
+	tmpl, err := template.ParseFiles(filePath)
+	if err != nil {
+		return errors.Wrapf(err, "failed to create template for %s", name)
+	}
+
+	path := filepath.Join(dstDir, filepath.Base(filePath))
+	file, err := os.Create(path)
+	if err != nil {
+		return errors.Wrapf(err, "failed to create new %s file", name)
+	}
+	defer file.Close()
+
+	if err = tmpl.Execute(file, obj); err != nil {
+		return errors.Wrapf(err, "failed to execute template for %s", name)
+	}
+	return nil
 }

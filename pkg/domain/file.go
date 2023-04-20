@@ -35,6 +35,11 @@ type FileIO interface {
 	DeferRemove(path string)
 	// ReplaceInFile replaces the given string in the file at the given path
 	ReplaceInFile(path, old, new string) error
+	// TemplateFiles renders the given files using the given object and writes them to the given directory
+	TemplateFiles(dstDir string, obj any, filePaths ...string) error
+	// TemplateFilesInDir renders any files in the given source directory using the given object and writes them to the
+	// given destination directory using the same file names
+	TemplateFilesInDir(srcDir, dstDir string, obj any) error
 }
 
 type ErrFileNotFound struct {

@@ -1,17 +1,22 @@
 package angular
 
 import (
+	"fmt"
 	"github.com/pkg/errors"
 	"path/filepath"
 	"spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
 )
 
-// Paths for use in generating angular packages
 const (
-	PackageJSONPath = "./registry/package.json"
-	TSConfigPath    = "./registry/tsconfig.json"
-	NPMRCPath       = "./registry/.npmrc"
+	packagingFilesDir = "/templates/angular"
+)
+
+// Paths for use in generating angular packages
+var (
+	npmrcPath       = filepath.Join(packagingFilesDir, ".npmrc")
+	packageJSONPath = filepath.Join(packagingFilesDir, "package.json")
+	tsConfigPath    = filepath.Join(packagingFilesDir, "tsconfig.json")
 )
 
 // Packages installed by the generator
@@ -38,13 +43,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	_, err = g.getPackageJSON(packageDir)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to get package.json")
-	}
-
-	err = g.FileIO.CopyManyToDir(packageDir, TSConfigPath)
-	if err != nil {
+	if err = g.FileIO.TemplateFiles(packageDir, g, packageJSONPath, tsConfigPath); err != nil {
 		return "", err
 	}
 
@@ -59,31 +58,10 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 	}
 
 	distDir := filepath.Join(outputDir, "dist")
-
-	// Copy the original package.json to the dist directory to remove the dependencies
-	_, err = g.getPackageJSON(distDir)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to get package.json")
-	}
-
-	err = g.FileIO.CopyManyToDir(distDir, NPMRCPath)
-	if err != nil {
+	if err = g.FileIO.TemplateFiles(distDir, g, packageJSONPath, npmrcPath); err != nil {
 		return "", err
 	}
-
 	return distDir, nil
-}
-
-func (g *Generator) getPackageJSON(packageDir string) (string, error) {
-	_, packageJSONPath, err := g.FileIO.CopyToDir(PackageJSONPath, packageDir)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to copy package.json")
-	}
-	err = g.FileIO.ReplaceInFile(packageJSONPath, "0.0.0", g.Version)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to replace version in package.json")
-	}
-	return packageJSONPath, nil
 }
 
 func (g *Generator) installNPMPackages(dir string, packages ...string) error {
@@ -97,7 +75,7 @@ func (g *Generator) installNPMPackages(dir string, packages ...string) error {
 }
 
 func (g *Generator) GetPackageName() string {
-	return g.ServiceName
+	return fmt.Sprintf("%s-angular", g.RepoName)
 }
 
 func (g *Generator) PushPackage(packageDir string) error {

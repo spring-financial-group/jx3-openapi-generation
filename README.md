@@ -19,6 +19,7 @@ The CLI is configured through environment variables. The following environment v
 | `REPO_OWNER`         | The owner of the service repository.                                                          |
 | `REPO_NAME`          | The name of the service repository.                                                           |
 | `GIT_TOKEN`          | Authorisation token used for pushing Python packages to a repository.                         |
+| `GIT_USER`           | The user to use for authenticating with GitHub                                                |
 
 Then to generate a package for a service, run the following command:
 ```bash
@@ -81,9 +82,6 @@ spec:
           name: ""
           resources: {}
         - name: jx-variables
-          resources: {}
-        - image: uses:spring-financial-group/DevOps/pipelines/sonar-scanner-pr.yaml@main
-          name: ""
           resources: {}
         - name: build-make-build
           resources: {}

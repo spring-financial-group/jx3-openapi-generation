@@ -124,7 +124,7 @@ func (o *PackageOptions) InitialiseGenerators() error {
 	if err != nil {
 		return err
 	}
-	baseGenerator, err := packageGenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.SpecPath, config)
+	baseGenerator, err := packageGenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.GitUser, o.SpecPath, config)
 	if err != nil {
 		return errors.Wrap(err, "failed to create base generator")
 	}

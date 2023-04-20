@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	NugetConfigPath = "./registry/nuget.config"
+	packagingFilesDir = "/templates/csharp"
 )
 
 type Generator struct {
@@ -30,9 +30,8 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	_, _, err = g.FileIO.CopyToDir(NugetConfigPath, packageDir)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to copy nuget config")
+	if err = g.FileIO.TemplateFilesInDir(packagingFilesDir, packageDir, g); err != nil {
+		return "", err
 	}
 
 	err = g.Cmd.ExecuteAndLog(packageDir, "dotnet", "pack", "-c", "Release", fmt.Sprintf("-p:VERSION=%s", g.Version))
