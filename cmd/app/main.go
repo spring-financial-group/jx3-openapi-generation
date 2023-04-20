@@ -18,6 +18,7 @@ ___  ___                      _     _ _          _____
                                                                       __/ | __/ |
                                                                      |___/ |___/
 @version: %s
+
 `, version.GetVersion())
 
 	rootCmd := cmd.Main()
