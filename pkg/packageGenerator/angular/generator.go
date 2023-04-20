@@ -1,6 +1,7 @@
 package angular
 
 import (
+	"fmt"
 	"github.com/pkg/errors"
 	"path/filepath"
 	"spring-financial-group/jx3-openapi-generation/pkg/domain"
@@ -74,7 +75,7 @@ func (g *Generator) installNPMPackages(dir string, packages ...string) error {
 }
 
 func (g *Generator) GetPackageName() string {
-	return g.ServiceName
+	return fmt.Sprintf("%s-angular", g.RepoName)
 }
 
 func (g *Generator) PushPackage(packageDir string) error {
