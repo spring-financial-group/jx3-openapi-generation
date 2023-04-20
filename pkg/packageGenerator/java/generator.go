@@ -43,10 +43,8 @@ func (g *Generator) setDynamicConfigVariables() {
 }
 
 func (g *Generator) GetPackageName() string {
-	// Some PascalCase -> camelCase conversion
-	pkgName := strings.ToLower(string(g.ServiceName[0]))
-	pkgName += g.ServiceName[1:]
-	return fmt.Sprintf("mqube.%s", pkgName)
+	// Replace first hyphen with a dot mqube-foo-service -> mqube.foo-service
+	return strings.Replace(g.RepoName, "-", ".", 1)
 }
 
 func (g *Generator) PushPackage(packageDir string) error {
