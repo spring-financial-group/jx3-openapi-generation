@@ -28,7 +28,8 @@ spec:
           name: build-make-linux
           resources: {}
           script: |
-            #!/bin/sh
+            #!/bin/bash
+            source .jx/variables.sh
             make linux
         - name: check-registry
           resources: {}
