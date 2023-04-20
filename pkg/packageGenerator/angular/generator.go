@@ -7,9 +7,15 @@ import (
 	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
 )
 
-// Paths for use in generating angular packages
 const (
 	packagingFilesDir = "/templates/angular"
+)
+
+// Paths for use in generating angular packages
+var (
+	npmrcPath       = filepath.Join(packagingFilesDir, ".npmrc")
+	packageJSONPath = filepath.Join(packagingFilesDir, "package.json")
+	tsConfigPath    = filepath.Join(packagingFilesDir, "tsconfig.json")
 )
 
 // Packages installed by the generator
@@ -36,6 +42,10 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
+	if err = g.FileIO.TemplateFiles(packageDir, g, packageJSONPath, tsConfigPath); err != nil {
+		return "", err
+	}
+
 	err = g.installNPMPackages(packageDir, RXJS, Zone, AngularCore, AngularCommon)
 	if err != nil {
 		return "", err
@@ -47,10 +57,9 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 	}
 
 	distDir := filepath.Join(outputDir, "dist")
-	if err = g.FileIO.TemplateFilesInDir(packagingFilesDir, distDir, g); err != nil {
+	if err = g.FileIO.TemplateFiles(distDir, g, packageJSONPath, npmrcPath); err != nil {
 		return "", err
 	}
-
 	return distDir, nil
 }
 

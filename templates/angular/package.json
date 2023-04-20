@@ -1,6 +1,6 @@
 {
   "name": "@spring-financial-group/{{ .RepoName }}",
-  "version": "VERSION",
+  "version": "{{ .Version }}",
   "description": "Dynamically generated {{ .RepoName }} API Library for Angular",
   "main": "index.js",
   "scripts": {
