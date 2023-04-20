@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/file"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/rootcmd"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/helper"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/templates"
 	"github.com/spring-financial-group/mqa-logging/pkg/log"
 	"os"
 	"path/filepath"
-	"spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"spring-financial-group/jx3-openapi-generation/pkg/file"
-	"spring-financial-group/jx3-openapi-generation/pkg/rootcmd"
-	"spring-financial-group/jx3-openapi-generation/pkg/utils"
 )
 
 // Options for triggering

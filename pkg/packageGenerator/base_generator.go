@@ -2,10 +2,10 @@ package packageGenerator
 
 import (
 	"github.com/pkg/errors"
-	"spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
-	"spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"spring-financial-group/jx3-openapi-generation/pkg/file"
-	"spring-financial-group/jx3-openapi-generation/pkg/openapitools"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/file"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/openapitools"
 )
 
 type BaseGenerator struct {

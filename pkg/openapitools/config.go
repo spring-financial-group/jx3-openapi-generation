@@ -3,9 +3,9 @@ package openapitools
 import (
 	"encoding/json"
 	"github.com/pkg/errors"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"os"
 	"path/filepath"
-	"spring-financial-group/jx3-openapi-generation/pkg/utils"
 )
 
 const (

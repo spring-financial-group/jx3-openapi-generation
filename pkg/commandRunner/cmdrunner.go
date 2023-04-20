@@ -2,10 +2,10 @@ package commandRunner
 
 import (
 	"fmt"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"github.com/spring-financial-group/mqa-logging/pkg/log"
 	"os/exec"
-	"spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"strings"
 )
 

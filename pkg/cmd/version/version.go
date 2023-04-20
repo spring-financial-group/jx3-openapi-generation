@@ -3,10 +3,20 @@ package version
 import (
 	"fmt"
 	"github.com/spf13/cobra"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/rootcmd"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/helper"
-	"spring-financial-group/jx3-openapi-generation/pkg/rootcmd"
 
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/templates"
+)
+
+// Build information. Populated at build-time.
+var (
+	Version   string
+	Revision  string
+	Branch    string
+	BuildUser string
+	BuildDate string
+	GoVersion string
 )
 
 // Options for triggering
@@ -31,8 +41,6 @@ var (
 	createExample = templates.Examples(`
 		version
 	`)
-
-	Version string
 )
 
 // NewCmdTrigger
@@ -55,12 +63,10 @@ func NewCmdVersion() (*cobra.Command, *Options) {
 	o.Cmd = cmd
 
 	return cmd, o
-
 }
 
 func (o *Options) Run() error {
 	fmt.Println(GetVersion())
-
 	return nil
 }
 

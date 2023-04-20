@@ -2,12 +2,12 @@ package git
 
 import (
 	"github.com/pkg/errors"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"github.com/spring-financial-group/mqa-logging/pkg/log"
 	"net/url"
 	"path/filepath"
-	"spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
-	"spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"strings"
 )
 

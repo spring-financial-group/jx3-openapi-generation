@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	domain "spring-financial-group/jx3-openapi-generation/pkg/domain"
+	domain "github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 
 	mock "github.com/stretchr/testify/mock"
 )
