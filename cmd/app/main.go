@@ -3,6 +3,7 @@ package app
 import (
 	"github.com/spring-financial-group/mqa-logging/pkg/log"
 	"spring-financial-group/jx3-openapi-generation/pkg/cmd"
+	"spring-financial-group/jx3-openapi-generation/pkg/cmd/version"
 )
 
 // Run runs the command, if args are not nil they will be set on the command
@@ -16,7 +17,8 @@ ___  ___                      _     _ _          _____
 \_|  |_/\___/ \_/ \___||___/ \_____/_|_|\_\___| \____/  \_/\_/ \__,_|\__, |\__, |\___|_|
                                                                       __/ | __/ |
                                                                      |___/ |___/
-`)
+@version: %s
+`, version.GetVersion())
 
 	rootCmd := cmd.Main()
 	if args != nil {
