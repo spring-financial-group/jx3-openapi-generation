@@ -5,13 +5,13 @@ import (
 	"fmt"
 	gh "github.com/google/go-github/v47/github"
 	"github.com/pkg/errors"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/git"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/scmClient/github"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"k8s.io/apimachinery/pkg/util/json"
 	"path/filepath"
-	"spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"spring-financial-group/jx3-openapi-generation/pkg/git"
-	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
-	"spring-financial-group/jx3-openapi-generation/pkg/scmClient/github"
-	"spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"strings"
 )
 

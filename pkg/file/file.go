@@ -3,12 +3,12 @@ package file
 import (
 	"fmt"
 	"github.com/pkg/errors"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"github.com/spring-financial-group/mqa-logging/pkg/log"
 	"io"
 	"os"
 	"path/filepath"
-	"spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"strings"
 	"text/template"
 )

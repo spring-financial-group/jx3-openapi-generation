@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"spring-financial-group/jx3-openapi-generation/cmd/app"
+	"github.com/spring-financial-group/jx3-openapi-generation/cmd/app"
 )
 
 func main() {

@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/cmd/generate"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/cmd/version"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/rootcmd"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras"
 	"github.com/spring-financial-group/mqa-logging/pkg/log"
-	"spring-financial-group/jx3-openapi-generation/pkg/cmd/generate"
-	"spring-financial-group/jx3-openapi-generation/pkg/cmd/version"
-	"spring-financial-group/jx3-openapi-generation/pkg/rootcmd"
 )
 
 // Main creates the new command

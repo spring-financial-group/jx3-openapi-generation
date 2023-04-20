@@ -3,9 +3,9 @@ package angular
 import (
 	"fmt"
 	"github.com/pkg/errors"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
 	"path/filepath"
-	"spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
 )
 
 const (
