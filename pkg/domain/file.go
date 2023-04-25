@@ -3,6 +3,7 @@ package domain
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 type FileIO interface {
@@ -51,9 +52,10 @@ func (f *ErrFileNotFound) Error() string {
 }
 
 type ErrEnvironmentVariableNotFound struct {
-	VariableName string
+	VariableNames []string
 }
 
 func (e *ErrEnvironmentVariableNotFound) Error() string {
-	return fmt.Sprintf("environment variable not found: %s", e.VariableName)
+	variableNamesCommaSeparated := strings.Join(e.VariableNames, ", ")
+	return fmt.Sprintf("environment variables not found: %s", variableNamesCommaSeparated)
 }

@@ -67,10 +67,6 @@ func NewCmdGenerate() *cobra.Command {
 		FileIO: file.NewFileIO(),
 	}
 
-	// Initialising the generic variables for this command and all sub-commands
-	err := o.initialise()
-	helper.CheckErr(err)
-
 	cmd := &cobra.Command{
 		Use:     "generate",
 		Short:   "Generates one or more resources",
@@ -82,7 +78,7 @@ func NewCmdGenerate() *cobra.Command {
 			err := o.Run()
 			helper.CheckErr(err)
 		},
-		SuggestFor: []string{"genarate"},
+		SuggestFor: []string{"genarate, genorate"},
 		Aliases:    []string{"gen"},
 	}
 
@@ -92,6 +88,10 @@ func NewCmdGenerate() *cobra.Command {
 
 // Run implements this command
 func (o *Options) Run() error {
+	// Initialising the generic variables for this command and all sub-commands
+	err := o.initialise()
+	helper.CheckErr(err)
+
 	return o.Cmd.Help()
 }
 
@@ -108,30 +108,30 @@ func (o *Options) initialise() error {
 }
 
 func (o *Options) getVariablesFromEnvironment() error {
-	var missingVariable string
+	var missingVariables []string
 	if o.Version = os.Getenv(versionKey); o.Version == "" {
-		missingVariable = versionKey
+		missingVariables = append(missingVariables, versionKey)
 	}
 	if o.RepoOwner = os.Getenv(repoOwnerKey); o.RepoOwner == "" {
-		missingVariable = repoOwnerKey
+		missingVariables = append(missingVariables, repoOwnerKey)
 	}
 	if o.RepoName = os.Getenv(repoNameKey); o.RepoName == "" {
-		missingVariable = repoNameKey
+		missingVariables = append(missingVariables, repoNameKey)
 	}
 	if o.SwaggerServiceName = os.Getenv(swaggerServiceNameKey); o.SwaggerServiceName == "" {
-		missingVariable = swaggerServiceNameKey
+		missingVariables = append(missingVariables, swaggerServiceNameKey)
 	}
 	if o.SpecPath = os.Getenv(specPathKey); o.SpecPath == "" {
-		missingVariable = specPathKey
+		missingVariables = append(missingVariables, specPathKey)
 	}
 	if o.GitUser = os.Getenv(gitUserKey); o.GitUser == "" {
-		missingVariable = gitUserKey
+		missingVariables = append(missingVariables, gitUserKey)
 	}
 	if o.GitToken = os.Getenv(gitTokenKey); o.GitToken == "" {
-		missingVariable = gitTokenKey
+		missingVariables = append(missingVariables, gitTokenKey)
 	}
-	if missingVariable != "" {
-		return &domain.ErrEnvironmentVariableNotFound{VariableName: missingVariable}
+	if len(missingVariables) > 0 {
+		return &domain.ErrEnvironmentVariableNotFound{VariableNames: missingVariables}
 	}
 	return nil
 }
