@@ -67,6 +67,10 @@ func NewCmdGenerate() *cobra.Command {
 		FileIO: file.NewFileIO(),
 	}
 
+	// Initialising the generic variables for this command and all sub-commands
+	err := o.initialise()
+	helper.CheckErr(err)
+
 	cmd := &cobra.Command{
 		Use:     "generate",
 		Short:   "Generates one or more resources",
@@ -88,10 +92,6 @@ func NewCmdGenerate() *cobra.Command {
 
 // Run implements this command
 func (o *Options) Run() error {
-	// Initialising the generic variables for this command and all sub-commands
-	err := o.initialise()
-	helper.CheckErr(err)
-
 	return o.Cmd.Help()
 }
 
