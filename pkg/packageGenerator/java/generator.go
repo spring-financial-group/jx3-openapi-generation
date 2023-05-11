@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"path/filepath"
 	"strings"
 )
@@ -38,13 +39,18 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 }
 
 func (g *Generator) setDynamicConfigVariables() {
-	g.Cfg.GeneratorCLI.Generators[domain.Java].AdditionalProperties["basePackage"] = g.GetPackageName()
-	g.Cfg.GeneratorCLI.Generators[domain.Java].AdditionalProperties["modelPackage"] = fmt.Sprintf("%s.models", g.GetPackageName())
+	g.Cfg.GeneratorCLI.Generators[domain.Java].AdditionalProperties["basePackage"] = g.getModelName()
+	g.Cfg.GeneratorCLI.Generators[domain.Java].AdditionalProperties["modelPackage"] = fmt.Sprintf("%s.models", g.getModelName())
 }
 
 func (g *Generator) GetPackageName() string {
 	// Replace first hyphen with a dot mqube-foo-service -> mqube.foo-service
 	return strings.Replace(g.RepoName, "-", ".", 1)
+}
+
+func (g *Generator) getModelName() string {
+	// convert pascal case to camel case
+	return fmt.Sprintf("mqube.%s", utils.FirstCharToLower(g.ServiceName))
 }
 
 func (g *Generator) PushPackage(packageDir string) error {
