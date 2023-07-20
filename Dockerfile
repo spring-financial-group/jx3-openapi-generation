@@ -2,9 +2,6 @@ FROM node:14
 
 RUN apt-get update
 
-# Install python dependencies
-RUN apt-get install python3-pip -y && pip3 install datamodel-code-generator
-
 # Install node dependencies
 RUN npm install -g @openapitools/openapi-generator-cli@2.6.0
 RUN npm install -g @angular/compiler-cli@13.3.1 @angular/platform-server@13.3.1 @angular/compiler@13.3.1
