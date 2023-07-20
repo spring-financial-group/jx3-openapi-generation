@@ -80,8 +80,13 @@ spec:
         # Replace Extra.forbid with Extra.ignore
         # if env var EXTRA_FIELD_IGNORE is True
         python3 << HEREDOC
+        print('Inside Python HEREDOC')
         import os
         from pathlib import Path
+        env_var = os.getenv("EXTRA_FIELD_IGNORE", "NOT FOUND")
+        print(f'EXTRA_FIELD_IGNORE: {env_var}')
+        print(f'EXTRA_FIELD_IGNORE: {type(env_var)}')
+        print(f'Considition Passed: {env_var == "True"}')
         if os.getenv('EXTRA_FIELD_IGNORE', False) == 'True':
           path = Path('$serviceName/schemas.py')
           content = content.replace('extra = Extra.forbid', 'Extra.ignore')
