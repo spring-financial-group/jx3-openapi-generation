@@ -89,7 +89,8 @@ spec:
         print(f'Considition Passed: {env_var == "True"}')
         if os.getenv('EXTRA_FIELD_IGNORE', False) == 'True':
           path = Path('$serviceName/schemas.py')
-          content = content.replace('extra = Extra.forbid', 'Extra.ignore')
+          content = path.read_text()
+          content = content.replace('extra = Extra.forbid', 'extra = Extra.ignore')
           path.write_text(content)
           print(f'Change successful')
         HEREDOC
