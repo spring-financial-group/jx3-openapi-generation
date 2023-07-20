@@ -91,6 +91,7 @@ spec:
           path = Path('$serviceName/schemas.py')
           content = content.replace('extra = Extra.forbid', 'Extra.ignore')
           path.write_text(content)
+          print(f'Change successful')
         HEREDOC
 
         new_packages_json=`cat packages.json | python3 -c "import sys, json; packages=json.load(sys.stdin); packages['$REPO_NAME']={'dir':'$serviceName','name':'$REPO_NAME','version':'$VERSION'}; print(json.dumps(packages,indent=4))"`
