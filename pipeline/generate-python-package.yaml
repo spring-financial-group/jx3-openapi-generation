@@ -77,6 +77,17 @@ spec:
         datamodel-codegen  --input /workspace/source/spec.json --input-file-type auto --output "$serviceName"/schemas.py
         echo > "$serviceName"/__init__.py
 
+        # Replace Extra.forbid with Extra.ignore
+        # if env var EXTRA_FIELD_IGNORE is True
+        python3 << HEREDOC
+        import os
+        from pathlib import Path
+        if os.getenv('EXTRA_FIELD_IGNORE', False) == 'True':
+          path = Path('$serviceName/schemas.py')
+          content = content.replace('extra = Extra.forbid', 'Extra.ignore')
+          path.write_text(content)
+        HEREDOC
+
         new_packages_json=`cat packages.json | python3 -c "import sys, json; packages=json.load(sys.stdin); packages['$REPO_NAME']={'dir':'$serviceName','name':'$REPO_NAME','version':'$VERSION'}; print(json.dumps(packages,indent=4))"`
         echo "$new_packages_json" > packages.json
 
