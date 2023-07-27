@@ -5,7 +5,10 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
+	"github.com/spring-financial-group/mqa-logging/pkg/log"
 	"path/filepath"
+	"strings"
+	"time"
 )
 
 const (
@@ -25,6 +28,8 @@ const (
 	Zone          = "zone.js@0.9.1"
 	AngularCore   = "@angular/core@8.2.14"
 	AngularCommon = "@angular/common@8.2.14"
+
+	errNPMVersionAlreadyExists = "npm ERR! publish fail Cannot publish over existing version"
 )
 
 type Generator struct {
@@ -79,5 +84,33 @@ func (g *Generator) GetPackageName() string {
 }
 
 func (g *Generator) PushPackage(packageDir string) error {
-	return g.Cmd.ExecuteAndLog(packageDir, "npm", "publish")
+	out, err := g.Cmd.Execute(packageDir, "npm", "publish")
+	log.Logger().Infof(out)
+	if err != nil {
+		// NPM returns the error message on STDOUT, so we need to check there for the error
+		if strings.Contains(out, errNPMVersionAlreadyExists) {
+			log.Logger().Warnf("Package already exists at version %s, incrementing version and trying again", g.Version)
+			err = g.incrementPackageVersion(packageDir)
+			if err != nil {
+				return err
+			}
+			return g.PushPackage(packageDir)
+		}
+		// Otherwise return the error
+		return errors.Wrap(err, "failed to publish package")
+	}
+	return nil
+}
+
+func (g *Generator) incrementPackageVersion(packageDir string) error {
+	currentV := g.Version
+	newV := fmt.Sprintf("%s-%d", currentV, time.Now().Unix())
+
+	log.Logger().Infof("Incrementing version %s to %s", currentV, newV)
+	err := g.Cmd.ExecuteAndLog(packageDir, "npm", "version", newV)
+	if err != nil {
+		return errors.Wrapf(err, "failed to increment version to %s", newV)
+	}
+	g.Version = newV
+	return nil
 }
