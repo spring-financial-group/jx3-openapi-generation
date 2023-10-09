@@ -26,7 +26,7 @@ spec:
     resources: {}
     workingDir: /workspace/source
   steps:
-  - image: jx3mqubebuild.azurecr.io/spring-financial-group/jx3-openapi-generation:latest
+  - image: jx3mqubebuild.azurecr.io/spring-financial-group/jx3-openapi-generation:1.3.33
     name: package-generation
     resources: {}
     script: |
