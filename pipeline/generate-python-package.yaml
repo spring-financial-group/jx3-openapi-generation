@@ -83,16 +83,15 @@ spec:
         print('Inside Python HEREDOC')
         import os
         from pathlib import Path
-        env_var = os.getenv("EXTRA_FIELD_IGNORE", "NOT FOUND")
-        print(f'EXTRA_FIELD_IGNORE: {env_var}')
-        print(f'EXTRA_FIELD_IGNORE: {type(env_var)}')
-        print(f'Considition Passed: {env_var == "True"}')
-        if os.getenv('EXTRA_FIELD_IGNORE', False) == 'True':
-          path = Path('$serviceName/schemas.py')
-          content = path.read_text()
-          content = content.replace('extra = Extra.forbid', 'extra = Extra.ignore')
-          path.write_text(content)
-          print(f'Change successful')
+        approach = os.getenv('PY_EXTRA_FIELD_CONFIG', 'ignore')
+        valid_approaches = {'allow', 'forbid', 'ignore'}
+        assert approach in valid_approaches, f"{approach} not a valid config for python extra fields - select from one of: {valid_approaches}"
+        print("Extra field config: {approach}")
+        path = Path('$serviceName/schemas.py')
+        content = path.read_text()
+        content = content.replace('extra = Extra.forbid', f'extra = Extra.{approach}')
+        path.write_text(content)
+        print(f'Change successful')
         HEREDOC
 
         new_packages_json=`cat packages.json | python3 -c "import sys, json; packages=json.load(sys.stdin); packages['$REPO_NAME']={'dir':'$serviceName','name':'$REPO_NAME','version':'$VERSION'}; print(json.dumps(packages,indent=4))"`
