@@ -86,7 +86,7 @@ spec:
         approach = os.getenv('PY_EXTRA_FIELD_CONFIG', 'ignore')
         valid_approaches = {'allow', 'forbid', 'ignore'}
         assert approach in valid_approaches, f"{approach} not a valid config for python extra fields - select from one of: {valid_approaches}"
-        print("Extra field config: {approach}")
+        print(f"Extra field config: {approach}")
         path = Path('$serviceName/schemas.py')
         content = path.read_text()
         content = content.replace('extra = Extra.forbid', f'extra = Extra.{approach}')
