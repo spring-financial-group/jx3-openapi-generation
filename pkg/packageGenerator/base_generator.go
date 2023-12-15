@@ -59,8 +59,8 @@ func (g *BaseGenerator) GeneratePackage(outputDir, language string) (string, err
 	}
 
 	g.Cfg.GeneratorCLI.Generators[language].Output = outputDir
-	cfgPath, err2 := g.Cfg.WriteToCurrentWorkingDirectory()
-	if err2 != nil {
+	cfgPath, err := g.Cfg.WriteToCurrentWorkingDirectory()
+	if err != nil {
 		return "", err
 	}
 	defer g.FileIO.DeferRemove(cfgPath)
