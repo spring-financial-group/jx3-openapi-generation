@@ -49,6 +49,18 @@
         },
         "globalProperty": {
         }
+      },
+      "javascript": {
+        "generatorName": "javascript",
+        "output": "./javascript-service",
+        "inputSpec": "./mocks/swagger.json",
+        "enablePostProcessFile": true,
+        "removeOperationIdPrefix": true,
+        "additionalProperties": {
+          "fileNaming": "camelCase",
+          "packageVersion": "0.0.1",
+          "stringEnums": "true"
+        }
       }
     }
   }

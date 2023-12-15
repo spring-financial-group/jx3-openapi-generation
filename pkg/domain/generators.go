@@ -3,10 +3,11 @@ package domain
 import "fmt"
 
 const (
-	CSharp  = "csharp"
-	Java    = "java"
-	Angular = "angular"
-	Python  = "python"
+	CSharp     = "csharp"
+	Java       = "java"
+	Angular    = "angular"
+	Python     = "python"
+	Javascript = "javascript"
 )
 
 type PackageGenerator interface {
