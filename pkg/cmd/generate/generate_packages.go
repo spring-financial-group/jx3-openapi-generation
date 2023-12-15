@@ -10,6 +10,7 @@ import (
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/angular"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/csharp"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/java"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/javascript"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/python"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/helper"
@@ -130,10 +131,11 @@ func (o *PackageOptions) InitialiseGenerators() error {
 	}
 
 	o.languageGenerators = map[string]domain.PackageGenerator{
-		domain.CSharp:  csharp.NewGenerator(baseGenerator),
-		domain.Java:    java.NewGenerator(baseGenerator),
-		domain.Angular: angular.NewGenerator(baseGenerator),
-		domain.Python:  python.NewGenerator(baseGenerator),
+		domain.CSharp:     csharp.NewGenerator(baseGenerator),
+		domain.Java:       java.NewGenerator(baseGenerator),
+		domain.Angular:    angular.NewGenerator(baseGenerator),
+		domain.Python:     python.NewGenerator(baseGenerator),
+		domain.Javascript: javscript.NewGenerator(baseGenerator),
 	}
 	return nil
 }
