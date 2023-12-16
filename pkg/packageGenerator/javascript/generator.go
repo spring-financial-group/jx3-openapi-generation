@@ -42,11 +42,21 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	if err = g.FileIO.TemplateFiles(packageDir, g, packageJSONPath, npmrcPath); err != nil {
-		return "", err
+	err = g.Cmd.ExecuteAndLog(packageDir, "npm", "install")
+	if err != nil {
+		return "", errors.Wrap(err, "failed to run npm install")
 	}
 
-	return packageDir, nil
+	err = g.Cmd.ExecuteAndLog(packageDir, "npm", "run", "build")
+	if err != nil {
+		return "", errors.Wrap(err, "failed to run npm build")
+	}
+
+	distDir := filepath.Join(packageDir, "dist")
+	if err = g.FileIO.TemplateFiles(distDir, g, packageJSONPath, npmrcPath); err != nil {
+		return "", err
+	}
+	return distDir, nil
 }
 
 func (g *Generator) GetPackageName() string {
