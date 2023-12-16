@@ -7,7 +7,7 @@
       "csharp": {
         "output": "./csharp-service",
         "inputSpec": "./mocks/swagger.json",
-        "generatorName": "csharp-netcore",
+        "generatorName": "csharp",
         "additionalProperties": {
           "targetFramework": "netstandard2.1",
           "netCoreProjectFile": "true",
