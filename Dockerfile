@@ -3,7 +3,7 @@ FROM node:14
 RUN apt-get update
 
 # Install javascript dependencies
-RUN npm install -g @openapitools/openapi-generator-cli@2.6.0
+RUN npm install -g @openapitools/openapi-generator-cli@2.9.0
 RUN npm install -g @angular/compiler-cli@13.3.1 @angular/platform-server@13.3.1 @angular/compiler@13.3.1
 RUN npm install -g typescript@4.6.3
 
