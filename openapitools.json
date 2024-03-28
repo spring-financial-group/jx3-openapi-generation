@@ -23,10 +23,6 @@
           "dateLibrary": "java8-localdatetime"
         },
         "globalProperty": {
-          "models": "",
-          "supportingFiles": "JSON.java",
-          "modelTests": "false",
-          "modelDocs": "false"
         }
       },
       "angular": {
