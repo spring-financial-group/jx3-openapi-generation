@@ -151,12 +151,6 @@ func (o *Options) validateSpecificationLocation() error {
 	}
 	o.SpecPath = absPath
 	log.Logger().Infof("%sSpecification found at %s%s", utils.Cyan, absPath, utils.Reset)
-	log.Logger().Debugf("File read from %s", absPath)
-	data, err := o.FileIO.Read(absPath)
-	if err != nil {
-		return errors.Wrap(err, "failed to read specification")
-	}
-	log.Logger().Debugf("Version: %s", string(data))
 	return nil
 }
 
