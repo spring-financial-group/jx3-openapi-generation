@@ -45,8 +45,8 @@
         "output": "./python-service",
         "inputSpec": "./mocks/swagger.json",
         "generatorName": "python",
+        "library": "aiohttp",
         "additionalProperties": {
-          "library": "asyncio"
         },
         "globalProperty": {
         }
