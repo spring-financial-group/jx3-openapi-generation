@@ -66,7 +66,7 @@ func (g *BaseGenerator) GeneratePackage(outputDir, language string) (string, err
 	defer g.FileIO.DeferRemove(cfgPath)
 
 	// Generate Package
-	err = g.Cmd.ExecuteAndLog("", "npx", "openapi-generator-cli", "generate", "--generator-key", language)
+	err = g.Cmd.ExecuteAndLog("", "npx", "openapi-generator-cli", "generate", "--generator-key", language, "--config", "./openapitools.json")
 	if err != nil {
 		return "", errors.Wrap(err, "failed to generate package")
 	}
