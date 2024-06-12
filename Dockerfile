@@ -1,4 +1,4 @@
-FROM node:14
+FROM node:22
 
 RUN apt-get update
 
@@ -12,7 +12,7 @@ RUN wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-p
     && dpkg -i packages-microsoft-prod.deb \
     && rm packages-microsoft-prod.deb
 
-RUN apt-get update && apt-get install -y apt-transport-https dotnet-sdk-7.0 openjdk-11-jdk default-jre zip
+RUN apt-get update && apt-get install -y apt-transport-https dotnet-sdk-7.0 openjdk-17-jdk default-jre zip
 
 # Install java dependencies
 RUN wget https://services.gradle.org/distributions/gradle-7.3.2-bin.zip \
