@@ -54,7 +54,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 
 	g.setDynamicConfigVariables()
 
-	packageDir, err := g.BaseGenerator.GeneratePackage(filepath.Join(repoDir, g.GetPackageName()), domain.Python)
+	packageDir, err := g.BaseGenerator.GeneratePackage(repoDir, domain.Python)
 	if err != nil {
 		return "", err
 	}
@@ -64,7 +64,8 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", errors.Wrap(err, "failed to update packages.json")
 	}
 
-	err = g.Git.AddFiles(repoDir, packageJsonPath, packageDir)
+	readmePath := fmt.Sprintf("%s_README.md", packageDir)
+	err = g.Git.AddFiles(repoDir, packageJsonPath, packageDir, readmePath)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to add package to Git")
 	}
