@@ -58,6 +58,7 @@ spec:
                 source /workspace/source/.jx/variables.sh
                 npm install -g @openapitools/openapi-generator-cli@2.13.4
                 apt-get update && apt-get install -y apt-transport-https openjdk-11-jdk default-jre zip
+                cp ./openapitools.json /openapitools.json
                 cd ./mocks
                 ./jx3-openapi-generation generate packages python angular csharp java
   podTemplate: {}
