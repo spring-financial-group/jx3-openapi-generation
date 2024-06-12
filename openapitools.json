@@ -46,7 +46,8 @@
         "inputSpec": "./mocks/swagger.json",
         "generatorName": "python",
         "additionalProperties": {
-          "library": "asyncio"
+          "library": "asyncio",
+          "generateSourceCodeOnly": "true"
         },
         "globalProperty": {
         }
