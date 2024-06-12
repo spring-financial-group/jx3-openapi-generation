@@ -64,8 +64,8 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", errors.Wrap(err, "failed to update packages.json")
 	}
 
-	readmePath := fmt.Sprintf("%s_README.md", packageDir)
-	err = g.Git.AddFiles(repoDir, packageJsonPath, packageDir, readmePath)
+	readmePath := fmt.Sprintf("%s_README.md", g.GetPackageName())
+	err = g.Git.AddFiles(repoDir, packageJsonPath, g.GetPackageName(), readmePath)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to add package to Git")
 	}
