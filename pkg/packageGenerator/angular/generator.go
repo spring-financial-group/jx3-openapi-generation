@@ -29,7 +29,7 @@ const (
 	AngularCore   = "@angular/core@8.2.14"
 	AngularCommon = "@angular/common@8.2.14"
 
-	errNPMVersionAlreadyExists = "npm ERR! publish fail Cannot publish over existing version"
+	errNPMVersionAlreadyExists = "Cannot publish over existing version"
 )
 
 type Generator struct {
