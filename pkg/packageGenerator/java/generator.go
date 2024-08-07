@@ -31,9 +31,9 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	if err = g.FileIO.TemplateFilesInDir(packagingFilesDir, packageDir, g); err != nil {
-		return "", err
-	}
+	//if err = g.FileIO.TemplateFilesInDir(packagingFilesDir, packageDir, g); err != nil {
+	//	return "", err
+	//}
 
 	return packageDir, nil
 }
