@@ -44,7 +44,7 @@
       "python": {
         "output": "./python-service",
         "inputSpec": "./mocks/swagger.json",
-        "generatorName": "python",
+        "generatorName": "python-nextgen",
         "additionalProperties": {
           "library": "asyncio",
           "generateSourceCodeOnly": "true"
