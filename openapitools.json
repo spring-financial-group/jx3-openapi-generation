@@ -21,7 +21,8 @@
         "generatorName": "java",
         "additionalProperties": {
           "dateLibrary": "java8-localdatetime",
-          "serializationLibrary": "jackson"
+          "serializationLibrary": "jackson",
+          "library": "restclient"
         },
         "globalProperty": {
           "models": "",
