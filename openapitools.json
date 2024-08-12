@@ -22,7 +22,7 @@
         "additionalProperties": {
           "dateLibrary": "java8-localdatetime",
           "serializationLibrary": "jackson",
-          "library": "resttemplate"
+          "library": "webclient"
         },
         "globalProperty": {
           "models": "",
