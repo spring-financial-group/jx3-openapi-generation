@@ -22,7 +22,8 @@
         "additionalProperties": {
           "dateLibrary": "java8-localdatetime",
           "serializationLibrary": "jackson",
-          "library": "webclient"
+          "library": "webclient",
+          "openApiNullable": true
         },
         "globalProperty": {
           "models": "",
