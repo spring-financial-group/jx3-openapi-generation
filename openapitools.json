@@ -23,7 +23,7 @@
           "dateLibrary": "java8-localdatetime",
           "serializationLibrary": "jackson",
           "library": "webclient",
-          "openApiNullable": true
+          "openApiNullable": false
         },
         "globalProperty": {
           "models": "",
