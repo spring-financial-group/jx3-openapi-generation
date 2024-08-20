@@ -38,7 +38,8 @@
         "additionalProperties": {
           "fileNaming": "camelCase",
           "ngVersion": "10.0.0",
-          "stringEnums": "true"
+          "stringEnums": "true",
+          "disallowAdditionalPropertiesIfNotPresent": "false"
         }
       },
       "python": {
