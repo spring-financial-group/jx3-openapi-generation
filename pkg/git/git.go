@@ -75,7 +75,7 @@ func (c *Client) GetDefaultBranchName(dir string) (string, error) {
 
 func (c *Client) log(message string) {
 	if message != "" {
-		log.Logger().Infof(message)
+		log.Logger().Infof("%s", message)
 	}
 }
 
