@@ -34,11 +34,11 @@ func (c *CommandRunner) ExecuteAndLog(dir, name string, args ...string) error {
 	log.Logger().Infof("%sRunning command%s:%s %s %s", utils.Cyan, dirString, utils.Reset, name, strings.Join(args, " "))
 	out, err := c.Execute(dir, name, args...)
 	if err != nil {
-		log.Logger().Errorf("%s", out)
+		log.Logger().Error(out)
 		return err
 	}
 	if out != "" {
-		log.Logger().Infof("%s", out)
+		log.Logger().Info(out)
 	}
 	return nil
 }
