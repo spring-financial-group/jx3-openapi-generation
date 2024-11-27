@@ -46,7 +46,7 @@ func (g *Generator) setDynamicConfigVariables() {
 }
 
 func (g *Generator) GetPackageName() string {
-	return fmt.Sprintf("Mqube.%s.Client", g.ServiceName)
+	return fmt.Sprintf("Mqube.%s.%s", g.ServiceName, g.PackageName)
 }
 
 func (g *Generator) PushPackage(packageDir string) error {
