@@ -29,7 +29,8 @@ type Options struct {
 	GitUser            string
 	GitToken           string
 
-	FileIO domain.FileIO
+	FileIO      domain.FileIO
+	PackageName string
 }
 
 // Constants for environment variables required by the command
@@ -41,6 +42,7 @@ const (
 	specPathKey           = "SpecPath"
 	gitUserKey            = "GIT_USER"
 	gitTokenKey           = "GIT_TOKEN"
+	packageNameKey        = "PackageName"
 )
 
 const (
@@ -120,6 +122,9 @@ func (o *Options) getVariablesFromEnvironment() error {
 	}
 	if o.SwaggerServiceName = os.Getenv(swaggerServiceNameKey); o.SwaggerServiceName == "" {
 		missingVariables = append(missingVariables, swaggerServiceNameKey)
+	}
+	if o.PackageName = os.Getenv(packageNameKey); o.PackageName == "" {
+		o.PackageName = "Client"
 	}
 	if o.SpecPath = os.Getenv(specPathKey); o.SpecPath == "" {
 		missingVariables = append(missingVariables, specPathKey)
