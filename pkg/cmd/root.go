@@ -17,7 +17,7 @@ func Main() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			err := cmd.Help()
 			if err != nil {
-				log.Logger().Errorf("%s", err.Error())
+				log.Logger().Error(err.Error())
 			}
 		},
 	}
