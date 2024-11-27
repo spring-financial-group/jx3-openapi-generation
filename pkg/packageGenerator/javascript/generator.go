@@ -65,7 +65,7 @@ func (g *Generator) GetPackageName() string {
 
 func (g *Generator) PushPackage(packageDir string) error {
 	out, err := g.Cmd.Execute(packageDir, "npm", "publish")
-	log.Logger().Infof("%s", out)
+	log.Logger().Info(out)
 	if err != nil {
 		// NPM returns the error message on STDOUT, so we need to check there for the error
 		if strings.Contains(out, errNPMVersionAlreadyExists) {
