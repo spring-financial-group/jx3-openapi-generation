@@ -1,14 +1,20 @@
 package _go
 
 import (
+	"bytes"
 	"context"
+	"encoding/json"
 	"fmt"
+	"net/http"
+	"os"
 	"path/filepath"
-	"regexp"
 	"strings"
 
+	"github.com/getkin/kin-openapi/openapi3"
 	gh "github.com/google/go-github/v47/github"
+	"github.com/oapi-codegen/oapi-codegen/v2/pkg/codegen"
 	"github.com/pkg/errors"
+	"github.com/sirupsen/logrus"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/git"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
@@ -19,10 +25,11 @@ import (
 const (
 	PushRepositoryURL  = "https://github.com/spring-financial-group/mqube-go-packages.git"
 	PushRepositoryName = "mqube-go-packages"
+	Command = "go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen -generate \"models,client\" -o client_generated.go -package aloo openapi.json"
 )
 
 var (
-	reviewers = []string{"Skisocks"}
+	reviewers = []string{"Skisocks", "Reton2"}
 )
 
 type Generator struct {
@@ -51,15 +58,27 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", errors.Wrap(err, "failed to checkout branch")
 	}
 
-	g.setDynamicConfigVariables()
+	packageDir := filepath.Join(repoDir, g.GetPackageName())
 
-	packageDir, err := g.BaseGenerator.GeneratePackage(filepath.Join(repoDir, g.GetPackageName()), domain.Go)
+	err = g.createFreshDir(packageDir)
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(err, "failed to create fresh directory")
+	}
+
+	code, err := g.generateCode()
+	if err != nil {
+		return "", errors.Wrap(err, "failed to generate code")
+	}
+
+	// write code to file
+	codeFile := filepath.Join(packageDir, "client_generated.go")
+	err = g.FileIO.Write(codeFile, []byte(code), 0700)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to write code to file")
 	}
 
 	// Openapitools sets the module name to the REPO_NAME, we need it to be the PushRepositoryName
-	err = g.changeModuleName(packageDir)
+	err = g.goModInit(packageDir)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to change module name")
 	}
@@ -92,31 +111,9 @@ func (g *Generator) GetPackageName() string {
 	return strings.ToLower(g.ServiceName)
 }
 
-func (g *Generator) setDynamicConfigVariables() {
-	g.Cfg.GeneratorCLI.Generators[domain.Go].AdditionalProperties["packageName"] = g.GetPackageName()
-}
-
-func (g *Generator) changeModuleName(packageDir string) error {
-	goModPath := filepath.Join(packageDir, "go.mod")
-	bytes, err := g.FileIO.Read(goModPath)
-	if err != nil {
-		return errors.Wrap(err, "failed to read file")
-	}
-
+func (g *Generator) goModInit(packageDir string) error {
 	newModuleName := fmt.Sprintf("github.com/spring-financial-group/%s/%s", PushRepositoryName, g.GetPackageName())
-
-	re, err := regexp.Compile(`module .*`)
-	if err != nil {
-		return errors.Wrap(err, "failed to compile regex")
-	}
-
-	bytes = re.ReplaceAll(bytes, []byte(fmt.Sprintf("module %s", newModuleName)))
-
-	err = g.FileIO.Write(goModPath, bytes, 0700)
-	if err != nil {
-		return errors.Wrap(err, "failed to write file")
-	}
-	return nil
+	return g.Cmd.ExecuteAndLog(packageDir, "go", "mod", "init", newModuleName)
 }
 
 func (g *Generator) goModTidy(dir string) error {
@@ -157,7 +154,7 @@ func (g *Generator) createPullRequest(currentBranch, defaultBranch string) error
 			Title:               utils.NewPtr(fmt.Sprintf("chore(deps): upgrade %s package -> %s", g.GetPackageName(), g.Version)),
 			Head:                &currentBranch,
 			Base:                utils.NewPtr(strings.TrimPrefix(defaultBranch, "origin/")),
-			Body:                utils.NewPtr(fmt.Sprintf("Automated python schemas update for %s", g.GetPackageName())),
+			Body:                utils.NewPtr(fmt.Sprintf("Automated go schemas update for %s", g.GetPackageName())),
 			MaintainerCanModify: utils.NewPtr(true),
 		},
 	)
@@ -171,4 +168,101 @@ func (g *Generator) createPullRequest(currentBranch, defaultBranch string) error
 		return errors.Wrap(err, "failed to add reviewers to pull request")
 	}
 	return nil
+}
+
+func (g *Generator) createFreshDir(packageDir string) error {
+    // Check if directory exists
+    if _, err := os.Stat(packageDir); err == nil {
+        // Remove entire directory and its contents
+        if err := os.RemoveAll(packageDir); err != nil {
+            return errors.Wrapf(err, "failed to remove existing directory: %s", packageDir)
+        }
+        logrus.Infof("Removed existing directory: %s", packageDir)
+    }
+
+    // Create a fresh directory
+    if err := os.MkdirAll(packageDir, 0755); err != nil {
+        return errors.Wrapf(err, "failed to create directory: %s", packageDir)
+    }
+    fmt.Println("Created directory:", packageDir)
+
+	return nil
+}
+
+func (g *Generator) generateCode() (string, error) {
+	// Read file
+	var swaggerData []byte
+
+	swaggerData, err := os.ReadFile(g.BaseGenerator.SpecPath)
+	if err != nil {
+		return "", err
+	}
+
+	loader := openapi3.NewLoader()
+	swagger, err := loader.LoadFromData(swaggerData)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to load spec")
+	}
+
+	if strings.HasPrefix(swagger.OpenAPI, "3.1.") {
+		logrus.Warnf("You are using an OpenAPI 3.1.x specification, which is not yet supported by oapi-codegen. Some functionality may not be available. Until oapi-codegen supports OpenAPI 3.1, it is recommended to downgrade your spec to 3.0.x")
+	} else if strings.HasPrefix(swagger.OpenAPI, "2.") {
+		swaggerData, err = g.convertSwaggerV2toV3(swaggerData)
+		if err != nil {
+			return "", errors.Wrap(err, "failed to convert spec to v3")
+		}
+	}
+
+	swagger, err = loader.LoadFromData(swaggerData)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to load spec")
+	}
+
+	config := codegen.Configuration{
+		PackageName: g.GetPackageName(),
+		Generate: codegen.GenerateOptions{
+			Client:       true,
+			Models:       true,
+		},
+	}
+
+	code, err := codegen.Generate(swagger, config)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to generate code")
+	}
+
+	return code, nil
+}
+
+func (g *Generator) convertSwaggerV2toV3(data []byte) ([]byte, error) {
+	var response []byte
+	// Unmarshal into a map
+	var payload map[string]interface{}
+	if err := json.Unmarshal(data, &payload); err != nil {
+		return response, err
+	}
+
+	// Marshal map back to JSON
+	jsonBody, err := json.Marshal(payload)
+	if err != nil {
+		return response, err
+	}
+
+	// POST request
+	resp, err := http.Post("https://converter.swagger.io/api/convert", "application/json", bytes.NewBuffer(jsonBody))
+	if err != nil {
+		return response, err
+	}
+	defer resp.Body.Close()
+
+	// read response to str
+	body := new(bytes.Buffer)
+	body.ReadFrom(resp.Body)
+	response = body.Bytes()
+
+	if resp.StatusCode != http.StatusOK {
+		return response, fmt.Errorf("failed to convert spec")
+	}
+
+	return response, nil
 }
