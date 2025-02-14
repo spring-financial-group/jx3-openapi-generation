@@ -25,7 +25,6 @@ import (
 const (
 	PushRepositoryURL  = "https://github.com/spring-financial-group/mqube-go-packages.git"
 	PushRepositoryName = "mqube-go-packages"
-	Command = "go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen -generate \"models,client\" -o client_generated.go -package aloo openapi.json"
 )
 
 var (
