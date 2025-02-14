@@ -256,7 +256,10 @@ func (g *Generator) convertSwaggerV2toV3(data []byte) ([]byte, error) {
 
 	// read response to str
 	body := new(bytes.Buffer)
-	body.ReadFrom(resp.Body)
+	_, err = body.ReadFrom(resp.Body)
+	if err != nil {
+		return response, err
+	}
 	response = body.Bytes()
 
 	if resp.StatusCode != http.StatusOK {
