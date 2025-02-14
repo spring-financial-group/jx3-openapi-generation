@@ -2,8 +2,6 @@ module github.com/spring-financial-group/jx3-openapi-generation
 
 go 1.21.0
 
-toolchain go1.22.0
-
 require (
 	github.com/google/go-github/v47 v47.1.0
 	github.com/pkg/errors v0.9.1
