@@ -3,20 +3,21 @@ package generate
 import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/openapitools"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/angular"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/csharp"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/java"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/javascript"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/python"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/helper"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/templates"
 	"github.com/spring-financial-group/mqa-logging/pkg/log"
 	"path/filepath"
-	"spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
-	"spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"spring-financial-group/jx3-openapi-generation/pkg/openapitools"
-	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
-	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/angular"
-	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/csharp"
-	_go "spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/go"
-	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/java"
-	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/python"
-	"spring-financial-group/jx3-openapi-generation/pkg/utils"
+	_go "github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/go"
 	"strings"
 )
 
@@ -125,17 +126,18 @@ func (o *PackageOptions) InitialiseGenerators() error {
 	if err != nil {
 		return err
 	}
-	baseGenerator, err := packageGenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.SpecPath, config)
+	baseGenerator, err := packageGenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.GitUser, o.SpecPath, o.PackageName, config)
 	if err != nil {
 		return errors.Wrap(err, "failed to create base generator")
 	}
 
 	o.languageGenerators = map[string]domain.PackageGenerator{
-		domain.CSharp:  csharp.NewGenerator(baseGenerator),
-		domain.Java:    java.NewGenerator(baseGenerator),
-		domain.Angular: angular.NewGenerator(baseGenerator),
-		domain.Python:  python.NewGenerator(baseGenerator),
-		domain.Go:      _go.NewGenerator(baseGenerator),
+		domain.CSharp:     csharp.NewGenerator(baseGenerator),
+		domain.Java:       java.NewGenerator(baseGenerator),
+		domain.Angular:    angular.NewGenerator(baseGenerator),
+		domain.Python:     python.NewGenerator(baseGenerator),
+		domain.Javascript: javscript.NewGenerator(baseGenerator),
+		domain.Go:         _go.NewGenerator(baseGenerator),
 	}
 	return nil
 }

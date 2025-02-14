@@ -5,13 +5,13 @@ import (
 	"fmt"
 	gh "github.com/google/go-github/v47/github"
 	"github.com/pkg/errors"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/git"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/scmClient/github"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"k8s.io/apimachinery/pkg/util/json"
 	"path/filepath"
-	"spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"spring-financial-group/jx3-openapi-generation/pkg/git"
-	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
-	"spring-financial-group/jx3-openapi-generation/pkg/scmClient/github"
-	"spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"strings"
 )
 
@@ -23,7 +23,7 @@ const (
 )
 
 var (
-	reviewers = []string{"Skisocks"}
+	reviewers = []string{"Reton2"}
 )
 
 type Generator struct {
@@ -54,7 +54,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 
 	g.setDynamicConfigVariables()
 
-	packageDir, err := g.BaseGenerator.GeneratePackage(filepath.Join(repoDir, g.GetPackageName()), domain.Python)
+	packageDir, err := g.BaseGenerator.GeneratePackage(repoDir, domain.Python)
 	if err != nil {
 		return "", err
 	}
@@ -64,7 +64,8 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", errors.Wrap(err, "failed to update packages.json")
 	}
 
-	err = g.Git.AddFiles(repoDir, packageJsonPath, packageDir)
+	readmePath := fmt.Sprintf("%s_README.md", g.GetPackageName())
+	err = g.Git.AddFiles(repoDir, packageJsonPath, g.GetPackageName(), readmePath)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to add package to Git")
 	}

@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/file"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/rootcmd"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/helper"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/templates"
 	"github.com/spring-financial-group/mqa-logging/pkg/log"
 	"os"
 	"path/filepath"
-	"spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"spring-financial-group/jx3-openapi-generation/pkg/file"
-	"spring-financial-group/jx3-openapi-generation/pkg/rootcmd"
-	"spring-financial-group/jx3-openapi-generation/pkg/utils"
 )
 
 // Options for triggering
@@ -26,9 +26,11 @@ type Options struct {
 	RepoOwner          string
 	RepoName           string
 	SpecPath           string
+	GitUser            string
 	GitToken           string
 
-	FileIO domain.FileIO
+	FileIO      domain.FileIO
+	PackageName string
 }
 
 // Constants for environment variables required by the command
@@ -38,7 +40,9 @@ const (
 	repoNameKey           = "REPO_NAME"
 	swaggerServiceNameKey = "SwaggerServiceName"
 	specPathKey           = "SpecPath"
+	gitUserKey            = "GIT_USER"
 	gitTokenKey           = "GIT_TOKEN"
+	packageNameKey        = "PackageName"
 )
 
 const (
@@ -80,7 +84,7 @@ func NewCmdGenerate() *cobra.Command {
 			err := o.Run()
 			helper.CheckErr(err)
 		},
-		SuggestFor: []string{"genarate"},
+		SuggestFor: []string{"genarate, genorate"},
 		Aliases:    []string{"gen"},
 	}
 
@@ -106,27 +110,33 @@ func (o *Options) initialise() error {
 }
 
 func (o *Options) getVariablesFromEnvironment() error {
-	var missingVariable string
+	var missingVariables []string
 	if o.Version = os.Getenv(versionKey); o.Version == "" {
-		missingVariable = versionKey
+		missingVariables = append(missingVariables, versionKey)
 	}
 	if o.RepoOwner = os.Getenv(repoOwnerKey); o.RepoOwner == "" {
-		missingVariable = repoOwnerKey
+		missingVariables = append(missingVariables, repoOwnerKey)
 	}
 	if o.RepoName = os.Getenv(repoNameKey); o.RepoName == "" {
-		missingVariable = repoNameKey
+		missingVariables = append(missingVariables, repoNameKey)
 	}
 	if o.SwaggerServiceName = os.Getenv(swaggerServiceNameKey); o.SwaggerServiceName == "" {
-		missingVariable = swaggerServiceNameKey
+		missingVariables = append(missingVariables, swaggerServiceNameKey)
+	}
+	if o.PackageName = os.Getenv(packageNameKey); o.PackageName == "" {
+		o.PackageName = "Client"
 	}
 	if o.SpecPath = os.Getenv(specPathKey); o.SpecPath == "" {
-		missingVariable = specPathKey
+		missingVariables = append(missingVariables, specPathKey)
+	}
+	if o.GitUser = os.Getenv(gitUserKey); o.GitUser == "" {
+		missingVariables = append(missingVariables, gitUserKey)
 	}
 	if o.GitToken = os.Getenv(gitTokenKey); o.GitToken == "" {
-		missingVariable = gitTokenKey
+		missingVariables = append(missingVariables, gitTokenKey)
 	}
-	if missingVariable != "" {
-		return &domain.ErrEnvironmentVariableNotFound{VariableName: missingVariable}
+	if len(missingVariables) > 0 {
+		return &domain.ErrEnvironmentVariableNotFound{VariableNames: missingVariables}
 	}
 	return nil
 }

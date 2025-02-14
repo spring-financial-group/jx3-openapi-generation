@@ -2,12 +2,12 @@
   "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "5.4.0",
+    "version": "7.1.0",
     "generators": {
       "csharp": {
         "output": "./csharp-service",
         "inputSpec": "./mocks/swagger.json",
-        "generatorName": "csharp-netcore",
+        "generatorName": "csharp",
         "additionalProperties": {
           "targetFramework": "netstandard2.1",
           "netCoreProjectFile": "true",
@@ -24,6 +24,7 @@
         },
         "globalProperty": {
           "models": "",
+          "supportingFiles": "JSON.java",
           "modelTests": "false",
           "modelDocs": "false"
         }
@@ -45,6 +46,8 @@
         "inputSpec": "./mocks/swagger.json",
         "generatorName": "python",
         "additionalProperties": {
+          "library": "asyncio",
+          "generateSourceCodeOnly": "true"
         },
         "globalProperty": {
         }
@@ -61,6 +64,18 @@
           "modelTests": "false",
           "modelDocs": "false",
           "supportingFiles": "go.mod,go.sum"
+        }
+      },
+      "javascript": {
+        "generatorName": "javascript",
+        "output": "./javascript-service",
+        "inputSpec": "./mocks/swagger.json",
+        "enablePostProcessFile": true,
+        "removeOperationIdPrefix": true,
+        "additionalProperties": {
+          "fileNaming": "camelCase",
+          "packageVersion": "0.0.1",
+          "stringEnums": "true"
         }
       }
     }

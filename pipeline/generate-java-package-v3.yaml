@@ -23,7 +23,7 @@ spec:
         #!/usr/bin/env sh
         . /workspace/source/.jx/variables.sh
         sed -i 's/0.0.0/'$VERSION'/g' ./registry/package.json
-    - image: jx3mqubebuild.azurecr.io/spring-financial-group/jx3-openapi-generation:1.1.0
+    - image: jx3mqubebuild.azurecr.io/spring-financial-group/jx3-openapi-generation:1.3.33
       name: java-swagger
       resources: {}
       script: |

@@ -2,10 +2,10 @@ package packageGenerator
 
 import (
 	"github.com/pkg/errors"
-	"spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
-	"spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"spring-financial-group/jx3-openapi-generation/pkg/file"
-	"spring-financial-group/jx3-openapi-generation/pkg/openapitools"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/file"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/openapitools"
 )
 
 type BaseGenerator struct {
@@ -14,21 +14,25 @@ type BaseGenerator struct {
 	RepoOwner   string
 	RepoName    string
 	GitToken    string
+	GitUser     string
 	SpecPath    string
+	PackageName string
 
 	Cfg    *openapitools.Config
 	Cmd    domain.CommandRunner
 	FileIO domain.FileIO
 }
 
-func NewBaseGenerator(version, serviceName, repoOwner, repoName, gitToken, specPath string, cfg *openapitools.Config) (*BaseGenerator, error) {
+func NewBaseGenerator(version, serviceName, repoOwner, repoName, gitToken, gitUser, specPath string, packageName string, cfg *openapitools.Config) (*BaseGenerator, error) {
 	gen := &BaseGenerator{
 		Version:     version,
 		ServiceName: serviceName,
 		RepoOwner:   repoOwner,
 		RepoName:    repoName,
+		GitUser:     gitUser,
 		GitToken:    gitToken,
 		SpecPath:    specPath,
+		PackageName: packageName,
 		Cmd:         commandRunner.NewCommandRunner(),
 		FileIO:      file.NewFileIO(),
 		Cfg:         cfg,
@@ -64,7 +68,7 @@ func (g *BaseGenerator) GeneratePackage(outputDir, language string) (string, err
 	defer g.FileIO.DeferRemove(cfgPath)
 
 	// Generate Package
-	err = g.Cmd.ExecuteAndLog("", "npx", "openapi-generator-cli", "generate", "--generator-key", language)
+	err = g.Cmd.ExecuteAndLog("", "npx", "@openapitools/openapi-generator-cli", "generate", "--generator-key", language, "--config", cfgPath)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to generate package")
 	}

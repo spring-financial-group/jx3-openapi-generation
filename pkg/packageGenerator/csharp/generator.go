@@ -3,13 +3,13 @@ package csharp
 import (
 	"fmt"
 	"github.com/pkg/errors"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
 	"path/filepath"
-	"spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
 )
 
 const (
-	NugetConfigPath = "./registry/nuget.config"
+	packagingFilesDir = "/templates/csharp"
 )
 
 type Generator struct {
@@ -30,9 +30,8 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	_, _, err = g.FileIO.CopyToDir(NugetConfigPath, packageDir)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to copy nuget config")
+	if err = g.FileIO.TemplateFilesInDir(packagingFilesDir, packageDir, g); err != nil {
+		return "", err
 	}
 
 	err = g.Cmd.ExecuteAndLog(packageDir, "dotnet", "pack", "-c", "Release", fmt.Sprintf("-p:VERSION=%s", g.Version))
@@ -47,7 +46,7 @@ func (g *Generator) setDynamicConfigVariables() {
 }
 
 func (g *Generator) GetPackageName() string {
-	return fmt.Sprintf("Mqube.%s.Client", g.ServiceName)
+	return fmt.Sprintf("Mqube.%s.%s", g.ServiceName, g.PackageName)
 }
 
 func (g *Generator) PushPackage(packageDir string) error {

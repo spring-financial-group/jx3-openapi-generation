@@ -1,4 +1,4 @@
-module spring-financial-group/jx3-openapi-generation
+module github.com/spring-financial-group/jx3-openapi-generation
 
 go 1.18
 

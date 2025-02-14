@@ -27,6 +27,7 @@ The CLI is configured through environment variables. The following environment v
 | `REPO_OWNER`         | The owner of the service repository.                                                          |
 | `REPO_NAME`          | The name of the service repository.                                                           |
 | `GIT_TOKEN`          | Authorisation token used for pushing Python packages to a repository.                         |
+| `GIT_USER`           | The user to use for authenticating with GitHub                                                |
 
 Then to generate a package for a service, run the following command:
 ```bash
