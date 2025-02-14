@@ -110,9 +110,9 @@ func (g *Generator) GetPackageName() string {
 	return strings.ToLower(g.ServiceName)
 }
 
-func (g *Generator) goModInit(packageDir string) error {
+func (g *Generator) goModInit(dir string) error {
 	newModuleName := fmt.Sprintf("github.com/spring-financial-group/%s/%s", PushRepositoryName, g.GetPackageName())
-	return g.Cmd.ExecuteAndLog(packageDir, "go", "mod", "init", newModuleName)
+	return g.Cmd.ExecuteAndLog(dir, "go", "mod", "init", newModuleName)
 }
 
 func (g *Generator) goModTidy(dir string) error {
