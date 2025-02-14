@@ -2,6 +2,11 @@ FROM node:22
 
 RUN apt-get update
 
+# Install Go (1.21.0)
+RUN wget -c https://dl.google.com/go/go1.21.0.linux-amd64.tar.gz -O - | tar -xz -C /usr/local
+ENV PATH "$PATH:/usr/local/go/bin"
+RUN go version
+
 # Install javascript dependencies
 RUN npm install -g @openapitools/openapi-generator-cli@2.13.4
 RUN npm install -g @angular/compiler-cli@13.3.1 @angular/platform-server@13.3.1 @angular/compiler@13.3.1
