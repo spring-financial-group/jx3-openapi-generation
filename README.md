@@ -4,9 +4,17 @@ The tool is wrapped in a Go CLI which is used for setting up the configuration f
 packages to the relevant repositories.
 
 The following languages currently are supported:
-- C# (`csharp`)
-- Java (`java`)
-- Angular (`angular`)
+
+| Language | Argument  | Notes                                   |
+|----------|-----------|-----------------------------------------|
+| C#       | `csharp`  |                                         |
+| Java     | `java`    |                                         |
+| Angular  | `angular` |                                         |
+| Python   | `python`  | **Not available for preview packages*** |
+| Golang   | `go`      | **Not available for preview packages*** |
+
+\* Due to the way in which Go and Python packages are stored preview packages are not current supported so avoid
+using these languages in any preview pipelines
 
 ## Usage
 The CLI is configured through environment variables. The following environment variables are required:
@@ -48,7 +56,7 @@ env:
   - name: SpecPath
     value: ./docs/swagger.json
   - name: OutputLanguages
-    value: csharp angular java
+    value: csharp angular java go
 ```
 
 #### Full Example

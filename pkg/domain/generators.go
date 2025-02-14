@@ -8,6 +8,7 @@ const (
 	Angular    = "angular"
 	Python     = "python"
 	Javascript = "javascript"
+	Go         = "go"
 )
 
 type PackageGenerator interface {
