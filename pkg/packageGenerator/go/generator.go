@@ -111,7 +111,11 @@ func (g *Generator) GetPackageName() string {
 }
 
 func (g *Generator) goModInit(dir string) error {
-	newModuleName := fmt.Sprintf("github.com/spring-financial-group/%s/%s", PushRepositoryName, g.GetPackageName())
+	versiosStr := utils.GetMajorVersion(g.Version)
+	if versiosStr != "" {
+		versiosStr = "/" + versiosStr
+	}
+	newModuleName := fmt.Sprintf("github.com/spring-financial-group/%s/%s%s", PushRepositoryName, g.GetPackageName(), versiosStr)
 	return g.Cmd.ExecuteAndLog(dir, "go", "mod", "init", newModuleName)
 }
 
@@ -217,12 +221,8 @@ func (g *Generator) generateCode() (string, error) {
 		return "", errors.Wrap(err, "failed to load spec")
 	}
 
-	versiosStr := utils.GetMajorVersion(g.Version)
-	if versiosStr != "" {
-		versiosStr = "/" + versiosStr
-	}
 	config := codegen.Configuration{
-		PackageName: g.GetPackageName() + versiosStr,
+		PackageName: g.GetPackageName(),
 		Generate: codegen.GenerateOptions{
 			Client:       true,
 			Models:       true,
