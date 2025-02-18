@@ -37,7 +37,7 @@ func MarshalJSON[T any](dataStruct T) ([]byte, error) {
 // if major version is >1, it will return v{majorVersion}
 func GetMajorVersion(rawVersion string) string {
 	// get the version string with regex and split it by the dot
-	regex := regexp.MustCompile(`v(\d+\.\d+\.\d+)`)
+	regex := regexp.MustCompile(`v?(\d+\.\d+\.\d+)`)
 	if !regex.MatchString(rawVersion) {
 		return ""
 	}

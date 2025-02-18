@@ -72,6 +72,11 @@ func TestGetMajorVersion(t *testing.T) {
 			input:   "alphav23.0.0-rc1",
 			expected: "v23",
 		},
+		{
+			name:    "no v in version",
+			input:   "2.2.2",
+			expected: "v2",
+		},
 	}
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
