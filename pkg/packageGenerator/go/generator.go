@@ -111,16 +111,28 @@ func (g *Generator) GetPackageName() string {
 	return strings.ToLower(g.ServiceName)
 }
 
-func (g *Generator) goModInit(dir string) error {
+func (g *Generator) getMajorVersionString() (string, error) {
+	var versionString string
+
 	semversion, err := semver.NewVersion(g.Version)
 	if err != nil {
-		return errors.Wrap(err, "failed to parse version")
+		return versionString, errors.Wrap(err, "failed to parse version")
 	}
-	var versionString string
+
 	majorVersion := semversion.Major()
 	if majorVersion > 1 {
 		versionString = fmt.Sprintf("/v%d", majorVersion)
 	}
+
+	return versionString, nil
+}
+
+func (g *Generator) goModInit(dir string) error {
+	versionString, err := g.getMajorVersionString()
+	if err != nil {
+		return errors.Wrap(err, "failed to get major version string")
+	}
+
 	newModuleName := fmt.Sprintf("github.com/spring-financial-group/%s/%s%s", PushRepositoryName, g.GetPackageName(), versionString)
 	return g.Cmd.ExecuteAndLog(dir, "go", "mod", "init", newModuleName)
 }
