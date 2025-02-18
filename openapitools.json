@@ -52,6 +52,20 @@
         "globalProperty": {
         }
       },
+      "go": {
+        "output": "./go-service",
+        "inputSpec": "./mocks/swagger.json",
+        "generatorName": "go",
+        "additionalProperties": {
+          "isGoSubmodule": "true"
+        },
+        "globalProperty": {
+          "models": "",
+          "modelTests": "false",
+          "modelDocs": "false",
+          "supportingFiles": "go.mod,go.sum"
+        }
+      },
       "javascript": {
         "generatorName": "javascript",
         "output": "./javascript-service",
