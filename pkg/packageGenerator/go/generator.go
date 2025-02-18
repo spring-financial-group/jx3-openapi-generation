@@ -78,15 +78,21 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", errors.Wrap(err, "failed to write code to file")
 	}
 
-	err = g.generateMocks(packageDir)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to generate mocks")
-	}
-
 	// Openapitools sets the module name to the REPO_NAME, we need it to be the PushRepositoryName
 	err = g.goModInit(packageDir)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to change module name")
+	}
+
+	// Run go mod tidy to ensure the go.mod file doesn't have any unnecessary dependencies
+	err = g.goModTidy(packageDir)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to run go mod tidy")
+	}
+
+	err = g.generateMocks(packageDir)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to generate mocks")
 	}
 
 	// Run go mod tidy to ensure the go.mod file doesn't have any unnecessary dependencies
