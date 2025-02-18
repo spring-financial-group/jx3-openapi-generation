@@ -78,6 +78,11 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", errors.Wrap(err, "failed to write code to file")
 	}
 
+	err = g.generateMocks(packageDir)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to generate mocks")
+	}
+
 	// Openapitools sets the module name to the REPO_NAME, we need it to be the PushRepositoryName
 	err = g.goModInit(packageDir)
 	if err != nil {
@@ -258,6 +263,11 @@ func (g *Generator) generateCode() (string, error) {
 	}
 
 	return code, nil
+}
+
+func (g *Generator) generateMocks(dir string) error {
+	err := g.Cmd.ExecuteAndLog(dir, "mockery", "--all", "--inpackage-suffix", "--inpackage", "--case", "snake")
+	return err
 }
 
 func (g *Generator) convertSwaggerV2toV3(data []byte) ([]byte, error) {
