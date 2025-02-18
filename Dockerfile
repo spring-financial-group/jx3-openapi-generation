@@ -4,7 +4,8 @@ RUN apt-get update
 
 # Install Go (1.21.0)
 RUN wget -c https://dl.google.com/go/go1.21.0.linux-amd64.tar.gz -O - | tar -xz -C /usr/local
-ENV PATH "$PATH:/usr/local/go/bin"
+ENV GOPATH "/usr/local/go"
+ENV PATH "$PATH:$GOPATH/bin"
 RUN go install github.com/vektra/mockery/v2@v2.52.2
 RUN go version
 
