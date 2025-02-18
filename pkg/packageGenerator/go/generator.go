@@ -217,8 +217,12 @@ func (g *Generator) generateCode() (string, error) {
 		return "", errors.Wrap(err, "failed to load spec")
 	}
 
+	versiosStr := utils.GetMajorVersion(g.Version)
+	if versiosStr != "" {
+		versiosStr = "/" + versiosStr
+	}
 	config := codegen.Configuration{
-		PackageName: g.GetPackageName(),
+		PackageName: g.GetPackageName() + versiosStr,
 		Generate: codegen.GenerateOptions{
 			Client:       true,
 			Models:       true,
