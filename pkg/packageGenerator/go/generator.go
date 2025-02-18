@@ -20,6 +20,7 @@ import (
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/scmClient/github"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
+	"github.com/Masterminds/semver/v3"
 )
 
 const (
@@ -111,11 +112,16 @@ func (g *Generator) GetPackageName() string {
 }
 
 func (g *Generator) goModInit(dir string) error {
-	versiosStr := utils.GetMajorVersion(g.Version)
-	if versiosStr != "" {
-		versiosStr = "/" + versiosStr
+	semversion, err := semver.NewVersion(g.Version)
+	if err != nil {
+		return errors.Wrap(err, "failed to parse version")
 	}
-	newModuleName := fmt.Sprintf("github.com/spring-financial-group/%s/%s%s", PushRepositoryName, g.GetPackageName(), versiosStr)
+	var versionString string
+	majorVersion := semversion.Major()
+	if majorVersion > 1 {
+		versionString = fmt.Sprintf("/v%d", majorVersion)
+	}
+	newModuleName := fmt.Sprintf("github.com/spring-financial-group/%s/%s%s", PushRepositoryName, g.GetPackageName(), versionString)
 	return g.Cmd.ExecuteAndLog(dir, "go", "mod", "init", newModuleName)
 }
 
