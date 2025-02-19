@@ -235,6 +235,11 @@ func (g *Generator) generateCode() (string, error) {
 		return "", err
 	}
 
+	// replace all `Response"` occurences with `ResponseDto"` to avoid compilation errors
+	swaggerString := string(swaggerData)
+	swaggerString = strings.ReplaceAll(swaggerString, "Response\"", "ResponseDto\"")
+	swaggerData = []byte(swaggerString)
+
 	loader := openapi3.NewLoader()
 	swagger, err := loader.LoadFromData(swaggerData)
 	if err != nil {
@@ -267,9 +272,6 @@ func (g *Generator) generateCode() (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err, "failed to generate code")
 	}
-
-	// replace all `Response"` occurences with `ResponseDto"` to avoid compilation errors
-	code = strings.ReplaceAll(code, "Response\"", "ResponseDto\"")
 
 	return code, nil
 }
