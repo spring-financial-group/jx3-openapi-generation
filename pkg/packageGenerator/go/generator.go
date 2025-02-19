@@ -90,6 +90,17 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", errors.Wrap(err, "failed to run go mod tidy")
 	}
 
+	err = g.generateMocks(packageDir)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to generate mocks")
+	}
+
+	// Run go mod tidy to ensure the go.mod file doesn't have any unnecessary dependencies
+	err = g.goModTidy(packageDir)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to run go mod tidy")
+	}
+
 	// We need to be able to identify the version of the package from within the repository
 	err = g.createPackageVersionFile(packageDir)
 	if err != nil {
@@ -258,6 +269,11 @@ func (g *Generator) generateCode() (string, error) {
 	}
 
 	return code, nil
+}
+
+func (g *Generator) generateMocks(dir string) error {
+	err := g.Cmd.ExecuteAndLog(dir, "mockery", "--all", "--inpackage-suffix", "--inpackage", "--case", "snake")
+	return err
 }
 
 func (g *Generator) convertSwaggerV2toV3(data []byte) ([]byte, error) {
