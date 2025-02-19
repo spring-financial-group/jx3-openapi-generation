@@ -240,6 +240,13 @@ func (g *Generator) generateCode() (string, error) {
 	swaggerString = strings.ReplaceAll(swaggerString, "Response\"", "ResponseDto\"")
 	swaggerData = []byte(swaggerString)
 
+	if g.isSwaggerV2(swaggerData) {
+		swaggerData, err = g.convertSwaggerV2toV3(swaggerData)
+		if err != nil {
+			return "", errors.Wrap(err, "failed to convert spec")
+		}
+	}
+
 	loader := openapi3.NewLoader()
 	swagger, err := loader.LoadFromData(swaggerData)
 	if err != nil {
@@ -248,11 +255,6 @@ func (g *Generator) generateCode() (string, error) {
 
 	if strings.HasPrefix(swagger.OpenAPI, "3.1.") {
 		logrus.Warnf("You are using an OpenAPI 3.1.x specification, which is not yet supported by oapi-codegen. Some functionality may not be available. Until oapi-codegen supports OpenAPI 3.1, it is recommended to downgrade your spec to 3.0.x")
-	} else if strings.HasPrefix(swagger.OpenAPI, "2.") {
-		swaggerData, err = g.convertSwaggerV2toV3(swaggerData)
-		if err != nil {
-			return "", errors.Wrap(err, "failed to convert spec to v3")
-		}
 	}
 
 	swagger, err = loader.LoadFromData(swaggerData)
@@ -315,4 +317,29 @@ func (g *Generator) convertSwaggerV2toV3(data []byte) ([]byte, error) {
 	}
 
 	return response, nil
+}
+
+func (g *Generator) isSwaggerV2(data []byte) bool {
+	version, err := g.getSwaggerVersion(data)
+	if err != nil {
+		return false
+	}
+
+	return strings.HasPrefix(version, "2.")
+}
+
+func (g *Generator) getSwaggerVersion(data []byte) (string, error) {
+	// Unmarshal into a map
+	var swaggerDict map[string]interface{}
+	if err := json.Unmarshal(data, &swaggerDict); err != nil {
+		return "", err
+	}
+
+	// Get the version
+	version, ok := swaggerDict["swagger"].(string)
+	if !ok {
+		return "", fmt.Errorf("failed to get swagger version")
+	}
+
+	return version, nil
 }
