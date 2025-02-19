@@ -268,6 +268,9 @@ func (g *Generator) generateCode() (string, error) {
 		return "", errors.Wrap(err, "failed to generate code")
 	}
 
+	// replace all `Response"` occurences with `ResponseDto"` to avoid compilation errors
+	code = strings.ReplaceAll(code, "Response\"", "ResponseDto\"")
+
 	return code, nil
 }
 
