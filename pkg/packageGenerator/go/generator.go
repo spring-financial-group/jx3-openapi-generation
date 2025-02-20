@@ -30,7 +30,7 @@ const (
 )
 
 var (
-	reviewers = []string{"Skisocks", "Reton2"}
+	reviewers = []string{}
 )
 
 type Generator struct {
