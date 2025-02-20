@@ -29,10 +29,6 @@ const (
 	updateBotLabel = "updatebot"
 )
 
-var (
-	reviewers = []string{}
-)
-
 type Generator struct {
 	*packageGenerator.BaseGenerator
 	Git domain.Gitter
@@ -195,11 +191,7 @@ func (g *Generator) createPullRequest(currentBranch, defaultBranch string) error
 		return errors.Wrap(err, "failed to create pull request")
 	}
 
-	// Add Reviewers & auto-merge labels
-	_, err = g.Scm.RequestReviewers(context.Background(), reviewers, pr.GetNumber())
-	if err != nil {
-		return errors.Wrap(err, "failed to add reviewers to pull request")
-	}
+	// auto-merge labels
 	_, err = g.Scm.AddLabels(context.Background(), []string{updateBotLabel}, pr.GetNumber())
 	if err != nil {
 		return errors.Wrap(err, "failed to add labels pull request")
