@@ -9,15 +9,16 @@ import (
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/angular"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/csharp"
+	_go "github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/go"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/java"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/javascript"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/python"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/typescript"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/helper"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/templates"
 	"github.com/spring-financial-group/mqa-logging/pkg/log"
 	"path/filepath"
-	_go "github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/go"
 	"strings"
 )
 
@@ -137,6 +138,7 @@ func (o *PackageOptions) InitialiseGenerators() error {
 		domain.Angular:    angular.NewGenerator(baseGenerator),
 		domain.Python:     python.NewGenerator(baseGenerator),
 		domain.Javascript: javscript.NewGenerator(baseGenerator),
+		domain.Typescript: typescript.NewGenerator(baseGenerator),
 		domain.Go:         _go.NewGenerator(baseGenerator),
 	}
 	return nil

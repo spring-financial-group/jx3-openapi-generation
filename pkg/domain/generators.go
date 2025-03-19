@@ -8,6 +8,7 @@ const (
 	Angular    = "angular"
 	Python     = "python"
 	Javascript = "javascript"
+	Typescript = "typescript"
 	Go         = "go"
 )
 

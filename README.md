@@ -5,13 +5,14 @@ packages to the relevant repositories.
 
 The following languages currently are supported:
 
-| Language | Argument  | Notes                                   |
-|----------|-----------|-----------------------------------------|
-| C#       | `csharp`  |                                         |
-| Java     | `java`    |                                         |
-| Angular  | `angular` |                                         |
-| Python   | `python`  | **Not available for preview packages*** |
-| Golang   | `go`      | **Not available for preview packages*** |
+| Language   | Argument     | Notes                                   |
+|------------|--------------|-----------------------------------------|
+| C#         | `csharp`     |                                         |
+| Java       | `java`       |                                         |
+| Angular    | `angular`    |                                         |
+| Typescript | `typescript` |                                         |
+| Python     | `python`     | **Not available for preview packages*** |
+| Golang     | `go`         | **Not available for preview packages*** |
 
 \* Due to the way in which Go and Python packages are stored preview packages are not current supported so avoid
 using these languages in any preview pipelines
@@ -56,7 +57,7 @@ env:
   - name: SpecPath
     value: ./docs/swagger.json
   - name: OutputLanguages
-    value: csharp angular java go
+    value: csharp angular java go typescript
 ```
 
 #### Full Example
