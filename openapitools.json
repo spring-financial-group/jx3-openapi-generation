@@ -77,6 +77,18 @@
           "packageVersion": "0.0.1",
           "stringEnums": "true"
         }
+      },
+      "typescript": {
+        "generatorName": "typescript",
+        "output": "./typescript-service",
+        "inputSpec": "./mocks/swagger.json",
+        "enablePostProcessFile": true,
+        "removeOperationIdPrefix": true,
+        "additionalProperties": {
+          "fileNaming": "camelCase",
+          "packageVersion": "0.0.1",
+          "stringEnums": "true"
+        }
       }
     }
   }

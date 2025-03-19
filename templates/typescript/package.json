@@ -1,0 +1,13 @@
+{
+  "name": "@{{ .RepoOwner }}/{{ .GetPackageName }}",
+  "version": "{{ .Version }}",
+  "description": "Dynamically generated {{ .RepoName }} API Library for Node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",  
+  "repository": "git://github.com/{{ .RepoOwner }}/{{ .RepoName }}.git"
+}
