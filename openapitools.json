@@ -87,7 +87,8 @@
         "additionalProperties": {
           "fileNaming": "camelCase",
           "packageVersion": "0.0.1",
-          "stringEnums": "true"
+          "stringEnums": "true",
+          "useFormData": "true"
         }
       }
     }
