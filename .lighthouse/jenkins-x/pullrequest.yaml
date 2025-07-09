@@ -50,8 +50,9 @@ spec:
           script: |
             #!/bin/bash
             source .jx/variables.sh
-            ls -la
-            cp /tekton/creds-secrets/tekton-container-registry-auth/.dockerconfigjson /workspace/source/.docker/config.json
+            mkdir -p ~/.docker
+            cp /tekton/creds-secrets/tekton-container-registry-auth/.dockerconfigjson ~/.docker/config.json
+            export DOCKER_CONFIG=~/.docker
             crane push /workspace/source/image.tar $PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:$VERSION
             crane push /workspace/source/image.tar $PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:latest-preview
             rm /workspace/source/image.tar
