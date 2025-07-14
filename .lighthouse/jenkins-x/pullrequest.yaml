@@ -47,13 +47,13 @@ spec:
             --destination=$PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:$VERSION \
             --destination=$PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:latest-preview \
             --no-push --tarPath image.tar
-        - image: ghcr.io/spring-financial-group/container-tools:latest
+        - image: jx3mqubebuild.azurecr.io/spring-financial-group/container-tools:latest
           name: push
           resources: {}
           script: |
             #!/bin/bash
             source .jx/variables.sh
-            cp /tekton/creds-secrets/tekton-container-registry-auth/.dockerconfigjson ~/.docker/config.json
+            cp /temp-docker-config/config.json ~/.docker/config.json
             crane push /workspace/source/image.tar $PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:$VERSION
             crane push /workspace/source/image.tar $PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:latest-preview
             rm /workspace/source/image.tar
