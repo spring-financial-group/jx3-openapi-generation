@@ -18,6 +18,9 @@ spec:
               cpu: 400m
               memory: 512Mi
           workingDir: /workspace/source
+          volumeMounts:
+          - mountPath: /temp-docker-config
+            name: temp-docker-config
         steps:
         - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone.yaml@versionStream
           name: ""
@@ -46,18 +49,25 @@ spec:
             --destination=$PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:$VERSION \
             --destination=$PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:latest \
             --no-push --tarPath image.tar
-        - image: ghcr.io/spring-financial-group/container-tools:latest
+        - image: jx3mqubebuild.azurecr.io/spring-financial-group/container-tools:latest
           name: push
           resources: {}
           script: |
             #!/bin/bash
             source .jx/variables.sh
-            cp /tekton/creds-secrets/tekton-container-registry-auth/.dockerconfigjson ~/.docker/config.json
+            cp /temp-docker-config/config.json ~/.docker/config.json
             crane push /workspace/source/image.tar $PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:$VERSION
             crane push /workspace/source/image.tar $PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:latest
             rm /workspace/source/image.tar
         - name: promote-changelog
           resources: {}
+        volumes:
+        - name: temp-docker-config
+          secret:
+            secretName: tekton-temp-registry-auth
+            items:
+            - key: .dockerconfigjson
+              path: config.json
   podTemplate: {}
   serviceAccountName: tekton-bot
   timeout: 12h0m0s
