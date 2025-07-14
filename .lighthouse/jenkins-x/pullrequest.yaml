@@ -18,6 +18,9 @@ spec:
               cpu: 400m
               memory: 512Mi
           workingDir: /workspace/source
+          volumeMounts:
+          - mountPath: /temp-docker-config
+            name: temp-docker-config
         steps:
         - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone-pr.yaml@versionStream
           name: ""
@@ -54,6 +57,13 @@ spec:
             crane push /workspace/source/image.tar $PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:$VERSION
             crane push /workspace/source/image.tar $PUSH_CONTAINER_REGISTRY/$DOCKER_REGISTRY_ORG/$APP_NAME:latest-preview
             rm /workspace/source/image.tar
+        volumes:
+        - name: temp-docker-config
+          secret:
+            secretName: tekton-temp-registry-auth
+            items:
+            - key: .dockerconfigjson
+              path: config.json
   podTemplate: {}
   serviceAccountName: tekton-bot
   timeout: 12h0m0s
