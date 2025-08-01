@@ -1,5 +1,5 @@
 {
-    "openapi": "3.1.0",
+    "openapi": "3.0.2",
     "info": {
         "title": "Calculated_Values_Service",
         "description": "Set of API endpoints for all mortgage and affordability calculations",
@@ -721,16 +721,12 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Postcode",
                         "description": "",
-                        "examples": [
-                            "GU1 4HN"
-                        ]
+                        "nullable": true,
+                        "example": "GU1 4HN"
                     }
                 },
                 "type": "object",
@@ -795,9 +791,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Errormessage",
@@ -886,9 +879,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Impact Per Pound Change",
@@ -908,9 +898,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/SourcesUsed"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -919,9 +906,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/IncomeCreditExpenditureInputs"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -930,9 +914,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/IncomeCreditExpenditureCombo"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -944,9 +925,6 @@
                                     "$ref": "#/components/schemas/ApplicantModel"
                                 },
                                 "type": "array"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Applicants",
@@ -963,9 +941,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/AffordabilityOutput"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -979,9 +954,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Errormessage",
@@ -991,9 +963,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Case Id",
@@ -1003,9 +972,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Mongo Request Id",
@@ -1015,9 +981,6 @@
                         "anyOf": [
                             {
                                 "type": "boolean"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Was Ready",
@@ -1034,9 +997,6 @@
                             {
                                 "type": "string",
                                 "format": "date-time"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Time",
@@ -1103,9 +1063,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Maxloan",
@@ -1115,9 +1072,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Netdisposableincome",
@@ -1127,9 +1081,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Monthlynetincome",
@@ -1139,9 +1090,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Monthlyexpenditure",
@@ -1151,9 +1099,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Monthlycreditcommitmentpayments",
@@ -1170,9 +1115,6 @@
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Ltv Purchase Price",
@@ -1183,9 +1125,6 @@
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Ltv Avm",
@@ -1196,9 +1135,6 @@
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Ltv Physical Valuation",
@@ -1215,9 +1151,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Id",
@@ -1276,9 +1209,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Applicant Id",
@@ -1310,9 +1240,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Applicant Id",
@@ -1323,9 +1250,6 @@
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Annual Declared Gross Income",
@@ -1336,9 +1260,6 @@
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Annual Gross Income",
@@ -1349,9 +1270,6 @@
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Annual Basic And Allowances",
@@ -1362,9 +1280,6 @@
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Annual Student Loan Payments",
@@ -1374,9 +1289,6 @@
                         "anyOf": [
                             {
                                 "type": "boolean"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Is Self Employed",
@@ -1387,9 +1299,6 @@
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Annual Net Pay",
@@ -1584,9 +1493,6 @@
                         "anyOf": [
                             {
                                 "type": "boolean"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Valid",
@@ -1602,9 +1508,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/mqube_credit_commitments_service__schemas_v2__Source"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -1638,36 +1541,28 @@
                         "minimum": 0.0,
                         "title": "Last Salary",
                         "description": "Annual salary from the most recent year",
-                        "examples": [
-                            0
-                        ]
+                        "example": 0
                     },
                     "prev_salary": {
                         "type": "number",
                         "minimum": 0.0,
                         "title": "Prev Salary",
                         "description": "Annual salary from the second most recent year",
-                        "examples": [
-                            0
-                        ]
+                        "example": 0
                     },
                     "last_dividends": {
                         "type": "number",
                         "minimum": 0.0,
                         "title": "Last Dividends",
                         "description": "Annual dividends from the most recent year",
-                        "examples": [
-                            0
-                        ]
+                        "example": 0
                     },
                     "prev_dividends": {
                         "type": "number",
                         "minimum": 0.0,
                         "title": "Prev Dividends",
                         "description": "Annual dividends from the second most recent year",
-                        "examples": [
-                            0
-                        ]
+                        "example": 0
                     }
                 },
                 "type": "object",
@@ -1742,171 +1637,126 @@
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Household Utilities Goods And Repairs",
                         "description": "Monthly household utilities, goods, and repairs",
                         "default": 0,
-                        "examples": [
-                            10
-                        ],
-                        "nullable": true
+                        "nullable": true,
+                        "example": 10
                     },
                     "groceries_and_personal_goods": {
                         "anyOf": [
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Groceries And Personal Goods",
                         "description": "Monthly groceries and personal goods",
                         "default": 0,
-                        "examples": [
-                            10
-                        ],
-                        "nullable": true
+                        "nullable": true,
+                        "example": 10
                     },
                     "insurances": {
                         "anyOf": [
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Insurances",
                         "description": "Monthly insurance payments",
                         "default": 0,
-                        "examples": [
-                            10
-                        ],
-                        "nullable": true
+                        "nullable": true,
+                        "example": 10
                     },
                     "transport": {
                         "anyOf": [
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Transport",
                         "description": "Monthly transportation expenses",
                         "default": 0,
-                        "examples": [
-                            10
-                        ],
-                        "nullable": true
+                        "nullable": true,
+                        "example": 10
                     },
                     "recreation_social_and_holidays": {
                         "anyOf": [
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Recreation Social And Holidays",
                         "description": "Monthly payments on recreation, social activities, and holidays",
                         "default": 0,
-                        "examples": [
-                            10
-                        ],
-                        "nullable": true
+                        "nullable": true,
+                        "example": 10
                     },
                     "communications_and_digital_services": {
                         "anyOf": [
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Communications And Digital Services",
                         "description": "Monthly communication and digital services (e.g. wifi)",
                         "default": 0,
-                        "examples": [
-                            10
-                        ],
-                        "nullable": true
+                        "nullable": true,
+                        "example": 10
                     },
                     "clothing": {
                         "anyOf": [
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Clothing",
                         "description": "Monthly clothing spending",
                         "default": 0,
-                        "examples": [
-                            10
-                        ],
-                        "nullable": true
+                        "nullable": true,
+                        "example": 10
                     },
                     "council_tax": {
                         "type": "number",
                         "minimum": 0.0,
                         "title": "Council Tax",
                         "description": "Monthly council tax payments on security property",
-                        "examples": [
-                            10
-                        ]
+                        "example": 10
                     },
                     "childcare_school_fees": {
                         "type": "number",
                         "minimum": 0.0,
                         "title": "Childcare School Fees",
                         "description": "Monthly childcare or school fees",
-                        "examples": [
-                            10
-                        ]
+                        "example": 10
                     },
                     "maintenance_payments": {
                         "type": "number",
                         "minimum": 0.0,
                         "title": "Maintenance Payments",
                         "description": "Monthly maintenance payments",
-                        "examples": [
-                            10
-                        ]
+                        "example": 10
                     },
                     "service_charge_ground_rent": {
                         "type": "number",
                         "minimum": 0.0,
                         "title": "Service Charge Ground Rent",
                         "description": "Monthly service charge or ground rent on security property",
-                        "examples": [
-                            10
-                        ]
+                        "example": 10
                     },
                     "other_essential_expenditure": {
                         "type": "number",
                         "minimum": 0.0,
                         "title": "Other Essential Expenditure",
                         "description": "Any other large expenditure items which the applicant would not be willing/able to give up in order to cover the mortgage payments (as a monthly amount).",
-                        "examples": [
-                            10
-                        ]
+                        "example": 10
                     }
                 },
                 "type": "object",
@@ -1940,9 +1790,6 @@
                         "anyOf": [
                             {
                                 "type": "boolean"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Valid",
@@ -1959,18 +1806,14 @@
                         "minimum": 0.0,
                         "title": "Committed Expenditure",
                         "description": "Total fixed monthly payments of all non-revolving loans",
-                        "examples": [
-                            100
-                        ]
+                        "example": 100
                     },
                     "credit_card_balance": {
                         "type": "number",
                         "minimum": 0.0,
                         "title": "Credit Card Balance",
                         "description": "Total balance of all credit cards and other revolving credit",
-                        "examples": [
-                            500
-                        ]
+                        "example": 500
                     },
                     "student_loans": {
                         "$ref": "#/components/schemas/StudentLoansLite",
@@ -1987,9 +1830,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/mqube_expenditure_service__schemas_v2__Source"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -2030,9 +1870,6 @@
                                     "$ref": "#/components/schemas/ApplicantAcceptedGrossIncome"
                                 },
                                 "type": "array"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Result",
@@ -2047,9 +1884,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Errormessage",
@@ -2065,9 +1899,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/AffordabilityOutput"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -2081,9 +1912,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Errormessage",
@@ -2093,9 +1921,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Case Id",
@@ -2105,9 +1930,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Mongo Request Id",
@@ -2117,9 +1939,6 @@
                         "anyOf": [
                             {
                                 "type": "boolean"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Was Ready",
@@ -2136,9 +1955,6 @@
                             {
                                 "type": "string",
                                 "format": "date-time"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Time",
@@ -2155,9 +1971,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/AffordabilitySummary"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -2172,9 +1985,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Errormessage",
@@ -2203,9 +2013,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Errormessage",
@@ -2224,9 +2031,6 @@
                                     "$ref": "#/components/schemas/ApplicantDeclaredGrossIncome"
                                 },
                                 "type": "array"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Result",
@@ -2241,9 +2045,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Errormessage",
@@ -2281,9 +2082,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/mqube_credit_commitments_service__schemas_v2__Source"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -2292,9 +2090,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/mqube_expenditure_service__schemas_v2__Source"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -2381,9 +2176,6 @@
                                     "type": "string"
                                 },
                                 "type": "array"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Case Ids",
@@ -2469,9 +2261,6 @@
                                     "$ref": "#/components/schemas/ApplicantAffordabilitySummary"
                                 },
                                 "type": "array"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "By Applicant",
@@ -2527,9 +2316,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Total Essential Expenditure",
@@ -2573,16 +2359,11 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/UnemployedType"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "description": "Unemployment type of the individual",
-                        "examples": [
-                            "Homemaker"
-                        ],
-                        "nullable": true
+                        "nullable": true,
+                        "example": "Homemaker"
                     },
                     "passive_incomes": {
                         "items": {
@@ -2724,9 +2505,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Id",
@@ -2756,9 +2534,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Job Title",
@@ -2863,9 +2638,6 @@
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Max Loan Purchase Price",
@@ -2877,9 +2649,6 @@
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Max Loan Avm",
@@ -2891,9 +2660,6 @@
                             {
                                 "type": "number",
                                 "minimum": 0.0
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Max Loan Physical Valuation",
@@ -2931,9 +2697,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Max Loan Short Fix",
@@ -2944,9 +2707,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Max Loan Long Fix",
@@ -3048,9 +2808,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Loan To Income",
@@ -3060,9 +2817,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Debt To Income",
@@ -3072,9 +2826,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Maximum Loan Amount",
@@ -3084,9 +2835,6 @@
                         "anyOf": [
                             {
                                 "type": "boolean"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Requested Loan Affordable",
@@ -3096,9 +2844,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Stress Rate Used",
@@ -3108,9 +2853,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Net Income Used",
@@ -3120,9 +2862,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Committed Expenditure Used",
@@ -3132,9 +2871,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Essential Expenditure Used",
@@ -3144,9 +2880,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Net Disposable Income Used",
@@ -3156,9 +2889,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/SourcesUsed"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -3167,9 +2897,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Monthly Gross Income",
@@ -3179,9 +2906,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Unfiltered Monthly Gross Income",
@@ -3210,25 +2934,21 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
-                        "title": "Case Id"
+                        "title": "Case Id",
+                        "nullable": true
                     },
                     "lock_time": {
                         "anyOf": [
                             {
                                 "type": "string",
                                 "format": "date-time"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Lock Time",
-                        "description": "The time after which any affordability configuration is frozen for the case."
+                        "description": "The time after which any affordability configuration is frozen for the case.",
+                        "nullable": true
                     },
                     "applicants": {
                         "items": {
@@ -3246,9 +2966,6 @@
                             {
                                 "type": "string",
                                 "format": "date-time"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Time",
@@ -3265,25 +2982,21 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
-                        "title": "Case Id"
+                        "title": "Case Id",
+                        "nullable": true
                     },
                     "lock_time": {
                         "anyOf": [
                             {
                                 "type": "string",
                                 "format": "date-time"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Lock Time",
-                        "description": "The time after which any affordability configuration is frozen for the case."
+                        "description": "The time after which any affordability configuration is frozen for the case.",
+                        "nullable": true
                     },
                     "applicants": {
                         "items": {
@@ -3301,9 +3014,6 @@
                             {
                                 "type": "string",
                                 "format": "date-time"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Time",
@@ -3324,9 +3034,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Stress Rate",
@@ -3336,9 +3043,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Rate Stress Test Applied",
@@ -3348,9 +3052,6 @@
                         "anyOf": [
                             {
                                 "type": "number"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Total Monthly Expenditure",
@@ -3360,9 +3061,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/SourcesUsed"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -3376,18 +3074,14 @@
                     "type": {
                         "$ref": "#/components/schemas/AlternativeIncomeTypes",
                         "description": "The type of income",
-                        "examples": [
-                            "InvestmentIncome"
-                        ]
+                        "example": "InvestmentIncome"
                     },
                     "amount": {
                         "type": "number",
                         "minimum": 0.0,
                         "title": "Amount",
                         "description": "The gross income amount (based on the frequency provided)",
-                        "examples": [
-                            2000
-                        ]
+                        "example": 2000
                     },
                     "frequency": {
                         "$ref": "#/components/schemas/Frequencies",
@@ -3447,9 +3141,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Errormessage",
@@ -3465,9 +3156,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Postcode",
@@ -3558,17 +3246,12 @@
                         "minimum": 0.0,
                         "title": "Property Value",
                         "description": "The value of the property being purchased",
-                        "examples": [
-                            200000
-                        ]
+                        "example": 200000
                     },
                     "property_type": {
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/PropertyType"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "description": "The type of property being purchased",
@@ -3578,9 +3261,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/EpcRating"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "description": "The EPC rating of the property being purchased",
@@ -3590,9 +3270,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/Region"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "description": "The region of the property being purchased",
@@ -3603,17 +3280,12 @@
                         "minimum": 0.0,
                         "title": "Loan To Value",
                         "description": "The loan to value ratio of the loan",
-                        "examples": [
-                            0.5
-                        ]
+                        "example": 0.5
                     },
                     "all_loan_to_values": {
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/AllLoanToValueInputs"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "description": "The LTVs based on the various sources of property value",
@@ -3624,51 +3296,41 @@
                         "minimum": 0.0,
                         "title": "Loan Amount",
                         "description": "The size of the requested loan (including any capitalized fees)",
-                        "examples": [
-                            150000
-                        ]
+                        "example": 150000
                     },
                     "total_term_months": {
                         "type": "integer",
-                        "exclusiveMinimum": 0.0,
+                        "exclusiveMinimum": true,
                         "title": "Total Term Months",
                         "description": "The total term of the mortgage in months",
-                        "examples": [
-                            300
-                        ]
+                        "example": 300,
+                        "minimum": 0.0
                     },
                     "stress_rate": {
                         "type": "number",
-                        "exclusiveMinimum": 0.0,
+                        "exclusiveMinimum": true,
                         "title": "Stress Rate",
                         "description": "The interest rate used to assess/stress the max loan payments",
-                        "examples": [
-                            0.0499
-                        ]
+                        "example": 0.0499,
+                        "minimum": 0.0
                     },
                     "rate_stress_test_applied": {
                         "anyOf": [
                             {
                                 "type": "number",
-                                "exclusiveMinimum": 0.0
-                            },
-                            {
-                                "type": "null"
+                                "exclusiveMinimum": true,
+                                "minimum": 0.0
                             }
                         ],
                         "title": "Rate Stress Test Applied",
                         "description": "The rate used in the stress test before any adjustments or margins were added",
-                        "examples": [
-                            0.0399
-                        ]
+                        "nullable": true,
+                        "example": 0.0399
                     },
                     "repayment_method": {
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/RepaymentMethodsEnum"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "description": "Whether the payments are interest-only or capital repayment.",
@@ -3683,44 +3345,37 @@
                 "properties": {
                     "purchase_price": {
                         "type": "integer",
-                        "exclusiveMinimum": 0.0,
+                        "exclusiveMinimum": true,
                         "title": "Purchase Price",
                         "description": "The purchase price of the property",
-                        "examples": [
-                            250000
-                        ]
+                        "example": 250000,
+                        "minimum": 0.0
                     },
                     "requested_loan_amount": {
                         "type": "integer",
-                        "exclusiveMinimum": 0.0,
+                        "exclusiveMinimum": true,
                         "title": "Requested Loan Amount",
                         "description": "The amount that the applicants would like to borrow",
-                        "examples": [
-                            200000
-                        ]
+                        "example": 200000,
+                        "minimum": 0.0
                     },
                     "mortgage_term": {
                         "type": "integer",
-                        "exclusiveMinimum": 0.0,
+                        "exclusiveMinimum": true,
                         "title": "Mortgage Term",
                         "description": "The total term in months",
-                        "examples": [
-                            360
-                        ]
+                        "example": 360,
+                        "minimum": 0.0
                     },
                     "region": {
                         "$ref": "#/components/schemas/Region",
                         "description": "The region of the property",
-                        "examples": [
-                            "SouthEast"
-                        ]
+                        "example": "SouthEast"
                     },
                     "purpose": {
                         "$ref": "#/components/schemas/Purpose",
                         "description": "The purpose of the loan",
-                        "examples": [
-                            "Purchase"
-                        ]
+                        "example": "Purchase"
                     }
                 },
                 "type": "object",
@@ -3783,9 +3438,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/AffordabilityComparisonResults"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -3799,9 +3451,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Error Message",
@@ -3823,9 +3472,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/CreditCommitmentsSourceUsed"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -3839,9 +3485,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Error Message",
@@ -3863,9 +3506,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/ExpenditureSourceUsed"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -3879,9 +3519,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Error Message",
@@ -3903,9 +3540,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/GetSourcesUsedDto"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -3919,9 +3553,6 @@
                         "anyOf": [
                             {
                                 "type": "string"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "title": "Error Message",
@@ -3945,10 +3576,8 @@
                         "title": "Last Salary",
                         "description": "Annual salary from most recent year",
                         "default": 0,
-                        "examples": [
-                            50000
-                        ],
-                        "nullable": true
+                        "nullable": true,
+                        "example": 50000
                     },
                     "prev_salary": {
                         "type": "number",
@@ -3956,10 +3585,8 @@
                         "title": "Prev Salary",
                         "description": "Annual salary from second most recent year",
                         "default": 0,
-                        "examples": [
-                            70000
-                        ],
-                        "nullable": true
+                        "nullable": true,
+                        "example": 70000
                     },
                     "last_dividends": {
                         "type": "number",
@@ -3967,10 +3594,8 @@
                         "title": "Last Dividends",
                         "description": "Annual dividends from most recent year",
                         "default": 0,
-                        "examples": [
-                            10000
-                        ],
-                        "nullable": true
+                        "nullable": true,
+                        "example": 10000
                     },
                     "prev_dividends": {
                         "type": "number",
@@ -3978,10 +3603,8 @@
                         "title": "Prev Dividends",
                         "description": "Annual dividends from second most recent year",
                         "default": 0,
-                        "examples": [
-                            20000
-                        ],
-                        "nullable": true
+                        "nullable": true,
+                        "example": 20000
                     }
                 },
                 "type": "object",
@@ -4017,9 +3640,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/SourcesUsed"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -4050,9 +3670,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/mqube_credit_commitments_service__schemas_v2__Source"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
@@ -4061,9 +3678,6 @@
                         "anyOf": [
                             {
                                 "$ref": "#/components/schemas/mqube_expenditure_service__schemas_v2__Source"
-                            },
-                            {
-                                "type": "null"
                             }
                         ],
                         "nullable": true
