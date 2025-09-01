@@ -98,7 +98,9 @@
         "enablePostProcessFile": true,
         "removeOperationIdPrefix": true,
         "additionalProperties": {
-          "packageVersion": "0.0.1"
+          "packageVersion": "0.0.1",
+          "library": "reqwest-trait",
+          "mockall": true
         }
       }
     }
