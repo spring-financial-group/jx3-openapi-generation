@@ -10,6 +10,7 @@ const (
 	Javascript = "javascript"
 	Typescript = "typescript"
 	Go         = "go"
+	Rust       = "rust"
 )
 
 type PackageGenerator interface {

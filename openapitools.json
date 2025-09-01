@@ -90,6 +90,16 @@
           "packageVersion": "0.0.1",
           "stringEnums": "true"
         }
+      },
+      "rust": {
+        "generatorName": "rust",
+        "output": "./rust-service",
+        "inputSpec": "./mocks/swagger.json",
+        "enablePostProcessFile": true,
+        "removeOperationIdPrefix": true,
+        "additionalProperties": {
+          "packageVersion": "0.0.1"
+        }
       }
     }
   }
