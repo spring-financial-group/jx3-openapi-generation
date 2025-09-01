@@ -100,7 +100,7 @@
         "additionalProperties": {
           "packageVersion": "0.0.1",
           "library": "reqwest-trait",
-          "mockall": true
+          "mockall": "true"
         }
       }
     }

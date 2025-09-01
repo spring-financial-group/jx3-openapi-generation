@@ -1,10 +1,11 @@
 package rust
 
 import (
-	"fmt"
+	"path/filepath"
+
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
-	"path/filepath"
+	"github.com/spring-financial-group/mqa-logging/pkg/log"
 )
 
 const (
@@ -37,11 +38,12 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 }
 
 func (g *Generator) setDynamicConfigVariables() {
-	//g.Cfg.GeneratorCLI.Generators[domain.Rust].AdditionalProperties["packageName"] = g.GetPackageName()
+	g.Cfg.GeneratorCLI.Generators[domain.Rust].AdditionalProperties["packageName"] = g.GetPackageName()
+	g.Cfg.GeneratorCLI.Generators[domain.Rust].AdditionalProperties["packageVersion"] = g.Version
 }
 
 func (g *Generator) GetPackageName() string {
-	return fmt.Sprintf("mqube-%s-%s", g.ServiceName, g.PackageName)
+	return g.RepoName
 }
 
 func (g *Generator) PushPackage(packageDir string) error {
