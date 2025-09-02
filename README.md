@@ -13,6 +13,7 @@ The following languages currently are supported:
 | Typescript | `typescript` |                                         |
 | Python     | `python`     | **Not available for preview packages*** |
 | Golang     | `go`         | **Not available for preview packages*** |
+| Rust       | `rust`       |                                         |
 
 \* Due to the way in which Go and Python packages are stored preview packages are not current supported so avoid
 using these languages in any preview pipelines

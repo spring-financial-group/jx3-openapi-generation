@@ -2,15 +2,16 @@ package file
 
 import (
 	"fmt"
-	"github.com/pkg/errors"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
-	"github.com/spring-financial-group/mqa-logging/pkg/log"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
 	"text/template"
+
+	"github.com/pkg/errors"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
+	"github.com/spring-financial-group/mqa-logging/pkg/log"
 )
 
 type FileIO struct{}
@@ -59,13 +60,23 @@ func (f FileIO) Copy(src string, dst string) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
-	defer source.Close()
+	defer func(source *os.File) {
+		err := source.Close()
+		if err != nil {
+			log.Logger().Errorf("failed to close file %s: %s", src, err.Error())
+		}
+	}(source)
 
 	destination, err := os.Create(dst)
 	if err != nil {
 		return 0, err
 	}
-	defer destination.Close()
+	defer func(destination *os.File) {
+		err := destination.Close()
+		if err != nil {
+			log.Logger().Errorf("failed to close file %s: %s", dst, err.Error())
+		}
+	}(destination)
 	return io.Copy(destination, source)
 }
 
@@ -163,7 +174,12 @@ func (f FileIO) templateFile(dstDir string, obj any, filePath string) error {
 	if err != nil {
 		return errors.Wrapf(err, "failed to create new %s file", name)
 	}
-	defer file.Close()
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Logger().Errorf("failed to close file %s: %s", name, err.Error())
+		}
+	}(file)
 
 	if err = tmpl.Execute(file, obj); err != nil {
 		return errors.Wrapf(err, "failed to execute template for %s", name)

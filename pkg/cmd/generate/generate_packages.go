@@ -13,6 +13,7 @@ import (
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/java"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/javascript"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/python"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/rust"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/typescript"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/helper"
@@ -133,6 +134,7 @@ func (o *PackageOptions) InitialiseGenerators() error {
 	}
 
 	o.languageGenerators = map[string]domain.PackageGenerator{
+		domain.Rust:       rust.NewGenerator(baseGenerator),
 		domain.CSharp:     csharp.NewGenerator(baseGenerator),
 		domain.Java:       java.NewGenerator(baseGenerator),
 		domain.Angular:    angular.NewGenerator(baseGenerator),
@@ -141,6 +143,7 @@ func (o *PackageOptions) InitialiseGenerators() error {
 		domain.Typescript: typescript.NewGenerator(baseGenerator),
 		domain.Go:         _go.NewGenerator(baseGenerator),
 	}
+
 	return nil
 }
 
