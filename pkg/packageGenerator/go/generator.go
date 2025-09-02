@@ -5,11 +5,13 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 
+	"github.com/Masterminds/semver/v3"
 	"github.com/getkin/kin-openapi/openapi3"
 	gh "github.com/google/go-github/v47/github"
 	"github.com/oapi-codegen/oapi-codegen/v2/pkg/codegen"
@@ -20,13 +22,12 @@ import (
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/scmClient/github"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
-	"github.com/Masterminds/semver/v3"
 )
 
 const (
 	PushRepositoryURL  = "https://github.com/spring-financial-group/mqube-go-packages.git"
 	PushRepositoryName = "mqube-go-packages"
-	updateBotLabel = "updatebot"
+	updateBotLabel     = "updatebot"
 )
 
 type Generator struct {
@@ -200,20 +201,20 @@ func (g *Generator) createPullRequest(currentBranch, defaultBranch string) error
 }
 
 func (g *Generator) createFreshDir(packageDir string) error {
-    // Check if directory exists
-    if _, err := os.Stat(packageDir); err == nil {
-        // Remove entire directory and its contents
-        if err := os.RemoveAll(packageDir); err != nil {
-            return errors.Wrapf(err, "failed to remove existing directory: %s", packageDir)
-        }
-        logrus.Infof("Removed existing directory: %s", packageDir)
-    }
+	// Check if directory exists
+	if _, err := os.Stat(packageDir); err == nil {
+		// Remove entire directory and its contents
+		if err := os.RemoveAll(packageDir); err != nil {
+			return errors.Wrapf(err, "failed to remove existing directory: %s", packageDir)
+		}
+		logrus.Infof("Removed existing directory: %s", packageDir)
+	}
 
-    // Create a fresh directory
-    if err := os.MkdirAll(packageDir, 0755); err != nil {
-        return errors.Wrapf(err, "failed to create directory: %s", packageDir)
-    }
-    fmt.Println("Created directory:", packageDir)
+	// Create a fresh directory
+	if err := os.MkdirAll(packageDir, 0755); err != nil {
+		return errors.Wrapf(err, "failed to create directory: %s", packageDir)
+	}
+	fmt.Println("Created directory:", packageDir)
 
 	return nil
 }
@@ -222,7 +223,7 @@ func (g *Generator) generateCode() (string, error) {
 	// Read file
 	var swaggerData []byte
 
-	swaggerData, err := os.ReadFile(g.BaseGenerator.SpecPath)
+	swaggerData, err := os.ReadFile(g.SpecPath)
 	if err != nil {
 		return "", err
 	}
@@ -257,8 +258,8 @@ func (g *Generator) generateCode() (string, error) {
 	config := codegen.Configuration{
 		PackageName: g.GetPackageName(),
 		Generate: codegen.GenerateOptions{
-			Client:       true,
-			Models:       true,
+			Client: true,
+			Models: true,
 		},
 	}
 
@@ -294,7 +295,12 @@ func (g *Generator) convertSwaggerV2toV3(data []byte) ([]byte, error) {
 	if err != nil {
 		return response, err
 	}
-	defer resp.Body.Close()
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			logrus.Warnf("Failed to close response body: %v", err)
+		}
+	}(resp.Body)
 
 	// read response to str
 	body := new(bytes.Buffer)
