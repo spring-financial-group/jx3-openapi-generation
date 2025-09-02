@@ -47,7 +47,7 @@ func (g *Generator) GetPackageName() string {
 }
 
 func (g *Generator) PushPackage(packageDir string) error {
-	//solutionPath := fmt.Sprintf("./src/%s/bin/Release/**/*.nupkg", g.GetPackageName())
-	//return g.Cmd.ExecuteAndLog(packageDir, "dotnet", "nuget", "push", solutionPath, "-s", "mqube.packages", "--skip-duplicate")
-	return nil
+	out, err := g.Cmd.Execute(packageDir, "cargo", "publish", "--no-verify", "--allow-dirty")
+	log.Logger().Info(out)
+	return err
 }
