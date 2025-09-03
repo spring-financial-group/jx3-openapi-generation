@@ -101,7 +101,6 @@
           "packageVersion": "0.0.1",
           "library": "reqwest-trait",
           "supportMiddleware": "true",
-          "stringEnums": "true",
           "mockall": "true",
           "topLevelApiClient": "true"
         }
