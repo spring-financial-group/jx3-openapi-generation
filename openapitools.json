@@ -2,7 +2,7 @@
   "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "7.1.0",
+    "version": "7.15.0",
     "generators": {
       "csharp": {
         "output": "./csharp-service",
@@ -99,7 +99,11 @@
         "removeOperationIdPrefix": true,
         "additionalProperties": {
           "packageVersion": "0.0.1",
-          "library": "reqwest"
+          "library": "reqwest-trait",
+          "supportMiddleware": "true",
+          "stringEnums": "true",
+          "mockall": "true",
+          "topLevelApiClient": "true"
         }
       }
     }
