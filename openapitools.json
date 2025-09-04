@@ -12,7 +12,9 @@
           "targetFramework": "netstandard2.1",
           "netCoreProjectFile": "true",
           "optionalEmitDefaultValues": "true",
-          "validatable": "false"
+          "validatable": "false",
+          "library": "restsharp",
+          "equatable": "true"
         }
       },
       "java": {
