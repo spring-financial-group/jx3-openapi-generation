@@ -1,0 +1,23 @@
+{
+  "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.15.0",
+    "generators": {
+      "rust": {
+        "generatorName": "rust",
+        "output": "./rust-service",
+        "inputSpec": "./mocks/swagger.json",
+        "enablePostProcessFile": true,
+        "removeOperationIdPrefix": true,
+        "additionalProperties": {
+          "packageVersion": "0.0.1",
+          "library": "reqwest-trait",
+          "supportMiddleware": "true",
+          "mockall": "true",
+          "topLevelApiClient": "true"
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-package javscript
+package javascript
 
 import (
 	"fmt"

@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.15.0",
+    "generators": {
+      "angular": {
+        "output": "./angular-service",
+        "inputSpec": "./mocks/swagger.json",
+        "generatorName": "typescript-angular",
+        "enablePostProcessFile": true,
+        "removeOperationIdPrefix": true,
+        "additionalProperties": {
+          "fileNaming": "camelCase",
+          "ngVersion": "10.0.0",
+          "stringEnums": "true",
+          "generateAliasAsModel": "true"
+        }
+      }
+    }
+  }
+}
