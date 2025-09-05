@@ -36,6 +36,9 @@ ENV PATH "$PATH:/jx3-openapi-generation"
 # Copy packaging templates
 COPY ./templates /templates
 
+# Copy individual language configuration files
+COPY ./configs /configs
+
 # Add pipeline scripts & config files
 ADD openapitools.json openapitools.json
 ADD CreateAngularPackageV2.sh CreateAngularPackageV2.sh

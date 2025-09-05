@@ -60,7 +60,20 @@ func (g *BaseGenerator) GeneratePackage(outputDir, language string) (string, err
 		return "", err
 	}
 
-	g.Cfg.GeneratorCLI.Generators[language].Output = outputDir
+	// Find the generator config for this language
+	var generator *openapitools.Generator
+	for key, gen := range g.Cfg.GeneratorCLI.Generators {
+		if key == language {
+			generator = gen
+			break
+		}
+	}
+
+	if generator == nil {
+		return "", errors.New("generator configuration not found for language: " + language)
+	}
+
+	generator.Output = outputDir
 	cfgPath, err := g.Cfg.WriteToCurrentWorkingDirectory()
 	if err != nil {
 		return "", err

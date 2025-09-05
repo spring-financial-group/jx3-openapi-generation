@@ -2,10 +2,11 @@ package csharp
 
 import (
 	"fmt"
+	"path/filepath"
+
 	"github.com/pkg/errors"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
-	"path/filepath"
 )
 
 const (

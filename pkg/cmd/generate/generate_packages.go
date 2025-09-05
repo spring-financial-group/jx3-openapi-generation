@@ -1,6 +1,9 @@
 package generate
 
 import (
+	"path/filepath"
+	"strings"
+
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
@@ -19,8 +22,6 @@ import (
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/helper"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/templates"
 	"github.com/spring-financial-group/mqa-logging/pkg/log"
-	"path/filepath"
-	"strings"
 )
 
 const (
@@ -123,25 +124,40 @@ func (o *PackageOptions) ValidateLanguages(languages []string) error {
 }
 
 func (o *PackageOptions) InitialiseGenerators() error {
-	// Get the config & init base generator
-	config, err := openapitools.GetConfig()
-	if err != nil {
-		return err
-	}
-	baseGenerator, err := packageGenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.GitUser, o.SpecPath, o.PackageName, config)
-	if err != nil {
-		return errors.Wrap(err, "failed to create base generator")
-	}
+	o.languageGenerators = make(map[string]domain.PackageGenerator)
 
-	o.languageGenerators = map[string]domain.PackageGenerator{
-		domain.Rust:       rust.NewGenerator(baseGenerator),
-		domain.CSharp:     csharp.NewGenerator(baseGenerator),
-		domain.Java:       java.NewGenerator(baseGenerator),
-		domain.Angular:    angular.NewGenerator(baseGenerator),
-		domain.Python:     python.NewGenerator(baseGenerator),
-		domain.Javascript: javscript.NewGenerator(baseGenerator),
-		domain.Typescript: typescript.NewGenerator(baseGenerator),
-		domain.Go:         _go.NewGenerator(baseGenerator),
+	languages := []string{domain.Rust, domain.CSharp, domain.Java, domain.Angular, domain.Python, domain.Javascript, domain.Typescript, domain.Go}
+
+	for _, language := range languages {
+		// Get the language-specific config
+		config, err := openapitools.GetConfigForLanguage(language)
+		if err != nil {
+			return errors.Wrapf(err, "failed to get config for language %s", language)
+		}
+
+		baseGenerator, err := packageGenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.GitUser, o.SpecPath, o.PackageName, config)
+		if err != nil {
+			return errors.Wrapf(err, "failed to create base generator for %s", language)
+		}
+
+		switch language {
+		case domain.Rust:
+			o.languageGenerators[language] = rust.NewGenerator(baseGenerator)
+		case domain.CSharp:
+			o.languageGenerators[language] = csharp.NewGenerator(baseGenerator)
+		case domain.Java:
+			o.languageGenerators[language] = java.NewGenerator(baseGenerator)
+		case domain.Angular:
+			o.languageGenerators[language] = angular.NewGenerator(baseGenerator)
+		case domain.Python:
+			o.languageGenerators[language] = python.NewGenerator(baseGenerator)
+		case domain.Javascript:
+			o.languageGenerators[language] = javascript.NewGenerator(baseGenerator)
+		case domain.Typescript:
+			o.languageGenerators[language] = typescript.NewGenerator(baseGenerator)
+		case domain.Go:
+			o.languageGenerators[language] = _go.NewGenerator(baseGenerator)
+		}
 	}
 
 	return nil
