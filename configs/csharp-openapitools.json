@@ -1,0 +1,22 @@
+{
+  "$schema": "node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "7.1.0",
+    "generators": {
+      "csharp": {
+        "output": "./csharp-service",
+        "inputSpec": "./mocks/swagger.json",
+        "generatorName": "csharp",
+        "additionalProperties": {
+          "targetFramework": "netstandard2.1",
+          "netCoreProjectFile": "true",
+          "optionalEmitDefaultValues": "true",
+          "validatable": "false",
+          "library": "restsharp",
+          "equatable": "true"
+        }
+      }
+    }
+  }
+}

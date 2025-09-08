@@ -2,14 +2,16 @@ package openapitools
 
 import (
 	"encoding/json"
-	"github.com/pkg/errors"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"os"
 	"path/filepath"
+
+	"github.com/pkg/errors"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 )
 
 const (
 	OpenAPIConfigFileName = "openapitools.json"
+	ConfigsDir            = "/configs"
 )
 
 var (
@@ -51,6 +53,16 @@ func GetConfig() (*Config, error) {
 	_, err = cfg.WriteToCurrentWorkingDirectory()
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to write config to file")
+	}
+	return cfg, nil
+}
+
+func GetConfigForLanguage(language string) (*Config, error) {
+	cfg := new(Config)
+	configPath := filepath.Join(ConfigsDir, language+"-"+OpenAPIConfigFileName)
+	err := cfg.readFromFile(configPath)
+	if err != nil {
+		return nil, errors.Wrapf(err, "failed to read config from %s", configPath)
 	}
 	return cfg, nil
 }
