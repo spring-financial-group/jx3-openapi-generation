@@ -14,10 +14,6 @@ const (
 	ConfigsDir            = "/configs"
 )
 
-var (
-	initialConfigPath = "/" + OpenAPIConfigFileName
-)
-
 type Config struct {
 	Schema       string       `json:"$schema"`
 	Spaces       int          `json:"spaces"`
@@ -41,22 +37,6 @@ type Generator struct {
 	AdditionalProperties    map[string]string `json:"additionalProperties,omitempty"`
 }
 
-func GetConfig() (*Config, error) {
-	cfg := new(Config)
-	err := cfg.readFromFile(initialConfigPath)
-	if err != nil {
-		return nil, errors.Wrapf(err, "failed to read config from %s", initialConfigPath)
-	}
-
-	// Openapi-generator reads the config from the current working directory so when we first get the config we should
-	// move it to the cwd.
-	_, err = cfg.WriteToCurrentWorkingDirectory()
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to write config to file")
-	}
-	return cfg, nil
-}
-
 func GetConfigForLanguage(language string) (*Config, error) {
 	cfg := new(Config)
 	configPath := filepath.Join(ConfigsDir, language+"-"+OpenAPIConfigFileName)
@@ -70,7 +50,7 @@ func GetConfigForLanguage(language string) (*Config, error) {
 func (c *Config) readFromFile(path string) error {
 	data, err := os.ReadFile(path)
 	if err != nil {
-		return errors.Wrap(err, "failed to read openapitools.json")
+		return errors.Wrap(err, "failed to read config file: "+path)
 	}
 	err = json.Unmarshal(data, c)
 	if err != nil {
