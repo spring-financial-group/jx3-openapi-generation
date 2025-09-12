@@ -9,7 +9,8 @@
         "inputSpec": "./mocks/swagger.json",
         "generatorName": "java",
         "additionalProperties": {
-          "dateLibrary": "java8-localdatetime"
+          "dateLibrary": "java8-localdatetime",
+          "enumPropertyNaming": "legacy"
         },
         "globalProperty": {
           "models": "",
