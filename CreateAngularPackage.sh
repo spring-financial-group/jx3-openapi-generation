@@ -24,7 +24,7 @@ else
 	apt-get install default-jdk -y
 fi
 
-npm install @openapitools/openapi-generator-cli@1.0.18-4.3.1 -g
+npm install @openapitools/openapi-generator-cli@2.23.1 -g
 
 npx openapi-generator generate -i ./spec.json -g typescript-angular -o service --additional-properties=fileNaming=camelCase --enable-post-process-file
 
