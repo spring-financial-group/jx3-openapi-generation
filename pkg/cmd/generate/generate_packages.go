@@ -24,11 +24,6 @@ import (
 	"github.com/spring-financial-group/mqa-logging/pkg/log"
 )
 
-const (
-	// OpenAPIToolsPath is the path to the openapitools.json file
-	OpenAPIToolsPath = "/openapitools.json"
-)
-
 // PackageOptions contains the common options for the command
 type PackageOptions struct {
 	*Options
