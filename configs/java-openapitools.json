@@ -11,7 +11,7 @@
         "additionalProperties": {
           "dateLibrary": "java8-localdatetime",
           "library": "okhttp-gson",
-          "serializationLibrary": "gson"
+          "serializationLibrary": "gson",
           "enumPropertyNaming": "legacy"
         },
         "globalProperty": {
