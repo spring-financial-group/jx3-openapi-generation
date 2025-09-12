@@ -96,3 +96,15 @@ Language-specific template files are stored in `templates/{language}/` for post-
 - Pipeline files: `yarn global add @openapitools/openapi-generator-cli@2.23.1`
 
 **OpenAPI Generator Core**: Updated to v7.15.0 in all config files (`configs/*-openapitools.json`)
+
+**Java Configuration Fixes**: 
+- Updated Java dependencies in `templates/java/build.gradle` for OpenAPI Generator 7.15.0 compatibility:
+  - Added OAuth2 client: `org.apache.oltu.oauth2:org.apache.oltu.oauth2.client:1.0.2`
+  - Added javax annotations: `javax.annotation:javax.annotation-api:1.3.2`  
+  - Updated all other dependencies to latest compatible versions
+- Added Java generator properties: `library=okhttp-gson`, `serializationLibrary=gson`
+
+## Testing
+
+- `make test` - Run all unit tests with coverage (includes Java configuration validation)
+- Java configuration tests in `pkg/packageGenerator/java/generator_test.go` validate the fixes for OpenAPI Generator 7.15.0
