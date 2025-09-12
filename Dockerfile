@@ -39,17 +39,5 @@ COPY ./templates /templates
 # Copy individual language configuration files
 COPY ./configs /configs
 
-# Add pipeline scripts & config files
-ADD openapitools.json openapitools.json
-ADD CreateAngularPackageV2.sh CreateAngularPackageV2.sh
-ADD CreateAngularPackageV3.sh CreateAngularPackageV3.sh
-ADD CreateCsharpPackage.sh CreateCsharpPackage.sh
-ADD CreateJavaPackage.sh CreateJavaPackage.sh
-ADD FindOpenAPISpec.sh FindOpenAPISpec.sh
-
-# Set permissions
-RUN chmod +x CreateAngularPackageV2.sh \
-    && chmod +x CreateAngularPackageV3.sh \
-    && chmod +x CreateCsharpPackage.sh \
-    && chmod +x CreateJavaPackage.sh \
-    && chmod +x FindOpenAPISpec.sh
+# Copy OpenAPI tools config
+COPY openapitools.json openapitools.json
