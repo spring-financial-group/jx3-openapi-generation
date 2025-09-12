@@ -38,6 +38,3 @@ COPY ./templates /templates
 
 # Copy individual language configuration files
 COPY ./configs /configs
-
-# Copy OpenAPI tools config
-COPY openapitools.json openapitools.json
