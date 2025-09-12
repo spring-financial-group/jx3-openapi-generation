@@ -1,249 +1,2274 @@
 {
-  "openapi": "3.0.2",
+  "swagger": "2.0",
   "info": {
-    "title": "Swagger Petstore - OpenAPI 3.0",
-    "description": "This is a sample Pet Store Server based on the OpenAPI 3.0 specification.  You can find out more about\nSwagger at [http://swagger.io](http://swagger.io). In the third iteration of the pet store, we've switched to the design first approach!\nYou can now help us improve the API whether it's by making changes to the definition itself or to the code.\nThat way, with time, we can improve the API in general, and expose some of the new features in OAS3.\n\nSome useful links:\n- [The Pet Store repository](https://github.com/swagger-api/swagger-petstore)\n- [The source API definition for the Pet Store](https://github.com/swagger-api/swagger-petstore/blob/master/src/main/resources/openapi.yaml)",
-    "termsOfService": "http://swagger.io/terms/",
-    "contact": {
-      "email": "apiteam@swagger.io"
-    },
-    "license": {
-      "name": "Apache 2.0",
-      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
-    },
-    "version": "1.0.17"
+    "title": "Intermediary Service API",
+    "description": "Service for managing intermediaries and brokers",
+    "version": "v1"
   },
-  "externalDocs": {
-    "description": "Find out more about Swagger",
-    "url": "http://swagger.io"
-  },
-  "servers": [
-    {
-      "url": "/api/v3"
-    }
-  ],
-  "tags": [
-    {
-      "name": "pet",
-      "description": "Everything about your Pets",
-      "externalDocs": {
-        "description": "Find out more",
-        "url": "http://swagger.io"
-      }
-    },
-    {
-      "name": "store",
-      "description": "Access to Petstore orders",
-      "externalDocs": {
-        "description": "Find out more about our store",
-        "url": "http://swagger.io"
-      }
-    },
-    {
-      "name": "user",
-      "description": "Operations about user"
-    }
-  ],
   "paths": {
-    "/pet": {
-      "put": {
+    "/api/Access/AvailableBrokers": {
+      "get": {
         "tags": [
-          "pet"
+          "Access"
         ],
-        "summary": "Update an existing pet",
-        "description": "Update an existing pet by Id",
-        "operationId": "updatePet",
-        "requestBody": {
-          "description": "Update an existent pet in the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Pet"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/Pet"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/Pet"
-              }
-            }
-          },
-          "required": true
-        },
+        "operationId": "GetBrokerAccess",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "responses": {
           "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pet"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pet"
-                }
-              }
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokersResponseDto"
             }
           },
-          "400": {
-            "description": "Invalid ID supplied"
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/Access/AvailableBrokers/{brokerId}": {
+      "get": {
+        "tags": [
+          "Access"
+        ],
+        "operationId": "GetBrokerAccessByBrokerId",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokersResponseDto"
+            }
           },
           "404": {
-            "description": "Pet not found"
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
           },
-          "405": {
-            "description": "Validation exception"
+          "500": {
+            "description": "Internal Server Error"
           }
-        },
-        "security": [
+        }
+      }
+    },
+    "/api/Access/CheckAccess/{sourceBrokerId}/{destinationBrokerId}": {
+      "get": {
+        "tags": [
+          "Access"
+        ],
+        "operationId": "DoesBrokerHaveAccessByBrokerId",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
           {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
+            "in": "path",
+            "name": "sourceBrokerId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "destinationBrokerId",
+            "required": true,
+            "type": "string"
           }
-        ]
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerResponseDto"
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/BankDetails/{intermediaryId}": {
+      "get": {
+        "tags": [
+          "BankDetails"
+        ],
+        "operationId": "GetBankDetails",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BankDetailsResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "BankDetails"
+        ],
+        "operationId": "DeleteBankDetails",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BankDetailsResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/BankDetails": {
+      "post": {
+        "tags": [
+          "BankDetails"
+        ],
+        "operationId": "CreateBankDetails",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/BankDetailsDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BankDetailsResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "BankDetails"
+        ],
+        "operationId": "UpdateBankDetails",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/BankDetailsDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BankDetailsResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/BankDetails/WhoShouldBePaid/{brokerId}": {
+      "get": {
+        "tags": [
+          "BankDetails"
+        ],
+        "operationId": "GetBankDetailsOfWhoShouldBePaid",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "submittedDate",
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BankDetailsResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/BankDetails/WhoShouldBePaidByIntermediaryId/{intermediaryId}": {
+      "get": {
+        "tags": [
+          "BankDetails"
+        ],
+        "operationId": "GetBankDetailsOfWhoShouldBePaidByIntermediaryId",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "submittedDate",
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BankDetailsResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Brokers": {
+      "get": {
+        "tags": [
+          "Brokers"
+        ],
+        "operationId": "GetBrokers",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokersResponseDto"
+            }
+          }
+        }
       },
       "post": {
         "tags": [
-          "pet"
+          "Brokers"
         ],
-        "summary": "Add a new pet to the store",
-        "description": "Add a new pet to the store",
-        "operationId": "addPet",
-        "requestBody": {
-          "description": "Create a new pet in the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Pet"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/Pet"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/Pet"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pet"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pet"
-                }
-              }
-            }
-          },
-          "405": {
-            "description": "Invalid input"
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
-      }
-    },
-    "/pet/findByStatus": {
-      "get": {
-        "tags": [
-          "pet"
+        "operationId": "CreateBroker",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
         ],
-        "summary": "Finds Pets by status",
-        "description": "Multiple status values can be provided with comma separated strings",
-        "operationId": "findPetsByStatus",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "parameters": [
           {
-            "name": "status",
-            "in": "query",
-            "description": "Status values that need to be considered for filter",
-            "required": false,
-            "explode": true,
+            "in": "body",
+            "name": "body",
             "schema": {
-              "type": "string",
-              "default": "available",
-              "enum": [
-                "available",
-                "pending",
-                "sold"
-              ]
+              "$ref": "#/definitions/CreateBrokerDto"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "successful operation",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pet"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pet"
-                  }
-                }
-              }
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Brokers/intermediary/{intermediaryId}": {
+      "get": {
+        "tags": [
+          "Brokers"
+        ],
+        "operationId": "GetBrokersByIntermediaryId",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokersResponseDto"
+            }
+          }
+        }
+      }
+    },
+    "/api/Brokers/{brokerId}": {
+      "get": {
+        "tags": [
+          "Brokers"
+        ],
+        "operationId": "GetBroker",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Brokers"
+        ],
+        "operationId": "UpdateBroker",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/InternalBrokerDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Brokers"
+        ],
+        "operationId": "DeleteBroker",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GenericResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Brokers/email/{brokerEmailAddress}": {
+      "get": {
+        "tags": [
+          "Brokers"
+        ],
+        "operationId": "GetBrokerByBrokerEmailAddress",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerEmailAddress",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Brokers/{brokerId}/userSetup": {
+      "get": {
+        "tags": [
+          "Brokers"
+        ],
+        "operationId": "GetBrokerWithUserSetup",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerUserSetupResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Brokers/me": {
+      "get": {
+        "tags": [
+          "Brokers"
+        ],
+        "operationId": "GetCurrentBroker",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Brokers/summaries": {
+      "post": {
+        "tags": [
+          "Brokers"
+        ],
+        "operationId": "GetBrokerSummary",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerSummaryRequestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerSummaryResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Brokers/User/{userId}": {
+      "get": {
+        "tags": [
+          "Brokers"
+        ],
+        "operationId": "GetBrokerByUserId",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Brokers/MoveToIntermediary/{brokerId}": {
+      "put": {
+        "tags": [
+          "Brokers"
+        ],
+        "operationId": "MoveToIntermediary",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/MoveBrokerToIntermediaryDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Brokers/manuallyVerify/{brokerId}": {
+      "put": {
+        "tags": [
+          "Brokers"
+        ],
+        "operationId": "ManuallyVerifyBroker",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Brokers/search": {
+      "post": {
+        "tags": [
+          "Brokers"
+        ],
+        "operationId": "SearchBroker",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/SearchBrokerViewModel"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokersResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Brokers/NotficationEmail/{brokerId}": {
+      "get": {
+        "tags": [
+          "Brokers"
+        ],
+        "operationId": "GetBrokerNotificationEmail",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerNotificationEmailResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Brokers/{brokerId}/Exclusives": {
+      "get": {
+        "tags": [
+          "Brokers"
+        ],
+        "operationId": "GetBrokerExclusives",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerExclusiveRangesResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/ThirdParties/{thirdPartyId}/Contacts": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "operationId": "GetContacts",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "thirdPartyId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetIntermediariesResponseDto"
+            }
+          }
+        }
+      }
+    },
+    "/api/ThirdParties/{thirdPartyId}/Contacts/{contactId}": {
+      "get": {
+        "tags": [
+          "Contacts"
+        ],
+        "operationId": "GetContact",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "thirdPartyId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "contactId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetIntermediaryResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Intermediaries": {
+      "get": {
+        "tags": [
+          "Intermediaries"
+        ],
+        "operationId": "GetIntermediaries",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetIntermediariesResponseDto"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Intermediaries"
+        ],
+        "operationId": "CreateIntermediary",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateIntermediaryRequestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetIntermediaryResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Intermediaries/summary/all": {
+      "get": {
+        "tags": [
+          "Intermediaries"
+        ],
+        "operationId": "GetIntermediarySummary",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetIntermediarySummaryResponseDto"
+            }
+          }
+        }
+      }
+    },
+    "/api/Intermediaries/{id}": {
+      "get": {
+        "tags": [
+          "Intermediaries"
+        ],
+        "operationId": "GetIntermediary",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetIntermediaryResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Intermediaries"
+        ],
+        "operationId": "UpdateIntermediary",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateIntermediaryRequestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetIntermediaryResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Intermediaries"
+        ],
+        "operationId": "DeleteIntermediary",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GenericResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Intermediaries/Intermediary/{brokerId}": {
+      "get": {
+        "tags": [
+          "Intermediaries"
+        ],
+        "operationId": "GetIntermediaryByBrokerId",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetIntermediaryResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Intermediaries/FcaNumber/{fcaNumber}": {
+      "get": {
+        "tags": [
+          "Intermediaries"
+        ],
+        "operationId": "GetIntermediaryByFcaNumber",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "fcaNumber",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetIntermediaryResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Intermediaries/Misconfigured": {
+      "get": {
+        "tags": [
+          "Intermediaries"
+        ],
+        "operationId": "GetMisconfiguredIntermediaries",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetIntermediariesResponseDto"
+            }
+          }
+        }
+      }
+    },
+    "/api/Intermediaries/{intermediaryId}/Locations": {
+      "get": {
+        "tags": [
+          "Locations"
+        ],
+        "operationId": "GetLocations",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetLocationsResponseDto"
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Locations"
+        ],
+        "operationId": "CreateLocation",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateLocationRequestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetLocationResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Intermediaries/{intermediaryId}/Locations/{locationId}": {
+      "get": {
+        "tags": [
+          "Locations"
+        ],
+        "operationId": "GetLocation",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "locationId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetLocationResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Locations"
+        ],
+        "operationId": "UpdateLocation",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "locationId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdateLocationRequestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetLocationResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Locations"
+        ],
+        "operationId": "DeleteLocation",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "locationId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GenericResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Intermediaries/{intermediaryId}/Locations/PopulateFromFca": {
+      "post": {
+        "tags": [
+          "Locations"
+        ],
+        "operationId": "PopulateLocationsFromFca",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GenericResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/PaymentRoute/{brokerId}": {
+      "get": {
+        "tags": [
+          "PaymentRoute"
+        ],
+        "operationId": "GetPaymentRoute",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "submittedDate",
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetPaymentRouteResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/PaymentRoute/Intermediary/{intermediaryId}": {
+      "get": {
+        "tags": [
+          "PaymentRoute"
+        ],
+        "operationId": "GetIntermediaryPaymentRoute",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "submittedDate",
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetPaymentRouteResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/PaymentRoute/Intermediary/{intermediaryId}/List": {
+      "get": {
+        "tags": [
+          "PaymentRoute"
+        ],
+        "operationId": "GetIntermediaryPaymentRouteList",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "submittedDate",
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetPaymentRouteListResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/PaymentRoute/Intermediary/{intermediaryId}/Commission/{productId}": {
+      "post": {
+        "tags": [
+          "PaymentRoute"
+        ],
+        "operationId": "GetIntermediaryCommission",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "productId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GetIntermediaryCommissionRequestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetIntermediaryCommissionResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Register/LookupBroker/{SearchQuery}": {
+      "get": {
+        "tags": [
+          "Register"
+        ],
+        "operationId": "LookupBroker",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "SearchQuery",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SearchBrokerResponseDto"
             }
           },
           "400": {
-            "description": "Invalid status value"
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
           }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
+        }
       }
     },
-    "/pet/findByTags": {
+    "/api/Register/UseEid": {
       "get": {
         "tags": [
-          "pet"
+          "Register"
         ],
-        "summary": "Finds Pets by tags",
-        "description": "Multiple tags can be provided with comma separated strings. Use tag1, tag2, tag3 for testing.",
-        "operationId": "findPetsByTags",
+        "operationId": "UseEid",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Register/LookupIntermediary/{SearchQuery}": {
+      "get": {
+        "tags": [
+          "Register"
+        ],
+        "operationId": "LookupIntermediary",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "parameters": [
           {
-            "name": "tags",
+            "in": "path",
+            "name": "SearchQuery",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SearchIntermediaryResponseDto"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Register/Register": {
+      "post": {
+        "tags": [
+          "Register"
+        ],
+        "operationId": "Registration",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/RegistrationRequestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/RegistrationResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Register/Verified": {
+      "get": {
+        "tags": [
+          "Register"
+        ],
+        "operationId": "Verified",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
             "in": "query",
-            "description": "Tags to filter by",
-            "required": false,
-            "explode": true,
+            "name": "email",
+            "type": "string"
+          },
+          {
+            "in": "query",
+            "name": "irn",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/RegistrationState"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Register/SubmissionRoutes/{intermediaryType}": {
+      "get": {
+        "tags": [
+          "Register"
+        ],
+        "operationId": "GetSubmissionRoutes",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryType",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/SubmissionRoutesResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Register/RunAuthorisationCheck": {
+      "post": {
+        "tags": [
+          "Register"
+        ],
+        "operationId": "RunAuthorisationCheck",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "take",
+            "type": "integer",
+            "format": "int32",
+            "default": -1
+          },
+          {
+            "in": "query",
+            "name": "skip",
+            "type": "integer",
+            "format": "int32",
+            "default": 0
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BrokerAuthorisationChecksResponseDto"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/Register/ManualUnverify/{brokerId}": {
+      "post": {
+        "tags": [
+          "Register"
+        ],
+        "operationId": "ManualUnverifyUser",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GenericResponseDto"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/Review": {
+      "post": {
+        "tags": [
+          "Review"
+        ],
+        "operationId": "CreateReview",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/CreateReviewDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetReviewResponseDto"
+            }
+          }
+        }
+      }
+    },
+    "/api/Review/{id}": {
+      "put": {
+        "tags": [
+          "Review"
+        ],
+        "operationId": "UpdateReview",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdateReviewDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetReviewResponseDto"
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Review"
+        ],
+        "operationId": "DeleteReview",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/BaseResponseDto"
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Review"
+        ],
+        "operationId": "GetReview",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetReviewResponseDto"
+            }
+          }
+        }
+      }
+    },
+    "/api/Review/case/{caseId}": {
+      "get": {
+        "tags": [
+          "Review"
+        ],
+        "operationId": "GetReviewByCaseId",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "caseId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetReviewResponseDto"
+            }
+          }
+        }
+      }
+    },
+    "/api/Review/user/{userId}": {
+      "get": {
+        "tags": [
+          "Review"
+        ],
+        "operationId": "GetReviewByUserId",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "userId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetReviewsResponseDto"
+            }
+          }
+        }
+      }
+    },
+    "/api/Review/broker/{brokerId}": {
+      "get": {
+        "tags": [
+          "Review"
+        ],
+        "operationId": "GetReviewsByBrokerId",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetReviewsResponseDto"
+            }
+          }
+        }
+      }
+    },
+    "/api/Review/intermediary/{intermediaryId}": {
+      "get": {
+        "tags": [
+          "Review"
+        ],
+        "operationId": "GetReviewsByIntermediaryId",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetReviewsResponseDto"
+            }
+          }
+        }
+      }
+    },
+    "/api/Schema": {
+      "get": {
+        "tags": [
+          "Schema"
+        ],
+        "operationId": "GetSchemas",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
             "schema": {
               "type": "array",
               "items": {
@@ -251,975 +2276,3705 @@
               }
             }
           }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pet"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Pet"
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid tag value"
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
+        }
       }
     },
-    "/pet/{petId}": {
+    "/api/Schema/{name}": {
       "get": {
         "tags": [
-          "pet"
+          "Schema"
         ],
-        "summary": "Find pet by ID",
-        "description": "Returns a single pet",
-        "operationId": "getPetById",
+        "operationId": "GetSchema",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "parameters": [
           {
-            "name": "petId",
             "in": "path",
-            "description": "ID of pet to return",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pet"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Pet"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid ID supplied"
-          },
-          "404": {
-            "description": "Pet not found"
-          }
-        },
-        "security": [
-          {
-            "api_key": []
-          },
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
-      },
-      "post": {
-        "tags": [
-          "pet"
-        ],
-        "summary": "Updates a pet in the store with form data",
-        "description": "",
-        "operationId": "updatePetWithForm",
-        "parameters": [
-          {
-            "name": "petId",
-            "in": "path",
-            "description": "ID of pet that needs to be updated",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          },
-          {
             "name": "name",
-            "in": "query",
-            "description": "Name of pet that needs to be updated",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/JsonSchema"
+            }
+          }
+        }
+      }
+    },
+    "/api/SelfManagement/Firm": {
+      "get": {
+        "tags": [
+          "SelfManagement"
+        ],
+        "operationId": "GetOwnIntermediary",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetOwnIntermediaryResponseDto"
             }
           },
-          {
-            "name": "status",
-            "in": "query",
-            "description": "Status of pet that needs to be updated",
+          "404": {
+            "description": "Not Found",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/SelfManagement/Own": {
+      "put": {
+        "tags": [
+          "SelfManagement"
+        ],
+        "operationId": "UpdateOwnIntermediary",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdateOwnIntermediaryRequestDto"
             }
           }
         ],
         "responses": {
-          "405": {
-            "description": "Invalid input"
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetIntermediaryResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
           }
-        },
-        "security": [
+        }
+      }
+    },
+    "/api/SelfManagement/CreateBroker": {
+      "post": {
+        "tags": [
+          "SelfManagement"
+        ],
+        "operationId": "CreateBrokerInFirm",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
           {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/NonAuthorisedBrokerDto"
+            }
           }
-        ]
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/SelfManagement/Self": {
+      "put": {
+        "tags": [
+          "SelfManagement"
+        ],
+        "operationId": "UpdateSelf",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdateSelfBrokerRequestDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/SelfManagement/Brokers": {
+      "get": {
+        "tags": [
+          "SelfManagement"
+        ],
+        "operationId": "GetBrokersInFirm",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokersResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/SelfManagement/Admins": {
+      "get": {
+        "tags": [
+          "SelfManagement"
+        ],
+        "operationId": "GetAdminsInFirm",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetAccessBrokerSummaryResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/SelfManagement/Broker/{brokerId}": {
+      "get": {
+        "tags": [
+          "SelfManagement"
+        ],
+        "operationId": "GetBrokerInFirm",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "brokerId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/SelfManagement/UpdateBroker": {
+      "put": {
+        "tags": [
+          "SelfManagement"
+        ],
+        "operationId": "UpdateBrokerInFirm",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdateBrokerInFirmDto"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetBrokerResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/ThirdParties": {
+      "get": {
+        "tags": [
+          "ThirdParties"
+        ],
+        "operationId": "GetThirdParties",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetThirdPartiesResponseDto"
+            }
+          }
+        }
+      }
+    },
+    "/api/ThirdParties/{id}": {
+      "get": {
+        "tags": [
+          "ThirdParties"
+        ],
+        "operationId": "GetThirdParty",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetThirdPartyResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Intermediaries/{intermediaryId}/TradingName": {
+      "get": {
+        "tags": [
+          "TradingName"
+        ],
+        "operationId": "GetTradingNames",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetTradingNamesResponseDto"
+            }
+          }
+        }
       },
-      "delete": {
-        "tags": [
-          "pet"
-        ],
-        "summary": "Deletes a pet",
-        "description": "",
-        "operationId": "deletePet",
-        "parameters": [
-          {
-            "name": "api_key",
-            "in": "header",
-            "description": "",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "petId",
-            "in": "path",
-            "description": "Pet id to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "400": {
-            "description": "Invalid pet value"
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
-      }
-    },
-    "/pet/{petId}/uploadImage": {
       "post": {
         "tags": [
-          "pet"
+          "TradingName"
         ],
-        "summary": "uploads an image",
-        "description": "",
-        "operationId": "uploadFile",
+        "operationId": "CreateTradingName",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "parameters": [
           {
-            "name": "petId",
             "in": "path",
-            "description": "ID of pet to update",
+            "name": "intermediaryId",
             "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+            "type": "string"
           },
           {
-            "name": "additionalMetadata",
-            "in": "query",
-            "description": "Additional Metadata",
-            "required": false,
+            "in": "body",
+            "name": "body",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/CreateTradingNameRequestDto"
             }
           }
         ],
-        "requestBody": {
-          "content": {
-            "application/octet-stream": {
-              "schema": {
-                "type": "string",
-                "format": "binary"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ApiResponse"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "petstore_auth": [
-              "write:pets",
-              "read:pets"
-            ]
-          }
-        ]
-      }
-    },
-    "/store/inventory": {
-      "get": {
-        "tags": [
-          "store"
-        ],
-        "summary": "Returns pet inventories by status",
-        "description": "Returns a map of status codes to quantities",
-        "operationId": "getInventory",
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "integer",
-                    "format": "int32"
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "api_key": []
-          }
-        ]
-      }
-    },
-    "/store/order": {
-      "post": {
-        "tags": [
-          "store"
-        ],
-        "summary": "Place an order for a pet",
-        "description": "Place a new order in the store",
-        "operationId": "placeOrder",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Order"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/Order"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/Order"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Order"
-                }
-              }
-            }
-          },
-          "405": {
-            "description": "Invalid input"
-          }
-        }
-      }
-    },
-    "/store/order/{orderId}": {
-      "get": {
-        "tags": [
-          "store"
-        ],
-        "summary": "Find purchase order by ID",
-        "description": "For valid response try integer IDs with value <= 5 or > 10. Other values will generate exceptions.",
-        "operationId": "getOrderById",
-        "parameters": [
-          {
-            "name": "orderId",
-            "in": "path",
-            "description": "ID of order that needs to be fetched",
-            "required": true,
+            "description": "OK",
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "$ref": "#/definitions/GetTradingNameResponseDto"
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/Order"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Order"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid ID supplied"
           },
           "404": {
-            "description": "Order not found"
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
           }
         }
-      },
-      "delete": {
+      }
+    },
+    "/api/Intermediaries/{intermediaryId}/TradingName/{tradingNameId}": {
+      "get": {
         "tags": [
-          "store"
+          "TradingName"
         ],
-        "summary": "Delete purchase order by ID",
-        "description": "For valid response try integer IDs with value < 1000. Anything above 1000 or nonintegers will generate API errors",
-        "operationId": "deleteOrder",
+        "operationId": "GetTradingName",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "parameters": [
           {
-            "name": "orderId",
             "in": "path",
-            "description": "ID of the order that needs to be deleted",
+            "name": "intermediaryId",
             "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "tradingNameId",
+            "required": true,
+            "type": "string"
           }
         ],
         "responses": {
-          "400": {
-            "description": "Invalid ID supplied"
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetTradingNameResponseDto"
+            }
           },
           "404": {
-            "description": "Order not found"
-          }
-        }
-      }
-    },
-    "/user": {
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Create user",
-        "description": "This can only be done by the logged in user.",
-        "operationId": "createUser",
-        "requestBody": {
-          "description": "Created user object",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            }
-          }
-        },
-        "responses": {
-          "default": {
-            "description": "successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              },
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/user/createWithList": {
-      "post": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Creates list of users with given input array",
-        "description": "Creates list of users with given input array",
-        "operationId": "createUsersWithListInput",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/user/login": {
-      "get": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Logs user into the system",
-        "description": "",
-        "operationId": "loginUser",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "query",
-            "description": "The user name for login",
-            "required": false,
+            "description": "Not Found",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/ProblemDetails"
             }
-          },
-          {
-            "name": "password",
-            "in": "query",
-            "description": "The password for login in clear text",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "headers": {
-              "X-Rate-Limit": {
-                "description": "calls per hour allowed by the user",
-                "schema": {
-                  "type": "integer",
-                  "format": "int32"
-                }
-              },
-              "X-Expires-After": {
-                "description": "date in UTC when token expires",
-                "schema": {
-                  "type": "string",
-                  "format": "date-time"
-                }
-              }
-            },
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid username/password supplied"
-          }
-        }
-      }
-    },
-    "/user/logout": {
-      "get": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Logs out current logged in user session",
-        "description": "",
-        "operationId": "logoutUser",
-        "parameters": [],
-        "responses": {
-          "default": {
-            "description": "successful operation"
-          }
-        }
-      }
-    },
-    "/user/{username}": {
-      "get": {
-        "tags": [
-          "user"
-        ],
-        "summary": "Get user by user name",
-        "description": "",
-        "operationId": "getUserByName",
-        "parameters": [
-          {
-            "name": "username",
-            "in": "path",
-            "description": "The name that needs to be fetched. Use user1 for testing. ",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "successful operation",
-            "content": {
-              "application/xml": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/User"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid username supplied"
-          },
-          "404": {
-            "description": "User not found"
           }
         }
       },
       "put": {
         "tags": [
-          "user"
+          "TradingName"
         ],
-        "summary": "Update user",
-        "description": "This can only be done by the logged in user.",
-        "operationId": "updateUser",
+        "operationId": "UpdateTradingName",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "parameters": [
           {
-            "name": "username",
             "in": "path",
-            "description": "name that need to be deleted",
+            "name": "intermediaryId",
             "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "tradingNameId",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/UpdateTradingNameRequestDto"
             }
           }
         ],
-        "requestBody": {
-          "description": "Update an existent user in the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/xml": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/User"
-              }
-            }
-          }
-        },
         "responses": {
-          "default": {
-            "description": "successful operation"
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetTradingNameResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
           }
         }
       },
       "delete": {
         "tags": [
-          "user"
+          "TradingName"
         ],
-        "summary": "Delete user",
-        "description": "This can only be done by the logged in user.",
-        "operationId": "deleteUser",
+        "operationId": "DeleteTradingName",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
         "parameters": [
           {
-            "name": "username",
             "in": "path",
-            "description": "The name that needs to be deleted",
+            "name": "intermediaryId",
             "required": true,
+            "type": "string"
+          },
+          {
+            "in": "path",
+            "name": "tradingNameId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
             "schema": {
-              "type": "string"
+              "$ref": "#/definitions/GenericResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/Intermediaries/{intermediaryId}/TradingName/PopulateTradingNamesFromFca": {
+      "post": {
+        "tags": [
+          "TradingName"
+        ],
+        "operationId": "PopulateTradingNamesFromFca",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "intermediaryId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GenericResponseDto"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/ProblemDetails"
+            }
+          }
+        }
+      }
+    },
+    "/api/UserVerification/{regulatedIdentityId}": {
+      "get": {
+        "tags": [
+          "UserVerification"
+        ],
+        "operationId": "GetUserVerificationDto",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "regulatedIdentityId",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetUserVerificationResponseDto"
+            }
+          }
+        }
+      }
+    },
+    "/api/UserVerification/RegulatedIdentities": {
+      "get": {
+        "tags": [
+          "UserVerification"
+        ],
+        "operationId": "GetRegulatedIdentities",
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GetRegulatedIdentitiesResponseDto"
+            }
+          }
+        }
+      }
+    },
+    "/api/UserVerification/BatchVerification": {
+      "post": {
+        "tags": [
+          "UserVerification"
+        ],
+        "operationId": "RunBatchVerification",
+        "consumes": [
+          "application/json-patch+json",
+          "application/json",
+          "text/json",
+          "application/*+json"
+        ],
+        "produces": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "$ref": "#/definitions/BatchVerificationRequestDto"
             }
           }
         ],
         "responses": {
-          "400": {
-            "description": "Invalid username supplied"
-          },
-          "404": {
-            "description": "User not found"
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/GenericResponseDto"
+            }
           }
         }
       }
     }
   },
-  "components": {
-    "schemas": {
-      "Order": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "example": 10
-          },
-          "petId": {
-            "type": "integer",
-            "format": "int64",
-            "example": 198772
-          },
-          "quantity": {
-            "type": "integer",
-            "format": "int32",
-            "example": 7
-          },
-          "shipDate": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "status": {
-            "type": "string",
-            "description": "Order Status",
-            "example": "approved",
-            "enum": [
-              "placed",
-              "approved",
-              "delivered"
-            ]
-          },
-          "complete": {
-            "type": "boolean"
-          }
+  "definitions": {
+    "AccessBrokerSummaryDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
         },
-        "xml": {
-          "name": "order"
+        "title": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "middleName": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
         }
       },
-      "Customer": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "example": 100000
-          },
-          "username": {
-            "type": "string",
-            "example": "fehguy"
-          },
-          "address": {
-            "type": "array",
-            "xml": {
-              "name": "addresses",
-              "wrapped": true
-            },
-            "items": {
-              "$ref": "#/components/schemas/Address"
-            }
-          }
-        },
-        "xml": {
-          "name": "customer"
-        }
-      },
-      "Address": {
-        "type": "object",
-        "properties": {
-          "street": {
-            "type": "string",
-            "example": "437 Lytton"
-          },
-          "city": {
-            "type": "string",
-            "example": "Palo Alto"
-          },
-          "state": {
-            "type": "string",
-            "example": "CA"
-          },
-          "zip": {
-            "type": "string",
-            "example": "94301"
-          }
-        },
-        "xml": {
-          "name": "address"
-        }
-      },
-      "Category": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "example": 1
-          },
-          "name": {
-            "type": "string",
-            "example": "Dogs"
-          }
-        },
-        "xml": {
-          "name": "category"
-        }
-      },
-      "User": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "example": 10
-          },
-          "username": {
-            "type": "string",
-            "example": "theUser"
-          },
-          "firstName": {
-            "type": "string",
-            "example": "John"
-          },
-          "lastName": {
-            "type": "string",
-            "example": "James"
-          },
-          "email": {
-            "type": "string",
-            "example": "john@email.com"
-          },
-          "password": {
-            "type": "string",
-            "example": "12345"
-          },
-          "phone": {
-            "type": "string",
-            "example": "12345"
-          },
-          "userStatus": {
-            "type": "integer",
-            "description": "User Status",
-            "format": "int32",
-            "example": 1
-          }
-        },
-        "xml": {
-          "name": "user"
-        }
-      },
-      "Tag": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64"
-          },
-          "name": {
-            "type": "string"
-          }
-        },
-        "xml": {
-          "name": "tag"
-        }
-      },
-      "Pet": {
-        "required": [
-          "name",
-          "photoUrls"
-        ],
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "integer",
-            "format": "int64",
-            "example": 10
-          },
-          "name": {
-            "type": "string",
-            "example": "doggie"
-          },
-          "category": {
-            "$ref": "#/components/schemas/Category"
-          },
-          "photoUrls": {
-            "type": "array",
-            "xml": {
-              "wrapped": true
-            },
-            "items": {
-              "type": "string",
-              "xml": {
-                "name": "photoUrl"
-              }
-            }
-          },
-          "tags": {
-            "type": "array",
-            "xml": {
-              "wrapped": true
-            },
-            "items": {
-              "$ref": "#/components/schemas/Tag"
-            }
-          },
-          "status": {
-            "type": "string",
-            "description": "pet status in the store",
-            "enum": [
-              "available",
-              "pending",
-              "sold"
-            ]
-          }
-        },
-        "xml": {
-          "name": "pet"
-        }
-      },
-      "ApiResponse": {
-        "type": "object",
-        "properties": {
-          "code": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "type": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
-          }
-        },
-        "xml": {
-          "name": "##default"
-        }
-      }
+      "additionalProperties": false
     },
-    "requestBodies": {
-      "Pet": {
-        "description": "Pet object that needs to be added to the store",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Pet"
+    "AccessType": {
+      "enum": [
+        "OnlyBrokersOwnCases",
+        "BrokerInvited",
+        "AnyoneInFirm"
+      ],
+      "type": "string"
+    },
+    "AddressDto": {
+      "type": "object",
+      "properties": {
+        "addressLine1": {
+          "type": "string"
+        },
+        "addressLine2": {
+          "type": "string"
+        },
+        "addressLine3": {
+          "type": "string"
+        },
+        "town": {
+          "type": "string"
+        },
+        "county": {
+          "type": "string"
+        },
+        "postcode": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "AuthenticationStrategy": {
+      "enum": [
+        "DomainVerificationStrategy",
+        "EidAuthenticationStrategy"
+      ],
+      "type": "string"
+    },
+    "BankDetailsDto": {
+      "type": "object",
+      "properties": {
+        "intermediaryId": {
+          "type": "string"
+        },
+        "sortCode": {
+          "type": "string"
+        },
+        "accountNumber": {
+          "type": "string"
+        },
+        "accountName": {
+          "type": "string"
+        },
+        "bankName": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "BankDetailsResponseDto": {
+      "type": "object",
+      "properties": {
+        "bankDetails": {
+          "$ref": "#/definitions/BankDetailsDto"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "BaseResponseDto": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "BatchVerificationRequestDto": {
+      "type": "object",
+      "properties": {
+        "userIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "BrokerAuthorisationChecksResponseDto": {
+      "type": "object",
+      "properties": {
+        "numberOfBrokersChecked": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "numberOfBrokersWithAuthorisation": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "numberOfBrokersWithoutAuthorisation": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "numberOfBrokersInTransition": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "numberOfBrokersWithNoIrn": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "numberOfBrokersThatArentAdvisors": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "numberOfBrokersCheckedWithinTimeFrame": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "BrokerDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "createdDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "updatedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "createdBy": {
+          "type": "string"
+        },
+        "updatedBy": {
+          "type": "string"
+        },
+        "intermediaryId": {
+          "type": "string"
+        },
+        "allowDocumentlessSubmission": {
+          "type": "boolean"
+        },
+        "regulatedIdentityVerifiedState": {
+          "$ref": "#/definitions/RegulatedIdentityVerifiedState"
+        },
+        "locationId": {
+          "type": "string"
+        },
+        "tradingNameId": {
+          "type": "string"
+        },
+        "workingPostcode": {
+          "type": "string"
+        },
+        "userIdsAbleToAccess": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "accessType": {
+          "$ref": "#/definitions/AccessType"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "preferredSourcingSystem": {
+          "$ref": "#/definitions/SourcingSystem"
+        },
+        "title": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "middleName": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "salutation": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        },
+        "level": {
+          "$ref": "#/definitions/Level"
+        },
+        "canAdministerOrganisation": {
+          "description": "Can the broker administer the organisation\n(Principals can by default administer the organisation, even if they have false for this property)",
+          "type": "boolean"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/Status"
+        },
+        "individualReferenceNumber": {
+          "type": "string"
+        },
+        "residentialEnabled": {
+          "type": "boolean"
+        },
+        "betaEnabled": {
+          "type": "boolean"
+        },
+        "authorisationChecked": {
+          "format": "date-time",
+          "description": "Authorisation checked date, used to check the broker has the correct authorisation\nIf null, the broker has not been checked",
+          "type": "string"
+        },
+        "authorisationPresent": {
+          "description": "If the broker has the required authorisation, could mean the broker is deactivated",
+          "type": "boolean"
+        },
+        "regulatedIdentityId": {
+          "type": "string"
+        },
+        "intermediaryHistory": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IntermediaryHistoryDto"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "BrokerSummary": {
+      "type": "object",
+      "properties": {
+        "brokerId": {
+          "type": "string"
+        },
+        "brokerName": {
+          "type": "string"
+        },
+        "intermediaryName": {
+          "type": "string"
+        },
+        "intermediaryRef": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "BusinessDto": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ConsumerBtlDto": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "effectiveDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "business": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BusinessDto"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ContactDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "position": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "CreateBrokerDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "marketingSettings": {
+          "$ref": "#/definitions/MarketingSettingsRequestDto"
+        },
+        "intermediaryId": {
+          "type": "string"
+        },
+        "allowDocumentlessSubmission": {
+          "type": "boolean"
+        },
+        "regulatedIdentityVerifiedState": {
+          "$ref": "#/definitions/RegulatedIdentityVerifiedState"
+        },
+        "locationId": {
+          "type": "string"
+        },
+        "tradingNameId": {
+          "type": "string"
+        },
+        "workingPostcode": {
+          "type": "string"
+        },
+        "userIdsAbleToAccess": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "accessType": {
+          "$ref": "#/definitions/AccessType"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "preferredSourcingSystem": {
+          "$ref": "#/definitions/SourcingSystem"
+        },
+        "title": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "middleName": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "salutation": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        },
+        "level": {
+          "$ref": "#/definitions/Level"
+        },
+        "canAdministerOrganisation": {
+          "description": "Can the broker administer the organisation\n(Principals can by default administer the organisation, even if they have false for this property)",
+          "type": "boolean"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/Status"
+        },
+        "individualReferenceNumber": {
+          "type": "string"
+        },
+        "residentialEnabled": {
+          "type": "boolean"
+        },
+        "betaEnabled": {
+          "type": "boolean"
+        },
+        "authorisationChecked": {
+          "format": "date-time",
+          "description": "Authorisation checked date, used to check the broker has the correct authorisation\nIf null, the broker has not been checked",
+          "type": "string"
+        },
+        "authorisationPresent": {
+          "description": "If the broker has the required authorisation, could mean the broker is deactivated",
+          "type": "boolean"
+        },
+        "regulatedIdentityId": {
+          "type": "string"
+        },
+        "intermediaryHistory": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IntermediaryHistoryDto"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "CreateIntermediaryRequestDto": {
+      "required": [
+        "accessType",
+        "allowAccessTypeOverride",
+        "allowDocumentlessSubmission",
+        "isAuthorisedRepresentative",
+        "isDirectAuthorisedBroker",
+        "isMortgageClub",
+        "isNetwork",
+        "isPackager",
+        "residentialEnabled",
+        "showOnBrokerRegistration",
+        "tradingName"
+      ],
+      "type": "object",
+      "properties": {
+        "emailDomain": {
+          "type": "string"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "tradingName": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "tradingNames": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TradingName"
+          }
+        },
+        "isMortgageClub": {
+          "type": "boolean"
+        },
+        "isNetwork": {
+          "type": "boolean"
+        },
+        "isDirectAuthorisedBroker": {
+          "type": "boolean"
+        },
+        "isPackager": {
+          "type": "boolean"
+        },
+        "isAuthorisedRepresentative": {
+          "type": "boolean"
+        },
+        "authorisedPrincipal": {
+          "type": "string"
+        },
+        "mortgageClub": {
+          "type": "string"
+        },
+        "networks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fcaNumber": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "currentStatus": {
+          "type": "string"
+        },
+        "effectiveDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "companiesHouseNumber": {
+          "type": "string"
+        },
+        "consumerBtlDto": {
+          "$ref": "#/definitions/ConsumerBtlDto"
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PermissionDto"
+          }
+        },
+        "companiesHouseAddress": {
+          "$ref": "#/definitions/AddressDto"
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/CreateLocationRequestDto"
+          }
+        },
+        "showOnBrokerRegistration": {
+          "type": "boolean"
+        },
+        "residentialEnabled": {
+          "type": "boolean"
+        },
+        "accessType": {
+          "$ref": "#/definitions/AccessType"
+        },
+        "allowAccessTypeOverride": {
+          "type": "boolean"
+        },
+        "allowDocumentlessSubmission": {
+          "type": "boolean"
+        },
+        "notificationEmailAddress": {
+          "type": "string"
+        },
+        "authorisedDomains": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "CreateLocationRequestDto": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "addressLine1": {
+          "type": "string"
+        },
+        "addressLine2": {
+          "type": "string"
+        },
+        "addressLine3": {
+          "type": "string"
+        },
+        "town": {
+          "type": "string"
+        },
+        "county": {
+          "type": "string"
+        },
+        "postcode": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "CreateReviewDto": {
+      "type": "object",
+      "properties": {
+        "rating": {
+          "format": "int32",
+          "description": "Represents the rating given in a review.\nMust be an integer value between 1 and 5 (inclusive).",
+          "type": "integer"
+        },
+        "comment": {
+          "description": "Represents the comment provided in a review.\nContains the textual feedback or observations associated with the review.",
+          "type": "string"
+        },
+        "caseId": {
+          "description": "Represents the unique identifier for a specific case in the review process.\nThis property must not be empty and is required for successful validation.",
+          "type": "string"
+        },
+        "brokerId": {
+          "description": "Represents the unique identifier for a broker involved in the review process.\nThis property must not be empty and should correspond to a valid broker in the system.",
+          "type": "string"
+        },
+        "intermediaryId": {
+          "description": "Represents the unique identifier for the intermediary entity.\nThis property is required and must correspond to an existing intermediary in the system.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "CreateTradingNameRequestDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "EmailAddressDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "GenericResponseDto": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetAccessBrokerSummaryResponseDto": {
+      "type": "object",
+      "properties": {
+        "brokers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AccessBrokerSummaryDto"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetBrokerExclusiveRangesResponseDto": {
+      "type": "object",
+      "properties": {
+        "exclusiveRanges": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetBrokerNotificationEmailResponseDto": {
+      "type": "object",
+      "properties": {
+        "emailAddresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/EmailAddressDto"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetBrokerResponseDto": {
+      "type": "object",
+      "properties": {
+        "broker": {
+          "$ref": "#/definitions/BrokerDto"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetBrokerSummaryRequestDto": {
+      "type": "object",
+      "properties": {
+        "brokerIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetBrokerSummaryResponseDto": {
+      "type": "object",
+      "properties": {
+        "brokerSummaries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BrokerSummary"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetBrokerUserSetupResponseDto": {
+      "type": "object",
+      "properties": {
+        "broker": {
+          "$ref": "#/definitions/BrokerDto"
+        },
+        "isUserSetup": {
+          "type": "boolean"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetBrokersResponseDto": {
+      "type": "object",
+      "properties": {
+        "brokers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BrokerDto"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetIntermediariesResponseDto": {
+      "type": "object",
+      "properties": {
+        "intermediaries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IntermediaryDto"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetIntermediaryCommissionRequestDto": {
+      "required": [
+        "loanAmount",
+        "purpose"
+      ],
+      "type": "object",
+      "properties": {
+        "purpose": {
+          "$ref": "#/definitions/Purpose"
+        },
+        "loanAmount": {
+          "format": "double",
+          "type": "number"
+        },
+        "caseSubmitted": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetIntermediaryCommissionResponseDto": {
+      "type": "object",
+      "properties": {
+        "commission": {
+          "format": "double",
+          "type": "number"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetIntermediaryResponseDto": {
+      "type": "object",
+      "properties": {
+        "intermediary": {
+          "$ref": "#/definitions/IntermediaryDto"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetIntermediarySummaryResponseDto": {
+      "type": "object",
+      "properties": {
+        "intermediaries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IntermediarySummaryDto"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetLocationResponseDto": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "$ref": "#/definitions/LocationDto"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetLocationsResponseDto": {
+      "type": "object",
+      "properties": {
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LocationDto"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetOwnIntermediaryResponseDto": {
+      "type": "object",
+      "properties": {
+        "emailDomain": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "tradingName": {
+          "type": "string"
+        },
+        "fcaNumber": {
+          "type": "string"
+        },
+        "tradingNames": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TradingName"
+          }
+        },
+        "accessType": {
+          "$ref": "#/definitions/AccessType"
+        },
+        "allowAccessTypeOverride": {
+          "type": "boolean"
+        },
+        "notificationEmailAddress": {
+          "type": "string"
+        },
+        "paymentRoute": {
+          "$ref": "#/definitions/PaymentRouteDto"
+        },
+        "authorisedDomains": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetPaymentRouteListResponseDto": {
+      "type": "object",
+      "properties": {
+        "paymentRouteList": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PaymentRouteDto"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetPaymentRouteResponseDto": {
+      "type": "object",
+      "properties": {
+        "paymentRouteDto": {
+          "$ref": "#/definitions/PaymentRouteDto"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetRegulatedIdentitiesResponseDto": {
+      "type": "object",
+      "properties": {
+        "regulatedIdentities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/RegulatedIdentitySummaryDto"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetReviewResponseDto": {
+      "type": "object",
+      "properties": {
+        "review": {
+          "$ref": "#/definitions/ReviewDto"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetReviewsResponseDto": {
+      "type": "object",
+      "properties": {
+        "reviews": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ReviewDto"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetThirdPartiesResponseDto": {
+      "type": "object",
+      "properties": {
+        "thirdParties": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ThirdPartyDto"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetThirdPartyResponseDto": {
+      "type": "object",
+      "properties": {
+        "thirdParty": {
+          "$ref": "#/definitions/ThirdPartyDto"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetTradingNameResponseDto": {
+      "type": "object",
+      "properties": {
+        "tradingName": {
+          "$ref": "#/definitions/TradingNameDto"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetTradingNamesResponseDto": {
+      "type": "object",
+      "properties": {
+        "tradingNames": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TradingNameDto"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "GetUserVerificationResponseDto": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "middleName": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "salutation": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        },
+        "addressLine1": {
+          "type": "string"
+        },
+        "addressLine2": {
+          "type": "string"
+        },
+        "addressLine3": {
+          "type": "string"
+        },
+        "town": {
+          "type": "string"
+        },
+        "postcode": {
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "IJsonSchemaKeyword": {
+      "type": "object",
+      "additionalProperties": false
+    },
+    "IntermediaryDto": {
+      "required": [
+        "allowAccessTypeOverride",
+        "allowDocumentlessSubmission",
+        "isAuthorisedRepresentative",
+        "isDirectAuthorisedBroker",
+        "isMortgageClub",
+        "isNetwork",
+        "isPackager",
+        "paymentRouteSetupAndContractSigned",
+        "residentialEnabled",
+        "showOnBrokerRegistration",
+        "tradingName"
+      ],
+      "type": "object",
+      "properties": {
+        "emailDomain": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "tradingName": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "isMortgageClub": {
+          "type": "boolean"
+        },
+        "isNetwork": {
+          "type": "boolean"
+        },
+        "isDirectAuthorisedBroker": {
+          "type": "boolean"
+        },
+        "isPackager": {
+          "type": "boolean"
+        },
+        "isAuthorisedRepresentative": {
+          "type": "boolean"
+        },
+        "authorisedPrincipal": {
+          "type": "string"
+        },
+        "mortgageClubs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "mortgageClub": {
+          "type": "string"
+        },
+        "networks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fcaNumber": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "currentStatus": {
+          "type": "string"
+        },
+        "effectiveDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "companiesHouseNumber": {
+          "type": "string"
+        },
+        "consumerBtlDto": {
+          "$ref": "#/definitions/ConsumerBtlDto"
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PermissionDto"
+          }
+        },
+        "companiesHouseAddress": {
+          "$ref": "#/definitions/AddressDto"
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LocationDto"
+          }
+        },
+        "tradingNames": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TradingName"
+          }
+        },
+        "showOnBrokerRegistration": {
+          "type": "boolean"
+        },
+        "residentialEnabled": {
+          "type": "boolean"
+        },
+        "accessType": {
+          "$ref": "#/definitions/AccessType"
+        },
+        "allowAccessTypeOverride": {
+          "type": "boolean"
+        },
+        "allowDocumentlessSubmission": {
+          "type": "boolean"
+        },
+        "notificationEmailAddress": {
+          "type": "string"
+        },
+        "paymentRouteSetupAndContractSigned": {
+          "type": "boolean"
+        },
+        "exclusiveRanges": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "authorisedDomains": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "parentHistory": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ParentIntermediaryHistoryDto"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "IntermediaryHistoryDto": {
+      "type": "object",
+      "properties": {
+        "intermediaryId": {
+          "type": "string"
+        },
+        "archiveDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "IntermediarySummaryDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "reference": {
+          "type": "string"
+        },
+        "tradingName": {
+          "type": "string"
+        },
+        "isMortgageClub": {
+          "type": "boolean"
+        },
+        "isNetwork": {
+          "type": "boolean"
+        },
+        "isDirectAuthorisedBroker": {
+          "type": "boolean"
+        },
+        "isPackager": {
+          "type": "boolean"
+        },
+        "isAuthorisedRepresentative": {
+          "type": "boolean"
+        },
+        "authorisedPrincipal": {
+          "type": "string"
+        },
+        "mortgageClub": {
+          "type": "string"
+        },
+        "fcaNumber": {
+          "type": "string"
+        },
+        "paymentRouteSetupAndContractSigned": {
+          "type": "boolean"
+        },
+        "paymentRoute": {
+          "$ref": "#/definitions/PaymentRouteDto"
+        },
+        "parentHistory": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ParentIntermediaryHistoryDto"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "IntermediaryType": {
+      "enum": [
+        "DirectlyAuthorised",
+        "AppointedRepresentative"
+      ],
+      "type": "string"
+    },
+    "InternalBrokerDto": {
+      "type": "object",
+      "properties": {
+        "intermediaryId": {
+          "type": "string"
+        },
+        "allowDocumentlessSubmission": {
+          "type": "boolean"
+        },
+        "regulatedIdentityVerifiedState": {
+          "$ref": "#/definitions/RegulatedIdentityVerifiedState"
+        },
+        "locationId": {
+          "type": "string"
+        },
+        "tradingNameId": {
+          "type": "string"
+        },
+        "workingPostcode": {
+          "type": "string"
+        },
+        "userIdsAbleToAccess": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "accessType": {
+          "$ref": "#/definitions/AccessType"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "preferredSourcingSystem": {
+          "$ref": "#/definitions/SourcingSystem"
+        },
+        "title": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "middleName": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "salutation": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        },
+        "level": {
+          "$ref": "#/definitions/Level"
+        },
+        "canAdministerOrganisation": {
+          "description": "Can the broker administer the organisation\n(Principals can by default administer the organisation, even if they have false for this property)",
+          "type": "boolean"
+        },
+        "userId": {
+          "type": "string"
+        },
+        "status": {
+          "$ref": "#/definitions/Status"
+        },
+        "individualReferenceNumber": {
+          "type": "string"
+        },
+        "residentialEnabled": {
+          "type": "boolean"
+        },
+        "betaEnabled": {
+          "type": "boolean"
+        },
+        "authorisationChecked": {
+          "format": "date-time",
+          "description": "Authorisation checked date, used to check the broker has the correct authorisation\nIf null, the broker has not been checked",
+          "type": "string"
+        },
+        "authorisationPresent": {
+          "description": "If the broker has the required authorisation, could mean the broker is deactivated",
+          "type": "boolean"
+        },
+        "regulatedIdentityId": {
+          "type": "string"
+        },
+        "intermediaryHistory": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IntermediaryHistoryDto"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "IrnBroker": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "irnNumber": {
+          "type": "string"
+        },
+        "possibleIntermediaries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PossibleIntermediary"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "JsonSchema": {
+      "type": "object",
+      "properties": {
+        "keywords": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IJsonSchemaKeyword"
+          },
+          "readOnly": true
+        },
+        "boolValue": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "baseUri": {
+          "format": "uri",
+          "type": "string"
+        },
+        "isResourceRoot": {
+          "type": "boolean",
+          "readOnly": true
+        },
+        "declaredVersion": {
+          "$ref": "#/definitions/SpecVersion"
+        }
+      },
+      "additionalProperties": false
+    },
+    "Level": {
+      "enum": [
+        "Principal",
+        "Advisor",
+        "Administrator",
+        "CaseManager"
+      ],
+      "type": "string"
+    },
+    "LocationDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        },
+        "isPublicLocation": {
+          "type": "boolean"
+        },
+        "addressLine1": {
+          "type": "string"
+        },
+        "addressLine2": {
+          "type": "string"
+        },
+        "addressLine3": {
+          "type": "string"
+        },
+        "town": {
+          "type": "string"
+        },
+        "county": {
+          "type": "string"
+        },
+        "postcode": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "MarketingSettingsRequestDto": {
+      "type": "object",
+      "properties": {
+        "marketingPreferences": {
+          "type": "object",
+          "properties": {
+            "Email": {
+              "type": "boolean"
+            },
+            "Phone": {
+              "type": "boolean"
+            },
+            "Post": {
+              "type": "boolean"
+            },
+            "Text": {
+              "type": "boolean"
+            },
+            "NoFurtherCommunications": {
+              "type": "boolean"
             }
           },
-          "application/xml": {
-            "schema": {
-              "$ref": "#/components/schemas/Pet"
-            }
-          }
+          "additionalProperties": false
         }
       },
-      "UserArray": {
-        "description": "List of user object",
-        "content": {
-          "application/json": {
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/components/schemas/User"
-              }
-            }
-          }
-        }
-      }
+      "additionalProperties": false
     },
-    "securitySchemes": {
-      "petstore_auth": {
-        "type": "oauth2",
-        "flows": {
-          "implicit": {
-            "authorizationUrl": "https://petstore3.swagger.io/oauth/authorize",
-            "scopes": {
-              "write:pets": "modify pets in your account",
-              "read:pets": "read your pets"
+    "MoveBrokerToIntermediaryDto": {
+      "type": "object",
+      "properties": {
+        "intermediaryId": {
+          "type": "string"
+        },
+        "locationId": {
+          "type": "string"
+        },
+        "tradingNameId": {
+          "type": "string"
+        },
+        "reOnboard": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "NonAuthorisedBrokerDto": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "middleName": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "salutation": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        },
+        "level": {
+          "$ref": "#/definitions/Level"
+        },
+        "canAdministerOrganisation": {
+          "description": "Can the broker administer the organisation\n(Principals can by default administer the organisation, even if they have false for this property)",
+          "type": "boolean"
+        },
+        "status": {
+          "$ref": "#/definitions/Status"
+        },
+        "individualReferenceNumber": {
+          "type": "string"
+        },
+        "locationId": {
+          "type": "string"
+        },
+        "tradingNameId": {
+          "type": "string"
+        },
+        "workingPostcode": {
+          "type": "string"
+        },
+        "userIdsAbleToAccess": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "accessType": {
+          "$ref": "#/definitions/AccessType"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "preferredSourcingSystem": {
+          "$ref": "#/definitions/SourcingSystem"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ParentIntermediaryHistoryDto": {
+      "type": "object",
+      "properties": {
+        "parentIntermediaryId": {
+          "type": "string"
+        },
+        "authorisedPrincipal": {
+          "type": "string"
+        },
+        "mortgageClub": {
+          "type": "string"
+        },
+        "archiveDate": {
+          "format": "date-time",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "PaymentRouteDto": {
+      "type": "object",
+      "properties": {
+        "intermediaryId": {
+          "type": "string"
+        },
+        "tradingName": {
+          "type": "string"
+        },
+        "fcaNumber": {
+          "type": "string"
+        },
+        "isMortgageClub": {
+          "type": "boolean"
+        },
+        "isNetwork": {
+          "type": "boolean"
+        },
+        "paymentRoute": {
+          "$ref": "#/definitions/PaymentRouteDto"
+        }
+      },
+      "additionalProperties": false
+    },
+    "PermissionDto": {
+      "type": "object",
+      "properties": {
+        "service": {
+          "type": "string"
+        },
+        "customerTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PermissionTypeDto"
+          }
+        },
+        "investmentTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PermissionTypeDto"
+          }
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PermissionTypeDto"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "PermissionTypeDto": {
+      "type": "object",
+      "properties": {
+        "reference": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "PossibleIntermediary": {
+      "type": "object",
+      "properties": {
+        "intermediaryName": {
+          "type": "string"
+        },
+        "fcaNumber": {
+          "type": "string"
+        },
+        "isIntermediaryAlreadyRegistered": {
+          "type": "boolean"
+        },
+        "tradingNames": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ProblemDetails": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "format": "int32",
+          "type": "integer"
+        },
+        "detail": {
+          "type": "string"
+        },
+        "instance": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": { }
+    },
+    "Purpose": {
+      "enum": [
+        "Purchase",
+        "Remortgage",
+        "ProductTransfer",
+        "FurtherAdvance",
+        "Port",
+        "Construction"
+      ],
+      "type": "string"
+    },
+    "RegistrationRequestDto": {
+      "type": "object",
+      "properties": {
+        "brokerIrn": {
+          "type": "string"
+        },
+        "authorisedIntermediaryFcaNumber": {
+          "description": "The intermediary where the broker gets their permissions from the FCA",
+          "type": "string"
+        },
+        "mortgageClub": {
+          "description": "Optional ID of the submission route for firms who are Directly Authorised",
+          "type": "string"
+        },
+        "brokerEmailAddress": {
+          "description": "The email address of the broker",
+          "type": "string"
+        },
+        "brokerPhoneNumber": {
+          "description": "The phone number of the broker",
+          "type": "string"
+        },
+        "title": {
+          "description": "The Title of the broker",
+          "type": "string"
+        },
+        "firstName": {
+          "description": "The brokers first name",
+          "type": "string"
+        },
+        "middleNames": {
+          "description": "The brokers middle names",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "surname": {
+          "description": "The brokers surname",
+          "type": "string"
+        },
+        "brokerAddressLine1": {
+          "description": "Line 1 of the brokers current address",
+          "type": "string"
+        },
+        "brokerAddressLine2": {
+          "description": "Line 2 of the brokers current address",
+          "type": "string"
+        },
+        "brokerAddressLine3": {
+          "description": "Line 2 of the brokers current address",
+          "type": "string"
+        },
+        "brokerAddressTown": {
+          "description": "The town of brokers current address",
+          "type": "string"
+        },
+        "brokerAddressCounty": {
+          "description": "The county of the brokers current address",
+          "type": "string"
+        },
+        "brokerPostcode": {
+          "description": "The postcode in which the broker operates from, so we can assign a KAM/BDM to them",
+          "type": "string"
+        },
+        "brokerHomePostcode": {
+          "description": "The Brokers home postcode",
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "description": "The date of birth of the broker",
+          "type": "string"
+        },
+        "preferredSourcingSystem": {
+          "$ref": "#/definitions/SourcingSystem"
+        },
+        "marketingSettings": {
+          "$ref": "#/definitions/MarketingSettingsRequestDto"
+        },
+        "employerIntermediaryFcaNumber": {
+          "description": "The intermediary that the broker is employed by (where they would say they \"work\")\nThis could be the same as the authorised intermediary",
+          "type": "string"
+        },
+        "employerTradingName": {
+          "type": "string"
+        },
+        "reOnboarding": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "RegistrationResponseDto": {
+      "type": "object",
+      "properties": {
+        "wasNewIntermediaryCreated": {
+          "type": "boolean"
+        },
+        "regulatedIdentityVerifiedState": {
+          "$ref": "#/definitions/RegulatedIdentityVerifiedState"
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
             }
           }
         }
       },
-      "api_key": {
-        "type": "apiKey",
-        "name": "api_key",
-        "in": "header"
-      }
+      "additionalProperties": false
+    },
+    "RegistrationState": {
+      "enum": [
+        "Pending",
+        "Success",
+        "Failed",
+        "Faulted"
+      ],
+      "type": "string"
+    },
+    "RegulatedIdentitySummaryDto": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "middleName": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "salutation": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        },
+        "brokerIrn": {
+          "type": "string"
+        },
+        "updatedDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "updatedBy": {
+          "type": "string"
+        },
+        "verificationState": {
+          "$ref": "#/definitions/VerificationState"
+        },
+        "attemptedVerificationStrategies": {
+          "uniqueItems": true,
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/AuthenticationStrategy"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "RegulatedIdentityVerifiedState": {
+      "enum": [
+        "Unverified",
+        "Verified",
+        "Pending",
+        "Failed"
+      ],
+      "type": "string"
+    },
+    "ReviewDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "description": "Represents the unique identifier for the review.",
+          "type": "string"
+        },
+        "rating": {
+          "format": "int32",
+          "description": "Represents the rating value for the review, typically used to indicate the quality or performance level.",
+          "type": "integer"
+        },
+        "comment": {
+          "description": "Represents the content of the review provided by the user.",
+          "type": "string"
+        },
+        "caseId": {
+          "description": "Represents the unique identifier associated with a specific case.",
+          "type": "string"
+        },
+        "brokerId": {
+          "description": "Represents the unique identifier for the broker associated with the review.",
+          "type": "string"
+        },
+        "intermediaryId": {
+          "description": "Represents the identifier of the intermediary associated with the review.",
+          "type": "string"
+        },
+        "createdDate": {
+          "format": "date-time",
+          "description": "Represents the date and time when the review was created.",
+          "type": "string"
+        },
+        "updatedDate": {
+          "format": "date-time",
+          "description": "Indicates the date and time when the review was last updated.",
+          "type": "string"
+        },
+        "createdBy": {
+          "description": "Represents the identifier of the user or entity that created the review.",
+          "type": "string"
+        },
+        "updatedBy": {
+          "description": "Indicates the identifier of the user or entity responsible for the most recent update to the review.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SearchBrokerResponseDto": {
+      "type": "object",
+      "properties": {
+        "brokers": {
+          "description": "A simple dto containing a brokers name, their individual reference number and any intermediaries they have roles for.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IrnBroker"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "SearchBrokerViewModel": {
+      "type": "object",
+      "properties": {
+        "forename": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        },
+        "irn": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SearchIntermediaryResponseDto": {
+      "type": "object",
+      "properties": {
+        "intermediaries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PossibleIntermediary"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "SolicitorInfoDto": {
+      "type": "object",
+      "properties": {
+        "webhookUrl": {
+          "description": "for Solicitors who are directly integrated with us, and who are non-ULS, this is the URL to which we will send the instruction to via Webhook",
+          "type": "string"
+        },
+        "sraRegistrationNumber": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SourcingSystem": {
+      "enum": [
+        "Twenty7Tec",
+        "Iress",
+        "MortgageBrain",
+        "Trigold",
+        "LnGIgnite",
+        "MortgageBrokerTools",
+        "Other"
+      ],
+      "type": "string"
+    },
+    "SpecVersion": {
+      "enum": [
+        "Unspecified",
+        "Draft6",
+        "Draft7",
+        "Draft201909",
+        "Draft202012",
+        "DraftNext",
+        "All"
+      ],
+      "type": "string"
+    },
+    "Status": {
+      "enum": [
+        "Active",
+        "Inactive",
+        "Blocked",
+        "InTransition"
+      ],
+      "type": "string"
+    },
+    "SubmissionRouteDto": {
+      "type": "object",
+      "properties": {
+        "tradingName": {
+          "description": "The primary trading name of the firm.",
+          "type": "string"
+        },
+        "id": {
+          "description": "The internal ID of the firm on the platform.\nWe can't use the FCA number here as not all clubs have one.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SubmissionRoutesResponseDto": {
+      "type": "object",
+      "properties": {
+        "submissionRoutes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SubmissionRouteDto"
+          }
+        },
+        "success": {
+          "type": "boolean"
+        },
+        "errorDescription": {
+          "type": "string"
+        },
+        "validationErrors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "ThirdPartyDto": {
+      "required": [
+        "addressLine1",
+        "emailAddress",
+        "name",
+        "phoneNumber",
+        "postcode",
+        "town",
+        "type"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/ThirdPartyType"
+        },
+        "panelManager": {
+          "type": "boolean"
+        },
+        "name": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "addressLine1": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "addressLine2": {
+          "type": "string"
+        },
+        "addressLine3": {
+          "type": "string"
+        },
+        "town": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "county": {
+          "type": "string"
+        },
+        "postcode": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "emailAddress": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "contacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ContactDto"
+          }
+        },
+        "clientSortcode": {
+          "type": "string"
+        },
+        "clientAccountNumber": {
+          "type": "string"
+        },
+        "clientAccountName": {
+          "type": "string"
+        },
+        "solicitorInfo": {
+          "$ref": "#/definitions/SolicitorInfoDto"
+        },
+        "valuationInfo": {
+          "$ref": "#/definitions/ValuationInfoDto"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ThirdPartyType": {
+      "enum": [
+        "LenderSolicitor",
+        "InlifeServicer",
+        "ValuationGateway",
+        "ValuationPanelManager",
+        "Surveyor",
+        "SolicitorPanel"
+      ],
+      "type": "string"
+    },
+    "TradingName": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "TradingNameDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "UpdateBrokerInFirmDto": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "middleName": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "salutation": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        },
+        "level": {
+          "$ref": "#/definitions/Level"
+        },
+        "canAdministerOrganisation": {
+          "description": "Can the broker administer the organisation\n(Principals can by default administer the organisation, even if they have false for this property)",
+          "type": "boolean"
+        },
+        "status": {
+          "$ref": "#/definitions/Status"
+        },
+        "individualReferenceNumber": {
+          "type": "string"
+        },
+        "locationId": {
+          "type": "string"
+        },
+        "tradingNameId": {
+          "type": "string"
+        },
+        "workingPostcode": {
+          "type": "string"
+        },
+        "userIdsAbleToAccess": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "accessType": {
+          "$ref": "#/definitions/AccessType"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "preferredSourcingSystem": {
+          "$ref": "#/definitions/SourcingSystem"
+        }
+      },
+      "additionalProperties": false
+    },
+    "UpdateIntermediaryRequestDto": {
+      "required": [
+        "allowDocumentlessSubmission",
+        "isAuthorisedRepresentative",
+        "isDirectAuthorisedBroker",
+        "isMortgageClub",
+        "isNetwork",
+        "isPackager",
+        "paymentRouteSetupAndContractSigned",
+        "residentialEnabled",
+        "showOnBrokerRegistration",
+        "tradingName"
+      ],
+      "type": "object",
+      "properties": {
+        "reference": {
+          "type": "string"
+        },
+        "tradingName": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "isMortgageClub": {
+          "type": "boolean"
+        },
+        "isNetwork": {
+          "type": "boolean"
+        },
+        "isDirectAuthorisedBroker": {
+          "type": "boolean"
+        },
+        "isPackager": {
+          "type": "boolean"
+        },
+        "isAuthorisedRepresentative": {
+          "type": "boolean"
+        },
+        "authorisedPrincipal": {
+          "type": "string"
+        },
+        "mortgageClub": {
+          "type": "string"
+        },
+        "networks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "fcaNumber": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "currentStatus": {
+          "type": "string"
+        },
+        "effectiveDate": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "companiesHouseNumber": {
+          "type": "string"
+        },
+        "consumerBtlDto": {
+          "$ref": "#/definitions/ConsumerBtlDto"
+        },
+        "permissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PermissionDto"
+          }
+        },
+        "locations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/LocationDto"
+          }
+        },
+        "tradingNames": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/TradingName"
+          }
+        },
+        "showOnBrokerRegistration": {
+          "type": "boolean"
+        },
+        "residentialEnabled": {
+          "type": "boolean"
+        },
+        "accessType": {
+          "$ref": "#/definitions/AccessType"
+        },
+        "allowAccessTypeOverride": {
+          "type": "boolean"
+        },
+        "allowDocumentlessSubmission": {
+          "type": "boolean"
+        },
+        "notificationEmailAddress": {
+          "type": "string"
+        },
+        "paymentRouteSetupAndContractSigned": {
+          "type": "boolean"
+        },
+        "exclusiveRanges": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "authorisedDomains": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "bankDetails": {
+          "$ref": "#/definitions/BankDetailsDto"
+        }
+      },
+      "additionalProperties": false
+    },
+    "UpdateLocationRequestDto": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "addressLine1": {
+          "type": "string"
+        },
+        "addressLine2": {
+          "type": "string"
+        },
+        "addressLine3": {
+          "type": "string"
+        },
+        "town": {
+          "type": "string"
+        },
+        "county": {
+          "type": "string"
+        },
+        "postcode": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "UpdateOwnIntermediaryRequestDto": {
+      "type": "object",
+      "properties": {
+        "mortgageClub": {
+          "type": "string"
+        },
+        "authorisedPrincipal": {
+          "type": "string"
+        },
+        "networks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "accessType": {
+          "$ref": "#/definitions/AccessType"
+        },
+        "allowAccessTypeOverride": {
+          "type": "boolean"
+        },
+        "notificationEmailAddress": {
+          "type": "string"
+        },
+        "authorisedDomains": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "UpdateReviewDto": {
+      "type": "object",
+      "properties": {
+        "rating": {
+          "format": "int32",
+          "description": "Represents the rating assigned in the context of a review.\nThe value typically ranges between 1 and 5, where 1 indicates the lowest rating\nand 5 indicates the highest rating.",
+          "type": "integer"
+        },
+        "comment": {
+          "description": "Represents the text content of a review providing detailed feedback or observations.\nTypically captures user experiences, opinions, or suggestions regarding a subject.",
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "UpdateSelfBrokerRequestDto": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "middleName": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "salutation": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        },
+        "individualReferenceNumber": {
+          "type": "string"
+        },
+        "locationId": {
+          "type": "string"
+        },
+        "tradingNameId": {
+          "type": "string"
+        },
+        "workingPostcode": {
+          "type": "string"
+        },
+        "userIdsAbleToAccess": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "accessType": {
+          "$ref": "#/definitions/AccessType"
+        },
+        "dateOfBirth": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "preferredSourcingSystem": {
+          "$ref": "#/definitions/SourcingSystem"
+        },
+        "betaEnabled": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "UpdateTradingNameRequestDto": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "ValuationInfoDto": {
+      "type": "object",
+      "properties": {
+        "pvqEmailAddress": {
+          "type": "string"
+        },
+        "cancellationsEmail": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "VerificationState": {
+      "enum": [
+        "Submitted",
+        "DomainVerified",
+        "DomainFailed",
+        "DomainFaulted",
+        "EidVerified",
+        "EidFailed",
+        "EidPending",
+        "EidFaulted",
+        "ManuallyVerified",
+        "AutomatedVerificationFailed"
+      ],
+      "type": "string"
     }
-  }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Authorization header using the Bearer scheme"
+    }
+  },
+  "security": [
+    {
+      "Bearer": [ ]
+    }
+  ]
 }
