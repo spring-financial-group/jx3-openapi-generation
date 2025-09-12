@@ -15,7 +15,8 @@
           "models": "",
           "supportingFiles": "JSON.java",
           "modelTests": "false",
-          "modelDocs": "false"
+          "modelDocs": "false",
+          "enumPropertyNaming": "legacy"
         }
       }
     }
