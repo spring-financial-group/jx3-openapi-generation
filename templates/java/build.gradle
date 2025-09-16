@@ -27,6 +27,8 @@ publishing {
                 username = "{{ .GitUser }}"
                 password = "{{ .GitToken }}"
             }
+             // Only generate SHA-256 checksum to reduce unnecessary files/calls
+            checksumPolicy = 'sha256'
         }
     }
     publications {
