@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	packagingFilesDir = "/templates/angular"
+	packagingFilesDir = "./templates/angular"
 )
 
 // Paths for use in generating angular packages

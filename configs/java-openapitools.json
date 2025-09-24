@@ -16,7 +16,7 @@
         },
         "globalProperty": {
           "models": "",
-          "supportingFiles": "JSON.java",
+          "supportingFiles": "JSON.java,models/AbstractOpenApiSchema.java",
           "modelTests": "false",
           "modelDocs": "false"
         }

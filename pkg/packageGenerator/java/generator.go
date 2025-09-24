@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	packagingFilesDir = "/templates/java"
+	packagingFilesDir = "./templates/java"
 )
 
 type Generator struct {
