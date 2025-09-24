@@ -11,7 +11,7 @@ import (
 
 const (
 	OpenAPIConfigFileName = "openapitools.json"
-	ConfigsDir            = "./configs"
+	ConfigsDir            = "/configs"
 )
 
 type Config struct {
