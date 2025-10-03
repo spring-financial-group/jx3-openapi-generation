@@ -1,3 +1,4 @@
+//nolint:staticcheck // package name _go is required to avoid conflict with Go keyword
 package _go
 
 import (
