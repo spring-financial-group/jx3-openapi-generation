@@ -9,15 +9,15 @@ import (
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/openapitools"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/angular"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/csharp"
-	_go "github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/go"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/java"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/javascript"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/python"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/rust"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/typescript"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/angular"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/csharp"
+	_go "github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/go"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/java"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/javascript"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/python"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/rust"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/typescript"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/helper"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/templates"
@@ -130,7 +130,7 @@ func (o *PackageOptions) InitialiseGenerators() error {
 			return errors.Wrapf(err, "failed to get config for language %s", language)
 		}
 
-		baseGenerator, err := packageGenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.GitUser, o.SpecPath, o.PackageName, config)
+		baseGenerator, err := packagegenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.GitUser, o.SpecPath, o.PackageName, config)
 		if err != nil {
 			return errors.Wrapf(err, "failed to create base generator for %s", language)
 		}

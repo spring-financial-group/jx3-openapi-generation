@@ -1,4 +1,4 @@
-package packageGenerator
+package packagegenerator
 
 import (
 	"github.com/pkg/errors"

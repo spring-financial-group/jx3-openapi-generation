@@ -19,7 +19,7 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/git"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/scmClient/github"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 )
@@ -31,12 +31,12 @@ const (
 )
 
 type Generator struct {
-	*packageGenerator.BaseGenerator
+	*packagegenerator.BaseGenerator
 	Git domain.Gitter
 	Scm domain.ScmClient
 }
 
-func NewGenerator(baseGenerator *packageGenerator.BaseGenerator) *Generator {
+func NewGenerator(baseGenerator *packagegenerator.BaseGenerator) *Generator {
 	return &Generator{
 		BaseGenerator: baseGenerator,
 		Git:           git.NewClient(),
