@@ -7,9 +7,9 @@ type CommandRunner interface {
 	ExecuteAndLog(dir, name string, args ...string) error
 }
 
-type ErrCommandFailed struct {
+type CommandFailedError struct {
 }
 
-func (e *ErrCommandFailed) Error() string {
+func (e *CommandFailedError) Error() string {
 	return "stderr indicates command failed"
 }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
 	"github.com/spring-financial-group/mqa-logging/pkg/log"
 	"path/filepath"
 	"strings"
@@ -27,10 +27,10 @@ const (
 )
 
 type Generator struct {
-	*packageGenerator.BaseGenerator
+	*packagegenerator.BaseGenerator
 }
 
-func NewGenerator(baseGenerator *packageGenerator.BaseGenerator) *Generator {
+func NewGenerator(baseGenerator *packagegenerator.BaseGenerator) *Generator {
 	return &Generator{
 		BaseGenerator: baseGenerator,
 	}

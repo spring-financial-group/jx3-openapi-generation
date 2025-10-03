@@ -136,7 +136,7 @@ func (o *Options) getVariablesFromEnvironment() error {
 		missingVariables = append(missingVariables, gitTokenKey)
 	}
 	if len(missingVariables) > 0 {
-		return &domain.ErrEnvironmentVariableNotFound{VariableNames: missingVariables}
+		return &domain.EnvironmentVariableNotFoundError{VariableNames: missingVariables}
 	}
 	return nil
 }
@@ -152,7 +152,7 @@ func (o *Options) validateSpecificationLocation() error {
 		return errors.Wrap(err, "failed to check if specification exists")
 	}
 	if !exists {
-		return errors.Wrap(&domain.ErrFileNotFound{FilePath: o.SpecPath}, "failed to check if specification exists")
+		return errors.Wrap(&domain.FileNotFoundError{FilePath: o.SpecPath}, "failed to check if specification exists")
 	}
 	o.SpecPath = absPath
 	log.Logger().Infof("%sSpecification found at %s%s", utils.Cyan, absPath, utils.Reset)

@@ -12,8 +12,8 @@ import (
 
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/openapitools"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/java"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/java"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -97,7 +97,7 @@ func TestJavaGeneratorFixesIssues(t *testing.T) {
 					InputSpec: specFile,
 					Output:    outputDir,
 					AdditionalProperties: map[string]string{
-						"library":             "okhttp-gson",
+						"library":              "okhttp-gson",
 						"serializationLibrary": "gson",
 					},
 				},
@@ -106,9 +106,9 @@ func TestJavaGeneratorFixesIssues(t *testing.T) {
 	}
 
 	// Create base generator
-	baseGen, err := packageGenerator.NewBaseGenerator(
+	baseGen, err := packagegenerator.NewBaseGenerator(
 		"1.0.0-test",
-		"test-service", 
+		"test-service",
 		"test-owner",
 		"test-repo",
 		"test-token",
@@ -123,7 +123,7 @@ func TestJavaGeneratorFixesIssues(t *testing.T) {
 	javaGen := java.NewGenerator(baseGen)
 
 	// Set the dynamic config variables that the Java generator normally sets
-	cfg.GeneratorCLI.Generators["java"].AdditionalProperties["basePackage"] = "mqube.test-service" 
+	cfg.GeneratorCLI.Generators["java"].AdditionalProperties["basePackage"] = "mqube.test-service"
 	cfg.GeneratorCLI.Generators["java"].AdditionalProperties["modelPackage"] = "mqube.test-service.models"
 
 	// Generate the package - this is what was failing before
@@ -158,14 +158,14 @@ func TestJavaGeneratorFixesIssues(t *testing.T) {
 		contentStr := string(content)
 
 		// These were the specific issues that caused compilation failures
-		assert.Contains(t, contentStr, "extends AbstractOpenApiSchema", 
+		assert.Contains(t, contentStr, "extends AbstractOpenApiSchema",
 			"PurchasePrice should extend AbstractOpenApiSchema")
-		assert.Contains(t, contentStr, "super.setActualInstance", 
+		assert.Contains(t, contentStr, "super.setActualInstance",
 			"PurchasePrice should call super.setActualInstance (this was failing)")
-		assert.Contains(t, contentStr, "super.getActualInstance", 
+		assert.Contains(t, contentStr, "super.getActualInstance",
 			"PurchasePrice should call super.getActualInstance (this was failing)")
 
-		// Check RequestedLoanAmount model  
+		// Check RequestedLoanAmount model
 		loanAmountPath := filepath.Join(modelsDir, "RequestedLoanAmount.java")
 		assert.FileExists(t, loanAmountPath, "RequestedLoanAmount.java should be generated")
 
@@ -173,9 +173,9 @@ func TestJavaGeneratorFixesIssues(t *testing.T) {
 		require.NoError(t, err)
 		contentStr = string(content)
 
-		assert.Contains(t, contentStr, "extends AbstractOpenApiSchema", 
+		assert.Contains(t, contentStr, "extends AbstractOpenApiSchema",
 			"RequestedLoanAmount should extend AbstractOpenApiSchema")
-		assert.Contains(t, contentStr, "super.setActualInstance", 
+		assert.Contains(t, contentStr, "super.setActualInstance",
 			"RequestedLoanAmount should call super.setActualInstance (this was failing)")
 	})
 
@@ -217,7 +217,7 @@ func TestJavaGeneratorFixesIssues(t *testing.T) {
 		}
 
 		buildContent = strings.Join(filteredLines, "\n")
-		
+
 		// Write the build file
 		buildPath := filepath.Join(generatedDir, "build.gradle")
 		err = os.WriteFile(buildPath, []byte(buildContent), 0644)
@@ -235,7 +235,7 @@ func TestJavaGeneratorFixesIssues(t *testing.T) {
 
 		if err != nil {
 			t.Logf("Gradle output:\n%s", string(output))
-			
+
 			// Check for the specific errors that were happening before
 			outputStr := string(output)
 			if strings.Contains(outputStr, "cannot find symbol: class AbstractOpenApiSchema") {
@@ -248,7 +248,7 @@ func TestJavaGeneratorFixesIssues(t *testing.T) {
 				t.Fatal("Still getting @Override method signature errors - the fix didn't work")
 			}
 		}
-		
+
 		assert.NoError(t, err, "Java compilation should succeed with the fixes applied")
 	})
 }

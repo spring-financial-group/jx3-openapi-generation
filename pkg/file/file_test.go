@@ -3,12 +3,12 @@
 package file_test
 
 import (
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/file"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
-	"github.com/stretchr/testify/assert"
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/file"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestFile_ReplaceInFile(t *testing.T) {
@@ -49,8 +49,7 @@ func TestFile_ReplaceInFile(t *testing.T) {
 		},
 	}
 
-	tmpDir := utils.CreateTestTmpDir(t, "file-replace-in-file")
-	defer os.RemoveAll(tmpDir)
+	tmpDir := t.TempDir()
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {

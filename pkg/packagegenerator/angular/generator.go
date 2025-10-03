@@ -1,10 +1,10 @@
-package javascript
+package angular
 
 import (
 	"fmt"
 	"github.com/pkg/errors"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
 	"github.com/spring-financial-group/mqa-logging/pkg/log"
 	"path/filepath"
 	"strings"
@@ -12,55 +12,75 @@ import (
 )
 
 const (
-	packagingFilesDir = "/templates/javascript"
+	packagingFilesDir = "/templates/angular"
 )
 
 // Paths for use in generating angular packages
 var (
 	npmrcPath       = filepath.Join(packagingFilesDir, ".npmrc")
 	packageJSONPath = filepath.Join(packagingFilesDir, "package.json")
+	tsConfigPath    = filepath.Join(packagingFilesDir, "tsconfig.json")
 )
 
 // Packages installed by the generator
 const (
-	errNPMVersionAlreadyExists = "npm ERR! publish fail Cannot publish over existing version"
+	RXJS          = "rxjs@6.6.7"
+	Zone          = "zone.js@0.9.1"
+	AngularCore   = "@angular/core@8.2.14"
+	AngularCommon = "@angular/common@8.2.14"
+
+	errNPMVersionAlreadyExists = "Cannot publish over existing version"
 )
 
 type Generator struct {
-	*packageGenerator.BaseGenerator
+	*packagegenerator.BaseGenerator
 }
 
-func NewGenerator(baseGenerator *packageGenerator.BaseGenerator) *Generator {
+func NewGenerator(baseGenerator *packagegenerator.BaseGenerator) *Generator {
 	return &Generator{
 		BaseGenerator: baseGenerator,
 	}
 }
 
 func (g *Generator) GeneratePackage(outputDir string) (string, error) {
-	packageDir, err := g.BaseGenerator.GeneratePackage(filepath.Join(outputDir, g.GetPackageName()), domain.Javascript)
+	packageDir, err := g.BaseGenerator.GeneratePackage(filepath.Join(outputDir, g.GetPackageName()), domain.Angular)
 	if err != nil {
 		return "", err
 	}
 
-	err = g.Cmd.ExecuteAndLog(packageDir, "npm", "install")
-	if err != nil {
-		return "", errors.Wrap(err, "failed to run npm install")
+	if err = g.FileIO.TemplateFiles(packageDir, g, packageJSONPath, tsConfigPath); err != nil {
+		return "", err
 	}
 
-	err = g.Cmd.ExecuteAndLog(packageDir, "npm", "run", "build")
+	err = g.installNPMPackages(packageDir, RXJS, Zone, AngularCore, AngularCommon)
 	if err != nil {
-		return "", errors.Wrap(err, "failed to run npm build")
+		return "", err
 	}
 
-	distDir := filepath.Join(packageDir, "dist")
+	err = g.Cmd.ExecuteAndLog(packageDir, "ngc")
+	if err != nil {
+		return "", errors.Wrap(err, "failed to run ngc")
+	}
+
+	distDir := filepath.Join(outputDir, "dist")
 	if err = g.FileIO.TemplateFiles(distDir, g, packageJSONPath, npmrcPath); err != nil {
 		return "", err
 	}
 	return distDir, nil
 }
 
+func (g *Generator) installNPMPackages(dir string, packages ...string) error {
+	for _, pkg := range packages {
+		err := g.Cmd.ExecuteAndLog(dir, "npm", "install", "--save", pkg)
+		if err != nil {
+			return errors.Wrapf(err, "failed to install %s", pkg)
+		}
+	}
+	return nil
+}
+
 func (g *Generator) GetPackageName() string {
-	return fmt.Sprintf("%s-javascript", g.RepoName)
+	return fmt.Sprintf("%s-angular", g.RepoName)
 }
 
 func (g *Generator) PushPackage(packageDir string) error {
