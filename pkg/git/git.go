@@ -2,7 +2,7 @@ package git
 
 import (
 	"github.com/pkg/errors"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandrunner"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"github.com/spring-financial-group/mqa-logging/pkg/log"
@@ -17,7 +17,7 @@ type Client struct {
 
 func NewClient() *Client {
 	return &Client{
-		cmd: commandRunner.NewCommandRunner(),
+		cmd: commandrunner.NewCommandRunner(),
 	}
 }
 

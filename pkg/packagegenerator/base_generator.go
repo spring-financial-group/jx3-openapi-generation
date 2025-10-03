@@ -2,7 +2,7 @@ package packagegenerator
 
 import (
 	"github.com/pkg/errors"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandrunner"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/file"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/openapitools"
@@ -33,7 +33,7 @@ func NewBaseGenerator(version, serviceName, repoOwner, repoName, gitToken, gitUs
 		GitToken:    gitToken,
 		SpecPath:    specPath,
 		PackageName: packageName,
-		Cmd:         commandRunner.NewCommandRunner(),
+		Cmd:         commandrunner.NewCommandRunner(),
 		FileIO:      file.NewFileIO(),
 		Cfg:         cfg,
 	}

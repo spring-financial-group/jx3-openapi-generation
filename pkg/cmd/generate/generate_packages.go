@@ -6,7 +6,7 @@ import (
 
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandrunner"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/openapitools"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
@@ -48,7 +48,7 @@ var (
 func NewCmdGeneratePackages(opts *Options) *cobra.Command {
 	o := &PackageOptions{
 		Options:   opts,
-		CmdRunner: commandRunner.NewCommandRunner(),
+		CmdRunner: commandrunner.NewCommandRunner(),
 	}
 
 	cmd := &cobra.Command{

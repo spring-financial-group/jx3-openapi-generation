@@ -1,4 +1,4 @@
-package commandRunner
+package commandrunner
 
 import (
 	"fmt"
