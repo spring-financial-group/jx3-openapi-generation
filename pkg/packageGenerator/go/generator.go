@@ -290,28 +290,28 @@ func (g *Generator) convertSwaggerV2toV3(data []byte) ([]byte, error) {
 		return response, err
 	}
 
-	// POST request
-	resp, err := http.Post("https://converter.swagger.io/api/convert", "application/json", bytes.NewBuffer(jsonBody))
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodPost, "https://converter.swagger.io/api/convert", bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return response, err
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			logrus.Warnf("Failed to close response body: %v", err)
-		}
-	}(resp.Body)
 
-	// read response to str
-	body := new(bytes.Buffer)
-	_, err = body.ReadFrom(resp.Body)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
-		return response, err
+		return nil, err
 	}
-	response = body.Bytes()
+	defer resp.Body.Close()
+
+	response, err = io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 
 	if resp.StatusCode != http.StatusOK {
-		return response, fmt.Errorf("failed to convert spec")
+		return response, errors.New("failed to convert spec")
 	}
 
 	return response, nil
