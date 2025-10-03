@@ -190,8 +190,9 @@ linters:
           deny:
           - pkg: github.com/sirupsen/logrus
             desc: Use github.com/rs/zerolog/log instead, logrus is not our preferred logger
-          - pkg: github.com/spring-financial-group/mqa-logging
-            desc: Use github.com/rs/zerolog/log instead, mqa-logging is for CLI apps only
+          # This is a cli app
+          # - pkg: github.com/spring-financial-group/mqa-logging
+          #  desc: Use github.com/rs/zerolog/log instead, mqa-logging is for CLI apps only
         "non-test files":
           files:
           - "!$test"
