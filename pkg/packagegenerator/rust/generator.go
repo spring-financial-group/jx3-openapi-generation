@@ -123,7 +123,7 @@ func (g *Generator) createFreshDir(packageDir string) error {
 	}
 
 	// Create a fresh directory
-	if err := os.MkdirAll(packageDir, 0755); err != nil {
+	if err := os.MkdirAll(packageDir, 0750); err != nil {
 		return errors.Wrapf(err, "failed to create directory: %s", packageDir)
 	}
 	fmt.Println("Created directory:", packageDir)

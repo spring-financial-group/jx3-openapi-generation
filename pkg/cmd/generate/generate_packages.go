@@ -112,7 +112,7 @@ func (o *PackageOptions) Run(languages []string) error {
 func (o *PackageOptions) ValidateLanguages(languages []string) error {
 	for _, l := range languages {
 		if _, ok := o.languageGenerators[l]; !ok {
-			return &domain.ErrUnsupportedLanguage{Language: l}
+			return &domain.UnsupportedLanguageError{Language: l}
 		}
 	}
 	return nil

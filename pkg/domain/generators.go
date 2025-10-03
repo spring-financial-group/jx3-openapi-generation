@@ -22,10 +22,10 @@ type PackageGenerator interface {
 	GetPackageName() string
 }
 
-type ErrUnsupportedLanguage struct {
+type UnsupportedLanguageError struct {
 	Language string
 }
 
-func (e *ErrUnsupportedLanguage) Error() string {
+func (e *UnsupportedLanguageError) Error() string {
 	return fmt.Sprintf("unsupported language: %s", e.Language)
 }

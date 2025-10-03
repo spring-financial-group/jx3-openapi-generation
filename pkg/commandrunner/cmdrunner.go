@@ -1,12 +1,14 @@
 package commandrunner
 
 import (
+	"context"
 	"fmt"
+	"os/exec"
+	"strings"
+
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"github.com/spring-financial-group/mqa-logging/pkg/log"
-	"os/exec"
-	"strings"
 )
 
 type CommandRunner struct{}
@@ -16,7 +18,7 @@ func NewCommandRunner() domain.CommandRunner {
 }
 
 func (c *CommandRunner) Execute(dir, name string, args ...string) (string, error) {
-	e := exec.Command(name, args...)
+	e := exec.CommandContext(context.Background(), name, args...)
 	e.Dir = dir
 	out, err := e.CombinedOutput()
 	output := strings.TrimSpace(string(out))

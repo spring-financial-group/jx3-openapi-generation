@@ -212,7 +212,7 @@ func (g *Generator) createFreshDir(packageDir string) error {
 	}
 
 	// Create a fresh directory
-	if err := os.MkdirAll(packageDir, 0755); err != nil {
+	if err := os.MkdirAll(packageDir, 0750); err != nil {
 		return errors.Wrapf(err, "failed to create directory: %s", packageDir)
 	}
 	fmt.Println("Created directory:", packageDir)
@@ -337,7 +337,7 @@ func (g *Generator) getSwaggerVersion(data []byte) (string, error) {
 	// Get the version
 	version, ok := swaggerDict["swagger"].(string)
 	if !ok {
-		return "", fmt.Errorf("failed to get swagger version")
+		return "", errors.New("failed to get swagger version")
 	}
 
 	return version, nil
