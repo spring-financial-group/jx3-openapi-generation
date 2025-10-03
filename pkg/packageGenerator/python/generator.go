@@ -3,6 +3,9 @@ package python
 import (
 	"context"
 	"fmt"
+	"path/filepath"
+	"strings"
+
 	gh "github.com/google/go-github/v47/github"
 	"github.com/pkg/errors"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
@@ -11,8 +14,6 @@ import (
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/scmClient/github"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"k8s.io/apimachinery/pkg/util/json"
-	"path/filepath"
-	"strings"
 )
 
 const (
@@ -59,13 +60,13 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	packageJsonPath, err := g.updatePackagesJSON(repoDir)
+	packageJSONPath, err := g.updatePackagesJSON(repoDir)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to update packages.json")
 	}
 
 	readmePath := fmt.Sprintf("%s_README.md", g.GetPackageName())
-	err = g.Git.AddFiles(repoDir, packageJsonPath, g.GetPackageName(), readmePath)
+	err = g.Git.AddFiles(repoDir, packageJSONPath, g.GetPackageName(), readmePath)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to add package to Git")
 	}
