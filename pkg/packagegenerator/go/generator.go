@@ -17,12 +17,12 @@ import (
 	gh "github.com/google/go-github/v47/github"
 	"github.com/oapi-codegen/oapi-codegen/v2/pkg/codegen"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/git"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/scmClient/github"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
+	"github.com/spring-financial-group/mqa-logging/pkg/log"
 )
 
 const (
@@ -208,14 +208,14 @@ func (g *Generator) createFreshDir(packageDir string) error {
 		if err := os.RemoveAll(packageDir); err != nil {
 			return errors.Wrapf(err, "failed to remove existing directory: %s", packageDir)
 		}
-		logrus.Infof("Removed existing directory: %s", packageDir)
+		log.Logger().Infof("Removed existing directory: %s", packageDir)
 	}
 
 	// Create a fresh directory
 	if err := os.MkdirAll(packageDir, 0750); err != nil {
 		return errors.Wrapf(err, "failed to create directory: %s", packageDir)
 	}
-	fmt.Println("Created directory:", packageDir)
+	log.Logger().Info("Created directory:", packageDir)
 
 	return nil
 }
@@ -248,7 +248,7 @@ func (g *Generator) generateCode() (string, error) {
 	}
 
 	if strings.HasPrefix(swagger.OpenAPI, "3.1.") {
-		logrus.Warnf("You are using an OpenAPI 3.1.x specification, which is not yet supported by oapi-codegen. Some functionality may not be available. Until oapi-codegen supports OpenAPI 3.1, it is recommended to downgrade your spec to 3.0.x")
+		log.Logger().Warnf("You are using an OpenAPI 3.1.x specification, which is not yet supported by oapi-codegen. Some functionality may not be available. Until oapi-codegen supports OpenAPI 3.1, it is recommended to downgrade your spec to 3.0.x")
 	}
 
 	swagger, err = loader.LoadFromData(swaggerData)

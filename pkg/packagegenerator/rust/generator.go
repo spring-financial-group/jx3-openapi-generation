@@ -9,12 +9,12 @@ import (
 
 	gh "github.com/google/go-github/v47/github"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/git"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/scmClient/github"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
+	"github.com/spring-financial-group/mqa-logging/pkg/log"
 )
 
 const (
@@ -119,14 +119,14 @@ func (g *Generator) createFreshDir(packageDir string) error {
 		if err := os.RemoveAll(packageDir); err != nil {
 			return errors.Wrapf(err, "failed to remove existing directory: %s", packageDir)
 		}
-		logrus.Infof("Removed existing directory: %s", packageDir)
+		log.Logger().Infof("Removed existing directory: %s", packageDir)
 	}
 
 	// Create a fresh directory
 	if err := os.MkdirAll(packageDir, 0750); err != nil {
 		return errors.Wrapf(err, "failed to create directory: %s", packageDir)
 	}
-	fmt.Println("Created directory:", packageDir)
+	log.Logger().Info("Created directory:", packageDir)
 
 	return nil
 }
