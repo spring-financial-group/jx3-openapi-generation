@@ -179,3 +179,12 @@ docs: bin/docs ## update docs
 	@./bin/docs --target=./docs/man/man1 --kind=man
 	@rm -f ./bin/docs
 
+.PHONY: test-local
+test-local: build ## Run package generation test locally with script
+	./scripts/test-package-generation.sh
+
+.PHONY: test-podman
+test-podman: ## Run package generation test in Docker (replicates pipeline)
+	podman build -f Dockerfile.test -t $(NAME):test .
+	podman run --rm $(NAME):test
+

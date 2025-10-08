@@ -1,0 +1,28 @@
+FROM golang:1.24
+
+# Set working directory
+WORKDIR /workspace/source
+
+# Copy source code
+COPY . /workspace/source
+
+# Make the test script executable
+RUN chmod +x ./scripts/test-package-generation.sh
+
+# Ensure swagger.json exists in the expected location for the tool
+RUN if [ ! -f "/swagger.json" ] && [ -f "./mocks/swagger.json" ]; then \
+        cp ./mocks/swagger.json /swagger.json; \
+    fi
+
+# Set default environment variables
+ENV SwaggerServiceName=OpenAPIPkgGenerationMock
+ENV SpecPath=/swagger.json
+ENV VERSION=0.0.0-LOCAL-TEST-SNAPSHOT
+ENV REPO_OWNER=spring-financial-group
+ENV REPO_NAME=test-service
+ENV PackageName=Client
+ENV GIT_AUTHOR_NAME=local-test-bot
+ENV GIT_AUTHOR_EMAIL=test@example.com
+
+# Default command runs the test script
+CMD ["./scripts/test-package-generation.sh"]
