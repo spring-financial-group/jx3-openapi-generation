@@ -47,7 +47,7 @@ cp ./build/jx3-openapi-generation ./mocks/
 if [ ! -f "./mocks/swagger.json" ]; then
     echo "⚠️  swagger.json not found in mocks directory"
     echo "Creating a minimal swagger.json for testing..."
-    cat > ./mocks/swagger.json << 'EOF'
+    cat > ./swagger.json << 'EOF'
 {
   "swagger": "2.0",
   "info": {
