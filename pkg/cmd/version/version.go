@@ -3,11 +3,11 @@ package version
 import (
 	"fmt"
 
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/rootcmd"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/helper"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/templates"
-	"github.com/spring-financial-group/mqa-logging/pkg/log"
 )
 
 // Build information. Populated at build-time.
@@ -66,7 +66,7 @@ func NewCmdVersion() (*cobra.Command, *Options) {
 }
 
 func (o *Options) Run() error {
-	log.Logger().Info(GetVersion())
+	log.Info().Msg(GetVersion())
 	return nil
 }
 

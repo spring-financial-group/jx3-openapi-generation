@@ -2,13 +2,14 @@ package angular
 
 import (
 	"fmt"
-	"github.com/pkg/errors"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
-	"github.com/spring-financial-group/mqa-logging/pkg/log"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
 )
 
 const (
@@ -85,11 +86,11 @@ func (g *Generator) GetPackageName() string {
 
 func (g *Generator) PushPackage(packageDir string) error {
 	out, err := g.Cmd.Execute(packageDir, "npm", "publish")
-	log.Logger().Info(out)
+	log.Info().Msg(out)
 	if err != nil {
 		// NPM returns the error message on STDOUT, so we need to check there for the error
 		if strings.Contains(out, errNPMVersionAlreadyExists) {
-			log.Logger().Warnf("Package already exists at version %s, incrementing version and trying again", g.Version)
+			log.Warn().Msgf("Package already exists at version %s, incrementing version and trying again", g.Version)
 			err = g.incrementPackageVersion(packageDir)
 			if err != nil {
 				return err
@@ -106,7 +107,7 @@ func (g *Generator) incrementPackageVersion(packageDir string) error {
 	currentV := g.Version
 	newV := fmt.Sprintf("%s-%d", currentV, time.Now().Unix())
 
-	log.Logger().Infof("Incrementing version %s to %s", currentV, newV)
+	log.Info().Msgf("Incrementing version %s to %s", currentV, newV)
 	err := g.Cmd.ExecuteAndLog(packageDir, "npm", "version", newV)
 	if err != nil {
 		return errors.Wrapf(err, "failed to increment version to %s", newV)

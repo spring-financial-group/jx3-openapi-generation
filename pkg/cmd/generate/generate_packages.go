@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandrunner"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
@@ -21,7 +22,6 @@ import (
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/helper"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/templates"
-	"github.com/spring-financial-group/mqa-logging/pkg/log"
 )
 
 // PackageOptions contains the common options for the command
@@ -87,7 +87,7 @@ func (o *PackageOptions) Run(languages []string) error {
 	defer o.FileIO.DeferRemove(tmpDir)
 
 	for _, l := range languages {
-		log.Logger().Infof("%sGenerating %s client package%s", utils.Green, l, utils.Reset)
+		log.Info().Msgf("%sGenerating %s client package%s", utils.Green, l, utils.Reset)
 		outputDir, err := o.FileIO.MkdirAll(filepath.Join(tmpDir, l), 0700)
 		if err != nil {
 			return errors.Wrapf(err, "failed to make output dir for %s", l)
@@ -98,14 +98,14 @@ func (o *PackageOptions) Run(languages []string) error {
 			return errors.Wrapf(err, "failed to generate %s package", l)
 		}
 
-		log.Logger().Infof("%sPushing %s package%s", utils.Green, l, utils.Reset)
+		log.Info().Msgf("%sPushing %s package%s", utils.Green, l, utils.Reset)
 		err = o.languageGenerators[l].PushPackage(packageDir)
 		if err != nil {
 			return errors.Wrapf(err, "failed to push %s package", l)
 		}
 	}
 
-	log.Logger().Infof("%sSuccessfully generated and pushed packages for languages: %s%s", utils.Green, strings.Join(languages, ", "), utils.Reset)
+	log.Info().Msgf("%sSuccessfully generated and pushed packages for languages: %s%s", utils.Green, strings.Join(languages, ", "), utils.Reset)
 	return nil
 }
 
