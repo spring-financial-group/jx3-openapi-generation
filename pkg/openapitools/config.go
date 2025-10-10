@@ -32,7 +32,7 @@ type Generator struct {
 	GitRepoID               string            `json:"gitRepoId,omitempty"`
 	GitUserID               string            `json:"gitUserId,omitempty"`
 	EnablePostProcessFile   bool              `json:"enablePostProcessFile,omitempty"`
-	RemoveOperationIDPrefix bool              `json:"removeOperationIDPrefix,omitempty"`
+	RemoveOperationIDPrefix bool              `json:"removeOperationIdPrefix,omitempty"`
 	GlobalProperty          map[string]string `json:"globalProperty,omitempty"`
 	AdditionalProperties    map[string]string `json:"additionalProperties,omitempty"`
 }
