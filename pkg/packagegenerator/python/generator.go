@@ -2,6 +2,7 @@ package python
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -13,7 +14,6 @@ import (
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/scmClient/github"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
-	"k8s.io/apimachinery/pkg/util/json"
 )
 
 const (

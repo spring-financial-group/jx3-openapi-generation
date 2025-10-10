@@ -13,7 +13,6 @@ require (
 	github.com/spring-financial-group/mqa-helpers v0.0.0-20210207153409-87ea55a7a2e1
 	github.com/stretchr/testify v1.9.0
 	golang.org/x/oauth2 v0.0.0-20210628180205-a41e5a781914
-	k8s.io/apimachinery v0.20.2
 )
 
 require (
