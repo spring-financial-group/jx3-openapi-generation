@@ -28,6 +28,7 @@ type Options struct {
 	SpecPath           string
 	GitUser            string
 	GitToken           string
+	SkipPush           bool
 
 	FileIO      domain.FileIO
 	PackageName string
@@ -43,6 +44,7 @@ const (
 	gitUserKey            = "GIT_USER"
 	gitTokenKey           = "GIT_TOKEN"
 	packageNameKey        = "PackageName"
+	skipPushKey           = "SKIP_PUSH"
 )
 
 const (
@@ -134,6 +136,10 @@ func (o *Options) getVariablesFromEnvironment() error {
 	}
 	if o.GitToken = os.Getenv(gitTokenKey); o.GitToken == "" {
 		missingVariables = append(missingVariables, gitTokenKey)
+	}
+	// Check if SKIP_PUSH is set to "true"
+	if skipPush := os.Getenv(skipPushKey); skipPush == "true" {
+		o.SkipPush = true
 	}
 	if len(missingVariables) > 0 {
 		return &domain.ErrEnvironmentVariableNotFound{VariableNames: missingVariables}

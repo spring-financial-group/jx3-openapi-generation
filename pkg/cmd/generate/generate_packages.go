@@ -98,14 +98,22 @@ func (o *PackageOptions) Run(languages []string) error {
 			return errors.Wrapf(err, "failed to generate %s package", l)
 		}
 
-		log.Logger().Infof("%sPushing %s package%s", utils.Green, l, utils.Reset)
-		err = o.languageGenerators[l].PushPackage(packageDir)
-		if err != nil {
-			return errors.Wrapf(err, "failed to push %s package", l)
+		if !o.SkipPush {
+			log.Logger().Infof("%sPushing %s package%s", utils.Green, l, utils.Reset)
+			err = o.languageGenerators[l].PushPackage(packageDir)
+			if err != nil {
+				return errors.Wrapf(err, "failed to push %s package", l)
+			}
+		} else {
+			log.Logger().Infof("%sSkipping push for %s package (SKIP_PUSH=true)%s", utils.Cyan, l, utils.Reset)
 		}
 	}
 
-	log.Logger().Infof("%sSuccessfully generated and pushed packages for languages: %s%s", utils.Green, strings.Join(languages, ", "), utils.Reset)
+	if o.SkipPush {
+		log.Logger().Infof("%sSuccessfully generated packages for languages: %s%s", utils.Green, strings.Join(languages, ", "), utils.Reset)
+	} else {
+		log.Logger().Infof("%sSuccessfully generated and pushed packages for languages: %s%s", utils.Green, strings.Join(languages, ", "), utils.Reset)
+	}
 	return nil
 }
 

@@ -1,0 +1,33 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(go list:*)",
+      "Bash(go get:*)",
+      "Bash(go mod:*)",
+      "Bash(grep:*)",
+      "Bash(npx @openapitools/openapi-generator-cli:*)",
+      "Bash(find:*)",
+      "Bash(rm:*)",
+      "Bash(sed:*)",
+      "Bash(make:*)",
+      "Bash(go build:*)",
+      "Bash(git checkout:*)",
+      "WebFetch(domain:openapi-generator.tech)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(./gradlew:*)",
+      "Bash(chmod:*)",
+      "Bash(ls:*)",
+      "Bash(go test:*)",
+      "Bash(export:*)",
+      "Bash(export REPO_OWNER=\"test-owner\")",
+      "Bash(export REPO_NAME=\"test-repo\")",
+      "Bash(export SwaggerServiceName=\"TestService\")",
+      "Bash(export SpecPath=\"./mocks/swagger.json\")",
+      "Bash(export GIT_USER=\"test\")",
+      "Bash(export GIT_TOKEN=\"test\")",
+      "Bash(./build/jx3-openapi-generation generate:*)"
+    ],
+    "deny": []
+  }
+}
