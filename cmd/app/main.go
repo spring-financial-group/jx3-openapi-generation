@@ -1,14 +1,14 @@
 package app
 
 import (
+	"github.com/rs/zerolog/log"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/cmd"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/cmd/version"
-	"github.com/spring-financial-group/mqa-logging/pkg/log"
 )
 
 // Run runs the command, if args are not nil they will be set on the command
 func Run(args []string) error {
-	log.Logger().Infof(`
+	log.Info().Msgf(`
 ___  ___                      _     _ _          _____                                     
 |  \/  |                     | |   (_) |        /  ___|                                    
 | .  . | _____   _____  ___  | |    _| | _____  \ '--.__      ____ _  __ _  __ _  ___ _ __

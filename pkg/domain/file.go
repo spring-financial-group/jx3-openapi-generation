@@ -43,19 +43,19 @@ type FileIO interface {
 	TemplateFilesInDir(srcDir, dstDir string, obj any) error
 }
 
-type ErrFileNotFound struct {
+type FileNotFoundError struct {
 	FilePath string
 }
 
-func (f *ErrFileNotFound) Error() string {
+func (f *FileNotFoundError) Error() string {
 	return fmt.Sprintf("file not found: %s", f.FilePath)
 }
 
-type ErrEnvironmentVariableNotFound struct {
+type EnvironmentVariableNotFoundError struct {
 	VariableNames []string
 }
 
-func (e *ErrEnvironmentVariableNotFound) Error() string {
+func (e *EnvironmentVariableNotFoundError) Error() string {
 	variableNamesCommaSeparated := strings.Join(e.VariableNames, ", ")
 	return fmt.Sprintf("environment variables not found: %s", variableNamesCommaSeparated)
 }

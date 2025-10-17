@@ -1,3 +1,4 @@
+//nolint:staticcheck // package name _go is required to avoid conflict with Go keyword
 package _go
 
 import (
@@ -16,10 +17,10 @@ import (
 	gh "github.com/google/go-github/v47/github"
 	"github.com/oapi-codegen/oapi-codegen/v2/pkg/codegen"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
+	"github.com/rs/zerolog/log"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/git"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/scmClient/github"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 )
@@ -31,12 +32,12 @@ const (
 )
 
 type Generator struct {
-	*packageGenerator.BaseGenerator
+	*packagegenerator.BaseGenerator
 	Git domain.Gitter
 	Scm domain.ScmClient
 }
 
-func NewGenerator(baseGenerator *packageGenerator.BaseGenerator) *Generator {
+func NewGenerator(baseGenerator *packagegenerator.BaseGenerator) *Generator {
 	return &Generator{
 		BaseGenerator: baseGenerator,
 		Git:           git.NewClient(),
@@ -207,14 +208,14 @@ func (g *Generator) createFreshDir(packageDir string) error {
 		if err := os.RemoveAll(packageDir); err != nil {
 			return errors.Wrapf(err, "failed to remove existing directory: %s", packageDir)
 		}
-		logrus.Infof("Removed existing directory: %s", packageDir)
+		log.Info().Msgf("Removed existing directory: %s", packageDir)
 	}
 
 	// Create a fresh directory
-	if err := os.MkdirAll(packageDir, 0755); err != nil {
+	if err := os.MkdirAll(packageDir, 0750); err != nil {
 		return errors.Wrapf(err, "failed to create directory: %s", packageDir)
 	}
-	fmt.Println("Created directory:", packageDir)
+	log.Info().Msg("Created directory:" + packageDir)
 
 	return nil
 }
@@ -247,7 +248,7 @@ func (g *Generator) generateCode() (string, error) {
 	}
 
 	if strings.HasPrefix(swagger.OpenAPI, "3.1.") {
-		logrus.Warnf("You are using an OpenAPI 3.1.x specification, which is not yet supported by oapi-codegen. Some functionality may not be available. Until oapi-codegen supports OpenAPI 3.1, it is recommended to downgrade your spec to 3.0.x")
+		log.Warn().Msg("You are using an OpenAPI 3.1.x specification, which is not yet supported by oapi-codegen. Some functionality may not be available. Until oapi-codegen supports OpenAPI 3.1, it is recommended to downgrade your spec to 3.0.x")
 	}
 
 	swagger, err = loader.LoadFromData(swaggerData)
@@ -290,28 +291,28 @@ func (g *Generator) convertSwaggerV2toV3(data []byte) ([]byte, error) {
 		return response, err
 	}
 
-	// POST request
-	resp, err := http.Post("https://converter.swagger.io/api/convert", "application/json", bytes.NewBuffer(jsonBody))
+	req, err := http.NewRequestWithContext(context.Background(), http.MethodPost, "https://converter.swagger.io/api/convert", bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return response, err
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			logrus.Warnf("Failed to close response body: %v", err)
-		}
-	}(resp.Body)
 
-	// read response to str
-	body := new(bytes.Buffer)
-	_, err = body.ReadFrom(resp.Body)
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Accept", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
 	if err != nil {
-		return response, err
+		return nil, err
 	}
-	response = body.Bytes()
+	defer resp.Body.Close()
+
+	response, err = io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
 
 	if resp.StatusCode != http.StatusOK {
-		return response, fmt.Errorf("failed to convert spec")
+		return response, errors.New("failed to convert spec")
 	}
 
 	return response, nil
@@ -336,7 +337,7 @@ func (g *Generator) getSwaggerVersion(data []byte) (string, error) {
 	// Get the version
 	version, ok := swaggerDict["swagger"].(string)
 	if !ok {
-		return "", fmt.Errorf("failed to get swagger version")
+		return "", errors.New("failed to get swagger version")
 	}
 
 	return version, nil

@@ -32,7 +32,7 @@ type Generator struct {
 	GitRepoID               string            `json:"gitRepoId,omitempty"`
 	GitUserID               string            `json:"gitUserId,omitempty"`
 	EnablePostProcessFile   bool              `json:"enablePostProcessFile,omitempty"`
-	RemoveOperationIdPrefix bool              `json:"removeOperationIdPrefix,omitempty"`
+	RemoveOperationIDPrefix bool              `json:"removeOperationIdPrefix,omitempty"`
 	GlobalProperty          map[string]string `json:"globalProperty,omitempty"`
 	AdditionalProperties    map[string]string `json:"additionalProperties,omitempty"`
 }
@@ -76,7 +76,7 @@ func (c *Config) WriteToCurrentWorkingDirectory() (string, error) {
 	}
 
 	path := filepath.Join("./", OpenAPIConfigFileName)
-	err = os.WriteFile(path, data, 0755)
+	err = os.WriteFile(path, data, 0600)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to write config to directory")
 	}

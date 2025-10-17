@@ -1,14 +1,15 @@
 package git
 
 import (
-	"github.com/pkg/errors"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
-	"github.com/spring-financial-group/mqa-logging/pkg/log"
 	"net/url"
 	"path/filepath"
 	"strings"
+
+	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandrunner"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 )
 
 type Client struct {
@@ -17,7 +18,7 @@ type Client struct {
 
 func NewClient() *Client {
 	return &Client{
-		cmd: commandRunner.NewCommandRunner(),
+		cmd: commandrunner.NewCommandRunner(),
 	}
 }
 
@@ -75,12 +76,12 @@ func (c *Client) GetDefaultBranchName(dir string) (string, error) {
 
 func (c *Client) log(message string) {
 	if message != "" {
-		log.Logger().Info(message)
+		log.Info().Msg(message)
 	}
 }
 
 func (c *Client) git(dir string, args ...string) (string, error) {
-	log.Logger().Infof("%sRunning command:%s git %s", utils.Cyan, utils.Reset, strings.Join(args, " "))
+	log.Info().Msgf("%sRunning command:%s git %s", utils.Cyan, utils.Reset, strings.Join(args, " "))
 	out, err := c.cmd.Execute(dir, "git", args...)
 	if err != nil {
 		return out, errors.Wrap(err, "failed to run git command")

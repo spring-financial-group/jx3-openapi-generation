@@ -9,9 +9,9 @@ import (
 	"text/template"
 
 	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
-	"github.com/spring-financial-group/mqa-logging/pkg/log"
 )
 
 type FileIO struct{}
@@ -46,7 +46,7 @@ func (f FileIO) ReplaceInFile(path, old, new string) error {
 }
 
 func (f FileIO) Copy(src string, dst string) (int64, error) {
-	log.Logger().Info(fmt.Sprintf("%sCopying %s to %s%s", utils.Cyan, src, dst, utils.Reset))
+	log.Info().Msg(fmt.Sprintf("%sCopying %s to %s%s", utils.Cyan, src, dst, utils.Reset))
 	sourceFileStat, err := os.Stat(src)
 	if err != nil {
 		return 0, err
@@ -63,7 +63,7 @@ func (f FileIO) Copy(src string, dst string) (int64, error) {
 	defer func(source *os.File) {
 		err := source.Close()
 		if err != nil {
-			log.Logger().Errorf("failed to close file %s: %s", src, err.Error())
+			log.Error().Msgf("failed to close file %s: %s", src, err.Error())
 		}
 	}(source)
 
@@ -74,7 +74,7 @@ func (f FileIO) Copy(src string, dst string) (int64, error) {
 	defer func(destination *os.File) {
 		err := destination.Close()
 		if err != nil {
-			log.Logger().Errorf("failed to close file %s: %s", dst, err.Error())
+			log.Error().Msgf("failed to close file %s: %s", dst, err.Error())
 		}
 	}(destination)
 	return io.Copy(destination, source)
@@ -127,7 +127,7 @@ func (f FileIO) MkTmpDir(prefix string) (string, error) {
 
 func (f FileIO) DeferRemove(path string) {
 	if err := f.Remove(path); err != nil {
-		log.Logger().Errorf("Failed to remove temporary directory: %s", err.Error())
+		log.Error().Msgf("Failed to remove temporary directory: %s", err.Error())
 	}
 }
 
@@ -177,7 +177,7 @@ func (f FileIO) templateFile(dstDir string, obj any, filePath string) error {
 	defer func(file *os.File) {
 		err := file.Close()
 		if err != nil {
-			log.Logger().Errorf("failed to close file %s: %s", name, err.Error())
+			log.Error().Msgf("failed to close file %s: %s", name, err.Error())
 		}
 	}(file)
 
