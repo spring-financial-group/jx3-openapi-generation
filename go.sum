@@ -481,6 +481,8 @@ github.com/spring-financial-group/mqa-helpers v0.0.0-20210207153409-87ea55a7a2e1
 github.com/spring-financial-group/mqa-logging v0.0.0-20210207141655-9eb8c1864932/go.mod h1:3uHKxceaZh6MkQXMCViwJXDHjgfkcSryCEbXKksi90Q=
 github.com/spring-financial-group/mqa-logging v0.0.0-20210207151406-ca7942a073d7 h1:IYFDdGLH4v+CYj9kEhCiddbrNWrkJYoqKidNg7n9N4Y=
 github.com/spring-financial-group/mqa-logging v0.0.0-20210207151406-ca7942a073d7/go.mod h1:3uHKxceaZh6MkQXMCViwJXDHjgfkcSryCEbXKksi90Q=
+github.com/spring-financial-group/mqube-go-common v0.3.0 h1:BBWEGyG6wd9WEP3WCsvMMrdK80TfBy5qKLawhbPNzrU=
+github.com/spring-financial-group/mqube-go-common v0.3.0/go.mod h1:Lu2jQi9u/oy55Vo66dQ68vpr5MAqHal/zfvjj0NFMVE=
 github.com/src-d/gcfg v1.4.0/go.mod h1:p/UMsR43ujA89BJY9duynAwIpvqEujIH/jFlfL7jWoI=
 github.com/stoewer/go-strcase v1.2.0/go.mod h1:IBiWB2sKIp3wVVQ3Y035++gc+knqhUQag1KpM8ahLw8=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
@@ -496,8 +498,8 @@ github.com/stretchr/testify v1.3.1-0.20190311161405-34c6fa2dc709/go.mod h1:M5WIy
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=
 github.com/stretchr/testify v1.5.1/go.mod h1:5W2xD1RspED5o8YsWQXVCued0rvSQ+mT+I5cxcmMvtA=
 github.com/stretchr/testify v1.6.1/go.mod h1:6Fq8oRcR53rry900zMqJjRRixrwX3KX962/h/Wwjteg=
-github.com/stretchr/testify v1.9.0 h1:HtqpIVDClZ4nwg75+f6Lvsy/wHu+3BoSGCbBAcpTsTg=
-github.com/stretchr/testify v1.9.0/go.mod h1:r2ic/lqez/lEtzL7wO/rwa5dbSLXVDPFyf8C91i36aY=
+github.com/stretchr/testify v1.11.1 h1:7s2iGBzp5EwR7/aIZr8ao5+dra3wiQyKjjFuvgVKu7U=
+github.com/stretchr/testify v1.11.1/go.mod h1:wZwfW3scLgRK+23gO65QZefKpKQRnfz6sD981Nm4B6U=
 github.com/tidwall/pretty v1.0.0/go.mod h1:XNkn88O1ChpSDQmQeStsy+sBenx6DDtFZJxhVysOjyk=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/ugorji/go v1.1.4/go.mod h1:uQMGLiO92mf5W77hV/PUCpI3pbzQx3CRekS0kk+RGrc=
