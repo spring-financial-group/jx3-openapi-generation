@@ -36,10 +36,7 @@ spec:
 
       git config --global --add safe.directory /workspace/source
       git config --global user.name ${GIT_USER:-jenkins-x-bot}
-      
-      echo "GIT_AUTHOR_NAME is ${GIT_AUTHOR_NAME}"
-      echo "GIT_USER is ${GIT_USER}"
-      
+            
       jx3-openapi-generation generate pkg $OutputLanguages
   workspaces:
   - description: Generates client packages for the given languages
