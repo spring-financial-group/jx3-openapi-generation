@@ -31,11 +31,10 @@ spec:
     resources: {}
     script: |
       #!/bin/bash
-      set -ex
       source /workspace/source/.jx/variables.sh
 
       git config --global --add safe.directory /workspace/source
-      git config --global user.name ${GIT_USER:-jenkins-x-bot}
+      git config --global user.name "$GIT_USER"
             
       jx3-openapi-generation generate pkg $OutputLanguages
   workspaces:
