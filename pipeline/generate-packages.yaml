@@ -34,7 +34,8 @@ spec:
       source /workspace/source/.jx/variables.sh
 
       git config --global --add safe.directory /workspace/source
-      git config --global user.name "$GIT_USER"
+      git config --global user.name mqube-bot
+      git config --global user.email mqube-bot@mqube.com
             
       jx3-openapi-generation generate pkg $OutputLanguages
   workspaces:
