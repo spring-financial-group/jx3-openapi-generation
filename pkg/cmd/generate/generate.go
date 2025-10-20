@@ -2,7 +2,11 @@ package generate
 
 import (
 	"fmt"
+	"os"
+	"path/filepath"
+
 	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/file"
@@ -10,9 +14,6 @@ import (
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/helper"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/templates"
-	"github.com/spring-financial-group/mqa-logging/pkg/log"
-	"os"
-	"path/filepath"
 )
 
 // Options for triggering
@@ -142,7 +143,7 @@ func (o *Options) getVariablesFromEnvironment() error {
 		o.SkipPush = true
 	}
 	if len(missingVariables) > 0 {
-		return &domain.ErrEnvironmentVariableNotFound{VariableNames: missingVariables}
+		return &domain.EnvironmentVariableNotFoundError{VariableNames: missingVariables}
 	}
 	return nil
 }
@@ -158,10 +159,10 @@ func (o *Options) validateSpecificationLocation() error {
 		return errors.Wrap(err, "failed to check if specification exists")
 	}
 	if !exists {
-		return errors.Wrap(&domain.ErrFileNotFound{FilePath: o.SpecPath}, "failed to check if specification exists")
+		return errors.Wrap(&domain.FileNotFoundError{FilePath: o.SpecPath}, "failed to check if specification exists")
 	}
 	o.SpecPath = absPath
-	log.Logger().Infof("%sSpecification found at %s%s", utils.Cyan, absPath, utils.Reset)
+	log.Info().Msgf("%sSpecification found at %s%s", utils.Cyan, absPath, utils.Reset)
 	return nil
 }
 

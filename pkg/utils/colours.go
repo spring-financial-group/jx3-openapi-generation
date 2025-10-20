@@ -2,26 +2,22 @@ package utils
 
 import "runtime"
 
-var Reset = "\033[0m"
-var Red = "\033[31m"
-var Green = "\033[32m"
-var Yellow = "\033[33m"
-var Blue = "\033[34m"
-var Purple = "\033[35m"
-var Cyan = "\033[36m"
-var Gray = "\033[37m"
-var White = "\033[97m"
-
-func init() {
+func color(ansi string) string {
 	if runtime.GOOS == "windows" {
-		Reset = ""
-		Red = ""
-		Green = ""
-		Yellow = ""
-		Blue = ""
-		Purple = ""
-		Cyan = ""
-		Gray = ""
-		White = ""
+		return ""
 	}
+
+	return ansi
 }
+
+var (
+	Reset  = color("\033[0m")
+	Red    = color("\033[31m")
+	Green  = color("\033[32m")
+	Yellow = color("\033[33m")
+	Blue   = color("\033[34m")
+	Purple = color("\033[35m")
+	Cyan   = color("\033[36m")
+	Gray   = color("\033[37m")
+	White  = color("\033[97m")
+)

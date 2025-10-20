@@ -5,23 +5,23 @@ import (
 	"strings"
 
 	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandrunner"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/openapitools"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/angular"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/csharp"
-	_go "github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/go"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/java"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/javascript"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/python"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/rust"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packageGenerator/typescript"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/angular"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/csharp"
+	_go "github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/go"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/java"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/javascript"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/python"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/rust"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator/typescript"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/helper"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras/templates"
-	"github.com/spring-financial-group/mqa-logging/pkg/log"
 )
 
 // PackageOptions contains the common options for the command
@@ -48,7 +48,7 @@ var (
 func NewCmdGeneratePackages(opts *Options) *cobra.Command {
 	o := &PackageOptions{
 		Options:   opts,
-		CmdRunner: commandRunner.NewCommandRunner(),
+		CmdRunner: commandrunner.NewCommandRunner(),
 	}
 
 	cmd := &cobra.Command{
@@ -87,7 +87,7 @@ func (o *PackageOptions) Run(languages []string) error {
 	defer o.FileIO.DeferRemove(tmpDir)
 
 	for _, l := range languages {
-		log.Logger().Infof("%sGenerating %s client package%s", utils.Green, l, utils.Reset)
+		log.Info().Msgf("%sGenerating %s client package%s", utils.Green, l, utils.Reset)
 		outputDir, err := o.FileIO.MkdirAll(filepath.Join(tmpDir, l), 0700)
 		if err != nil {
 			return errors.Wrapf(err, "failed to make output dir for %s", l)
@@ -98,29 +98,21 @@ func (o *PackageOptions) Run(languages []string) error {
 			return errors.Wrapf(err, "failed to generate %s package", l)
 		}
 
-		if !o.SkipPush {
-			log.Logger().Infof("%sPushing %s package%s", utils.Green, l, utils.Reset)
-			err = o.languageGenerators[l].PushPackage(packageDir)
-			if err != nil {
-				return errors.Wrapf(err, "failed to push %s package", l)
-			}
-		} else {
-			log.Logger().Infof("%sSkipping push for %s package (SKIP_PUSH=true)%s", utils.Cyan, l, utils.Reset)
+		log.Info().Msgf("%sPushing %s package%s", utils.Green, l, utils.Reset)
+		err = o.languageGenerators[l].PushPackage(packageDir)
+		if err != nil {
+			return errors.Wrapf(err, "failed to push %s package", l)
 		}
 	}
 
-	if o.SkipPush {
-		log.Logger().Infof("%sSuccessfully generated packages for languages: %s%s", utils.Green, strings.Join(languages, ", "), utils.Reset)
-	} else {
-		log.Logger().Infof("%sSuccessfully generated and pushed packages for languages: %s%s", utils.Green, strings.Join(languages, ", "), utils.Reset)
-	}
+	log.Info().Msgf("%sSuccessfully generated and pushed packages for languages: %s%s", utils.Green, strings.Join(languages, ", "), utils.Reset)
 	return nil
 }
 
 func (o *PackageOptions) ValidateLanguages(languages []string) error {
 	for _, l := range languages {
 		if _, ok := o.languageGenerators[l]; !ok {
-			return &domain.ErrUnsupportedLanguage{Language: l}
+			return &domain.UnsupportedLanguageError{Language: l}
 		}
 	}
 	return nil
@@ -138,7 +130,7 @@ func (o *PackageOptions) InitialiseGenerators() error {
 			return errors.Wrapf(err, "failed to get config for language %s", language)
 		}
 
-		baseGenerator, err := packageGenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.GitUser, o.SpecPath, o.PackageName, config)
+		baseGenerator, err := packagegenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.GitUser, o.SpecPath, o.PackageName, config)
 		if err != nil {
 			return errors.Wrapf(err, "failed to create base generator for %s", language)
 		}

@@ -2,10 +2,11 @@ package github
 
 import (
 	"context"
-	"github.com/google/go-github/v47/github"
-	"github.com/spring-financial-group/mqa-logging/pkg/log"
-	"golang.org/x/oauth2"
 	"strings"
+
+	"github.com/google/go-github/v47/github"
+	"github.com/rs/zerolog/log"
+	"golang.org/x/oauth2"
 )
 
 type Client struct {
@@ -29,17 +30,17 @@ func NewClient(owner, repo, token string) *Client {
 }
 
 func (c *Client) CreatePullRequest(ctx context.Context, pullRequest *github.NewPullRequest) (*github.PullRequest, error) {
-	log.Logger().Infof("Creating pull request for %s/%s", c.Owner, c.Repo)
+	log.Info().Msgf("Creating pull request for %s/%s", c.Owner, c.Repo)
 	pr, _, err := c.Github.PullRequests.Create(ctx, c.Owner, c.Repo, pullRequest)
 	if err != nil {
 		return nil, err
 	}
-	log.Logger().Infof("Pull Request created at %s", pr.GetHTMLURL())
+	log.Info().Msgf("Pull Request created at %s", pr.GetHTMLURL())
 	return pr, nil
 }
 
 func (c *Client) RequestReviewers(ctx context.Context, reviewers []string, pullNumber int) (*github.PullRequest, error) {
-	log.Logger().Infof("Requesting reviewers (%s) for %s/%s-PR-%d", strings.Join(reviewers, ", "), c.Owner, c.Repo, pullNumber)
+	log.Info().Msgf("Requesting reviewers (%s) for %s/%s-PR-%d", strings.Join(reviewers, ", "), c.Owner, c.Repo, pullNumber)
 	pr, _, err := c.Github.PullRequests.RequestReviewers(ctx, c.Owner, c.Repo, pullNumber, github.ReviewersRequest{Reviewers: reviewers})
 	if err != nil {
 		return nil, err
@@ -48,7 +49,7 @@ func (c *Client) RequestReviewers(ctx context.Context, reviewers []string, pullN
 }
 
 func (c *Client) AddLabels(ctx context.Context, labels []string, pullNumber int) ([]*github.Label, error) {
-	log.Logger().Infof("Adding labels (%s) for %s/%s-PR-%d", strings.Join(labels, ", "), c.Owner, c.Repo, pullNumber)
+	log.Info().Msgf("Adding labels (%s) for %s/%s-PR-%d", strings.Join(labels, ", "), c.Owner, c.Repo, pullNumber)
 	lbs, _, err := c.Github.Issues.AddLabelsToIssue(ctx, c.Owner, c.Repo, pullNumber, labels)
 	if err != nil {
 		return nil, err

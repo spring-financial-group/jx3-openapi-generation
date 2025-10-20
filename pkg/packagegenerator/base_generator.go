@@ -1,8 +1,8 @@
-package packageGenerator
+package packagegenerator
 
 import (
 	"github.com/pkg/errors"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandRunner"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/commandrunner"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/file"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/openapitools"
@@ -33,23 +33,20 @@ func NewBaseGenerator(version, serviceName, repoOwner, repoName, gitToken, gitUs
 		GitToken:    gitToken,
 		SpecPath:    specPath,
 		PackageName: packageName,
-		Cmd:         commandRunner.NewCommandRunner(),
+		Cmd:         commandrunner.NewCommandRunner(),
 		FileIO:      file.NewFileIO(),
 		Cfg:         cfg,
 	}
-	return gen, gen.setDynamicConfigVariables()
-}
 
-// setDynamicConfigVariables initializes the config for the generator setting the default values for the generator depending on the
-// environment
-func (g *BaseGenerator) setDynamicConfigVariables() (err error) {
-	for _, val := range g.Cfg.GeneratorCLI.Generators {
-		val.InputSpec = g.SpecPath
-		val.GitRepoID = g.RepoName
-		val.GitUserID = g.RepoOwner
-		val.AdditionalProperties["packageVersion"] = g.Version
+	// Set dynamic config variables
+	for _, val := range gen.Cfg.GeneratorCLI.Generators {
+		val.InputSpec = gen.SpecPath
+		val.GitRepoID = gen.RepoName
+		val.GitUserID = gen.RepoOwner
+		val.AdditionalProperties["packageVersion"] = gen.Version
 	}
-	return nil
+
+	return gen, nil
 }
 
 // GeneratePackage generates the package for the given language using the openapi-generator-cli. The config is written

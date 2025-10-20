@@ -1,12 +1,14 @@
-package commandRunner
+package commandrunner
 
 import (
+	"context"
 	"fmt"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
-	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
-	"github.com/spring-financial-group/mqa-logging/pkg/log"
 	"os/exec"
 	"strings"
+
+	"github.com/rs/zerolog/log"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 )
 
 type CommandRunner struct{}
@@ -16,7 +18,7 @@ func NewCommandRunner() domain.CommandRunner {
 }
 
 func (c *CommandRunner) Execute(dir, name string, args ...string) (string, error) {
-	e := exec.Command(name, args...)
+	e := exec.CommandContext(context.Background(), name, args...)
 	e.Dir = dir
 	out, err := e.CombinedOutput()
 	output := strings.TrimSpace(string(out))
@@ -31,14 +33,14 @@ func (c *CommandRunner) ExecuteAndLog(dir, name string, args ...string) error {
 	if dir != "" {
 		dirString = fmt.Sprintf(" in %s", dir)
 	}
-	log.Logger().Infof("%sRunning command%s:%s %s %s", utils.Cyan, dirString, utils.Reset, name, strings.Join(args, " "))
+	log.Info().Msgf("%sRunning command%s:%s %s %s", utils.Cyan, dirString, utils.Reset, name, strings.Join(args, " "))
 	out, err := c.Execute(dir, name, args...)
 	if err != nil {
-		log.Logger().Error(out)
+		log.Error().Msg(out)
 		return err
 	}
 	if out != "" {
-		log.Logger().Info(out)
+		log.Info().Msg(out)
 	}
 	return nil
 }

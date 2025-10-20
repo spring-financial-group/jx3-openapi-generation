@@ -1,12 +1,12 @@
 package cmd
 
 import (
+	"github.com/rs/zerolog/log"
 	"github.com/spf13/cobra"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/cmd/generate"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/cmd/version"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/rootcmd"
 	"github.com/spring-financial-group/mqa-helpers/pkg/cobras"
-	"github.com/spring-financial-group/mqa-logging/pkg/log"
 )
 
 // Main creates the new command
@@ -17,7 +17,7 @@ func Main() *cobra.Command {
 		Run: func(cmd *cobra.Command, args []string) {
 			err := cmd.Help()
 			if err != nil {
-				log.Logger().Error(err.Error())
+				log.Error().Msg(err.Error())
 			}
 		},
 	}
