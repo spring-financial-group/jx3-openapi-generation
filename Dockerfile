@@ -1,6 +1,14 @@
-FROM node:22
+FROM ghcr.io/astral-sh/uv:python3.10-bookworm
 
 RUN apt-get update
+
+ENV NODE_VERSION=22.21.0
+
+# Install NodeJS
+RUN wget -qO- https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz | tar -xJ -C /usr/local --strip-components=1
+
+RUN node --version
+RUN npm --version
 
 # Install Go
 RUN wget -c https://dl.google.com/go/go1.24.4.linux-amd64.tar.gz -O - | tar -xz -C /usr/local
