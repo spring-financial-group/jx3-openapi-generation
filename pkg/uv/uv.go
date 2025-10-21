@@ -58,7 +58,7 @@ module-root = ""
 }
 
 func (c *UVClient) BuildProject(dir string) error {
-	_, err := c.uvCommand(dir, "build")
+	err := c.uvCommand(dir, "build")
 	if err != nil {
 		return errors.Wrap(err, "failed to build project")
 	}
@@ -66,19 +66,19 @@ func (c *UVClient) BuildProject(dir string) error {
 }
 
 func (c *UVClient) PublishProject(dir string, indexName string) error {
-	_, err := c.uvCommand(dir, "publish", "--index", indexName)
+	err := c.uvCommand(dir, "publish", "--index", indexName)
 	if err != nil {
 		return errors.Wrap(err, "failed to publish project")
 	}
 	return nil
 }
 
-func (c *UVClient) uvCommand(dir string, args ...string) (string, error) {
+func (c *UVClient) uvCommand(dir string, args ...string) error {
 	log.Info().Msgf("Running uv command: uv %s", args)
 	out, err := c.cmd.Execute(dir, "uv", args...)
 	if err != nil {
 		log.Error().Msgf("uv command failed: %s", out)
-		return out, errors.Wrap(err, "uv command failed")
+		return errors.Wrap(err, "uv command failed")
 	}
-	return out, nil
+	return nil
 }
