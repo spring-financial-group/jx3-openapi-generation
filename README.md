@@ -77,40 +77,40 @@ metadata:
 spec:
   pipelineSpec:
     tasks:
-      - name: from-build-pack
-        resources: {}
-        taskSpec:
-          metadata: {}
-          stepTemplate:
-            image: uses:jenkins-x/jx3-pipeline-catalog/tasks/go/pullrequest.yaml@versionStream
+    - name: from-build-pack
+      resources: {}
+      taskSpec:
+        metadata: {}
+        stepTemplate:
+          image: uses:jenkins-x/jx3-pipeline-catalog/tasks/go/pullrequest.yaml@versionStream
+          name: ""
+          resources:
+            limits: {}
+          workingDir: /workspace/source
+          env:
+            - name: SwaggerServiceName
+              value: PetStoreService
+            - name: SpecPath
+              value: ./docs/swagger.json
+            - name: OutputLanguages
+              value: csharp angular java
+        steps:
+          - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone-pr.yaml@versionStream
             name: ""
-            resources:
-              limits: {}
-            workingDir: /workspace/source
-            env:
-              - name: SwaggerServiceName
-                value: PetStoreService
-              - name: SpecPath
-                value: ./docs/swagger.json
-              - name: OutputLanguages
-                value: csharp angular java
-          steps:
-            - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone-pr.yaml@versionStream
-              name: ""
-              resources: {}
-            - name: jx-variables
-              resources: {}
-            - name: build-make-build
-              resources: {}
-            - name: check-registry
-              resources: {}
-            - name: build-scan-push
-              resources: {}
-            - name: promote-jx-preview
-              resources: {}
-            - image: uses:spring-financial-group/jx3-openapi-generation/pipeline/generate-packages.yaml@master
-              name: ""
-              resources: {}
+            resources: {}
+          - name: jx-variables
+            resources: {}
+          - name: build-make-build
+            resources: {}
+          - name: check-registry
+            resources: {}
+          - name: build-scan-push
+            resources: {}
+          - name: promote-jx-preview
+            resources: {}
+          - image: uses:spring-financial-group/jx3-openapi-generation/pipeline/generate-packages.yaml@master
+            name: ""
+            resources: {}
   podTemplate: {}
   serviceAccountName: tekton-bot
   timeout: 1h0m0s
