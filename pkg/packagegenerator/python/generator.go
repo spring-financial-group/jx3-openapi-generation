@@ -79,6 +79,11 @@ func (g *Generator) GeneratePyxPackage(outputDir string) error {
 		return errors.Wrap(err, "failed to create pyproject.toml file")
 	}
 
+	err = g.Uvc.SyncEnvironment(packageDir)
+	if err != nil {
+		return errors.Wrap(err, "failed to sync UV environment")
+	}
+
 	err = g.Uvc.BuildProject(packageDir)
 	if err != nil {
 		return errors.Wrap(err, "failed to build UV project")
