@@ -3,6 +3,8 @@ package uv
 import (
 	"fmt"
 	"path/filepath"
+	"regexp"
+	"strings"
 
 	"github.com/pkg/errors"
 	"github.com/rs/zerolog/log"
@@ -24,9 +26,40 @@ func NewClient() domain.UVClient {
 }
 
 func (c *UVClient) GeneratePyProjectFile(dir, packageName, packageVersion string) error {
+	pkgVersion := packageVersion
+
+	// Because:
+	// https://packaging.python.org/en/latest/specifications/version-specifiers/#public-version-identifiers
+	//
+	// Example: 0.0.0-PR-123-12-SNAPSHOT
+	if strings.Contains(pkgVersion, "SNAPSHOT") {
+		pattern := `-([0-9][0-9]?[0-9]?)` // Matches any dash followed by up to 3 digits
+		regMatch := regexp.MustCompile(pattern)
+		matches := regMatch.FindAllStringSubmatch(pkgVersion, -1)
+
+		var suffix string
+		if len(matches) >= 2 {
+			suffix = fmt.Sprintf(".preview%s.dev%s", matches[0][1], matches[1][1])
+		} else {
+			suffix = ".dev"
+		}
+
+		// This part replaces everything after the first dash with the suffix above
+		versionPattern := `\.[0-9][0-9]?[0-9]?(-)` // Matches a dot followed by up to 3 digits and a dash
+		versionRegexp := regexp.MustCompile(versionPattern)
+		versionIndex := versionRegexp.FindStringIndex(pkgVersion)
+		if len(versionIndex) >= 2 {
+			pkgVersion = pkgVersion[:versionIndex[0]] + suffix
+		} else {
+			pkgVersion = pkgVersion + suffix
+		}
+
+		log.Info().Msgf("Converted SNAPSHOT version %s to %s for pyx", packageVersion, pkgVersion)
+	}
+
 	pyProjectContent := fmt.Sprintf(`[project]
 name = "%s"
-version = "%s-dev"
+version = "%s"
 description = "%s schema package generated from OpenAPI specification"
 readme = "%s_README.md"
 classifiers = [
@@ -47,7 +80,7 @@ publish-url = "https://api.pyx.dev/v1/upload/mqube/main"
 [tool.uv.build-backend]
 module-name = "%s"
 module-root = ""
-`, packageName, packageVersion, packageName, packageName, packageName)
+`, packageName, pkgVersion, packageName, packageName, packageName)
 
 	pyProjectPath := filepath.Join(dir, "pyproject.toml")
 	err := c.FileIO.Write(pyProjectPath, []byte(pyProjectContent), 0644)
