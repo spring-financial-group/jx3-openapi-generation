@@ -4,9 +4,6 @@ type UVClient interface {
 	// Generate pyproject.toml file required for the build and publish steps
 	GeneratePyProjectFile(dir, packageName, packageVersion string) error
 
-	// UV Sync the python environment in the given directory
-	SyncEnvironment(dir string) error
-
 	// Build the python project in the given directory
 	BuildProject(dir string) error
 

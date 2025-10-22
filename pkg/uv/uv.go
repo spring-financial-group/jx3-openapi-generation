@@ -90,14 +90,6 @@ module-root = ""
 	return nil
 }
 
-func (c *UVClient) SyncEnvironment(dir string) error {
-	err := c.uvCommand(dir, "sync")
-	if err != nil {
-		return errors.Wrap(err, "failed to sync environment")
-	}
-	return nil
-}
-
 func (c *UVClient) BuildProject(dir string) error {
 	err := c.uvCommand(dir, "build")
 	if err != nil {
