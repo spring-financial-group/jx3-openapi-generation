@@ -51,7 +51,7 @@ func (c *UVClient) GeneratePyProjectFile(dir, packageName, packageVersion string
 		if len(versionIndex) >= 2 {
 			pkgVersion = pkgVersion[:versionIndex[0]] + suffix
 		} else {
-			pkgVersion = pkgVersion + suffix
+			pkgVersion += suffix
 		}
 
 		log.Info().Msgf("Converted SNAPSHOT version %s to %s for pyx", packageVersion, pkgVersion)
