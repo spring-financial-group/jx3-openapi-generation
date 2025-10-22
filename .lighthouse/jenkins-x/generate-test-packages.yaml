@@ -31,6 +31,11 @@ spec:
                   secretKeyRef:
                     name: openapi-pkg-gen
                     key: user
+              - name: PYX_API_KEY
+                valueFrom:
+                  secretKeyRef:
+                    name: pyx
+                    key: api-key
           steps:
             - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone-pr.yaml@versionStream
               name: ""
