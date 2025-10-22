@@ -9,11 +9,13 @@ import (
 
 	gh "github.com/google/go-github/v47/github"
 	"github.com/pkg/errors"
+	"github.com/rs/zerolog/log"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/git"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/scmClient/github"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
+	"github.com/spring-financial-group/jx3-openapi-generation/pkg/uv"
 )
 
 const (
@@ -21,6 +23,8 @@ const (
 	PipelineSchemasName = "mqube-ml-doc-pipeline-schemas"
 
 	updateBotLabel = "updatebot"
+
+	uvIndexName = "pyx"
 )
 
 var (
@@ -31,6 +35,7 @@ type Generator struct {
 	*packagegenerator.BaseGenerator
 	Git domain.Gitter
 	Scm domain.ScmClient
+	Uvc domain.UVClient
 }
 
 func NewGenerator(baseGenerator *packagegenerator.BaseGenerator) *Generator {
@@ -38,10 +43,59 @@ func NewGenerator(baseGenerator *packagegenerator.BaseGenerator) *Generator {
 		BaseGenerator: baseGenerator,
 		Git:           git.NewClient(),
 		Scm:           github.NewClient(baseGenerator.RepoOwner, PipelineSchemasName, baseGenerator.GitToken),
+		Uvc:           uv.NewClient(),
 	}
 }
 
 func (g *Generator) GeneratePackage(outputDir string) (string, error) {
+	g.setDynamicConfigVariables()
+
+	// For now we ignore the packageDir since this is purely for POC
+	err := g.GeneratePyxPackage(outputDir)
+	if err != nil {
+		return "", err
+	}
+
+	packageDir, err := g.GenerateSchemasPackage(outputDir)
+	if err != nil {
+		return "", err
+	}
+	return packageDir, nil
+}
+
+func (g *Generator) GeneratePyxPackage(outputDir string) error {
+	pyxDir, err := g.FileIO.MkdirAll(filepath.Join(outputDir, g.GetPackageName()), 0700)
+	if err != nil {
+		return errors.Wrap(err, "failed to create package directory")
+	}
+
+	packageDir, err := g.BaseGenerator.GeneratePackage(pyxDir, domain.Python)
+	if err != nil {
+		return err
+	}
+
+	err = g.Uvc.GeneratePyProjectFile(pyxDir, g.GetPackageName(), g.Version)
+	if err != nil {
+		return errors.Wrap(err, "failed to create pyproject.toml file")
+	}
+
+	err = g.Uvc.BuildProject(packageDir)
+	if err != nil {
+		return errors.Wrap(err, "failed to build UV project")
+	}
+
+	// Because this is running in parallel with schemas repo, for now the publish step will have to live in here
+	// When we move to pyx we can move this to the publish step of the pipeline
+	err = g.Uvc.PublishProject(packageDir, uvIndexName)
+	if err != nil {
+		return errors.Wrap(err, "failed to publish UV project")
+	}
+	log.Info().Msgf("Published UV project from %s to index %s", packageDir, uvIndexName)
+
+	return nil
+}
+
+func (g *Generator) GenerateSchemasPackage(outputDir string) (string, error) {
 	repoDir, err := g.Git.Clone(outputDir, PipelineSchemasURL)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to clone pipeline schemas")
@@ -52,8 +106,6 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err, "failed to checkout branch")
 	}
-
-	g.setDynamicConfigVariables()
 
 	packageDir, err := g.BaseGenerator.GeneratePackage(repoDir, domain.Python)
 	if err != nil {
@@ -75,6 +127,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 	if err != nil {
 		return "", errors.Wrap(err, "failed to commit package")
 	}
+
 	return packageDir, nil
 }
 
