@@ -26,36 +26,7 @@ func NewClient() domain.UVClient {
 }
 
 func (c *UVClient) GeneratePyProjectFile(dir, packageName, packageVersion string) error {
-	pkgVersion := packageVersion
-
-	// Because:
-	// https://packaging.python.org/en/latest/specifications/version-specifiers/#public-version-identifiers
-	//
-	// Example: 0.0.0-PR-123-12-SNAPSHOT
-	if strings.Contains(pkgVersion, "SNAPSHOT") {
-		pattern := `-([0-9][0-9]?[0-9]?)` // Matches any dash followed by up to 3 digits
-		regMatch := regexp.MustCompile(pattern)
-		matches := regMatch.FindAllStringSubmatch(pkgVersion, -1)
-
-		var suffix string
-		if len(matches) >= 2 {
-			suffix = fmt.Sprintf(".preview%s.dev%s", matches[0][1], matches[1][1])
-		} else {
-			suffix = ".dev"
-		}
-
-		// This part replaces everything after the first dash with the suffix above
-		versionPattern := `\.[0-9][0-9]?[0-9]?(-)` // Matches a dot followed by up to 3 digits and a dash
-		versionRegexp := regexp.MustCompile(versionPattern)
-		versionIndex := versionRegexp.FindStringIndex(pkgVersion)
-		if len(versionIndex) >= 2 {
-			pkgVersion = pkgVersion[:versionIndex[0]] + suffix
-		} else {
-			pkgVersion += suffix
-		}
-
-		log.Info().Msgf("Converted SNAPSHOT version %s to %s for pyx", packageVersion, pkgVersion)
-	}
+	pkgVersion := c.extractVersion(packageVersion)
 
 	pyProjectContent := fmt.Sprintf(`[project]
 name = "%s"
@@ -114,4 +85,34 @@ func (c *UVClient) uvCommand(dir string, args ...string) error {
 		return errors.Wrap(err, "uv command failed")
 	}
 	return nil
+}
+
+// Because:
+// https://packaging.python.org/en/latest/specifications/version-specifiers/#public-version-identifiers
+func (c *UVClient) extractVersion(pkgVersion string) string {
+	// Example: 0.0.0-PR-123-12-SNAPSHOT
+	if strings.Contains(pkgVersion, "SNAPSHOT") {
+		pattern := `-([0-9][0-9]?[0-9]?)` // Matches any dash followed by up to 3 digits
+		regMatch := regexp.MustCompile(pattern)
+		matches := regMatch.FindAllStringSubmatch(pkgVersion, -1)
+
+		var suffix string
+		if len(matches) >= 2 {
+			suffix = fmt.Sprintf(".preview%s.dev%s", matches[0][1], matches[1][1])
+		} else {
+			suffix = ".dev"
+		}
+
+		// This part replaces everything after the first dash with the suffix above
+		versionPattern := `\.[0-9][0-9]?[0-9]?(-)` // Matches a dot followed by up to 3 digits and a dash
+		versionRegexp := regexp.MustCompile(versionPattern)
+		versionIndex := versionRegexp.FindStringIndex(pkgVersion)
+		if len(versionIndex) >= 2 {
+			pkgVersion = pkgVersion[:versionIndex[0]] + suffix
+		} else {
+			pkgVersion += suffix
+		}
+	}
+
+	return pkgVersion
 }
