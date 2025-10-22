@@ -88,29 +88,29 @@ spec:
             limits: {}
           workingDir: /workspace/source
           env:
-            - name: SwaggerServiceName
-              value: PetStoreService
-            - name: SpecPath
-              value: ./docs/swagger.json
-            - name: OutputLanguages
-              value: csharp angular java
+          - name: SwaggerServiceName
+            value: PetStoreService
+          - name: SpecPath
+            value: ./docs/swagger.json
+          - name: OutputLanguages
+            value: csharp angular java
         steps:
-          - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone-pr.yaml@versionStream
-            name: ""
-            resources: {}
-          - name: jx-variables
-            resources: {}
-          - name: build-make-build
-            resources: {}
-          - name: check-registry
-            resources: {}
-          - name: build-scan-push
-            resources: {}
-          - name: promote-jx-preview
-            resources: {}
-          - image: uses:spring-financial-group/jx3-openapi-generation/pipeline/generate-packages.yaml@master
-            name: ""
-            resources: {}
+        - image: uses:jenkins-x/jx3-pipeline-catalog/tasks/git-clone/git-clone-pr.yaml@versionStream
+          name: ""
+          resources: {}
+        - name: jx-variables
+          resources: {}
+        - name: build-make-build
+          resources: {}
+        - name: check-registry
+          resources: {}
+        - name: build-scan-push
+          resources: {}
+        - name: promote-jx-preview
+          resources: {}
+        - image: uses:spring-financial-group/jx3-openapi-generation/pipeline/generate-packages.yaml@master
+          name: ""
+          resources: {}
   podTemplate: {}
   serviceAccountName: tekton-bot
   timeout: 1h0m0s
