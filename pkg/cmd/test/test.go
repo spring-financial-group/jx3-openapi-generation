@@ -210,8 +210,14 @@ func (o *Options) Run() error {
 func (o *Options) setupTestEnvironment() error {
 	// Configure git if available
 	log.Info().Msg("🔧 Configuring git for testing...")
-	os.Setenv("GIT_AUTHOR_NAME", getEnvOrDefault("GIT_AUTHOR_NAME", "test-bot"))
-	os.Setenv("GIT_AUTHOR_EMAIL", getEnvOrDefault("GIT_AUTHOR_EMAIL", "test-bot@example.com"))
+	err := os.Setenv("GIT_AUTHOR_NAME", getEnvOrDefault("GIT_AUTHOR_NAME", "test-bot"))
+	if err != nil {
+		return err
+	}
+	err = os.Setenv("GIT_AUTHOR_EMAIL", getEnvOrDefault("GIT_AUTHOR_EMAIL", "test-bot@example.com"))
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -274,7 +280,7 @@ func (o *Options) ensureSwaggerSpec() (string, error) {
 
 	// Ensure mocks directory exists
 	mocksDir := "./mocks"
-	if err := os.MkdirAll(mocksDir, 0755); err != nil {
+	if err := os.MkdirAll(mocksDir, 0750); err != nil {
 		return "", fmt.Errorf("failed to create mocks directory: %w", err)
 	}
 
@@ -311,7 +317,10 @@ func (o *Options) setTestEnvironmentVariables(specPath string) error {
 	}
 
 	for key, value := range envVars {
-		os.Setenv(key, value)
+		err := os.Setenv(key, value)
+		if err != nil {
+			return fmt.Errorf("failed to set environment variable: %w", err)
+		}
 	}
 
 	// Log the configuration
