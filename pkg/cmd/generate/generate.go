@@ -72,10 +72,6 @@ func NewCmdGenerate() *cobra.Command {
 		FileIO: file.NewFileIO(),
 	}
 
-	// Initialising the generic variables for this command and all sub-commands
-	err := o.initialise()
-	helper.CheckErr(err)
-
 	cmd := &cobra.Command{
 		Use:     "generate",
 		Short:   "Generates one or more resources",
@@ -89,6 +85,11 @@ func NewCmdGenerate() *cobra.Command {
 		},
 		SuggestFor: []string{"genarate, genorate"},
 		Aliases:    []string{"gen"},
+		// Initialize environment variables at execution time, not creation time
+		// Use PersistentPreRunE so it runs before subcommands' PreRunE
+		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			return o.initialise()
+		},
 	}
 
 	cmd.AddCommand(NewCmdGeneratePackages(o))
@@ -167,6 +168,12 @@ func (o *Options) validateSpecificationLocation() error {
 }
 
 func (o *Options) getAbsoluteSpecPath(relativePath string) (string, error) {
+	// If the path is already absolute, return it as-is
+	if filepath.IsAbs(relativePath) {
+		return relativePath, nil
+	}
+
+	// Otherwise, make it absolute relative to current working directory
 	wd, err := os.Getwd()
 	if err != nil {
 		return "", err
