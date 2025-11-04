@@ -51,10 +51,10 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 	g.setDynamicConfigVariables()
 
 	// For now we ignore the packageDir since this is purely for POC
-	err := g.GeneratePyxPackage(outputDir)
-	if err != nil {
-		return "", err
-	}
+	// err := g.GeneratePyxPackage(outputDir)
+	// if err != nil {
+	// 	return "", err
+	// }
 
 	packageDir, err := g.GenerateSchemasPackage(outputDir)
 	if err != nil {
