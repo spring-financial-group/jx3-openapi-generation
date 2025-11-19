@@ -303,7 +303,10 @@ func (o *Options) setTestEnvironmentVariables(specPath string) error {
 		}
 	}
 
-	os.Setenv("SpecPath", specPath)
+	err := os.Setenv("SpecPath", specPath)
+	if err != nil {
+		return err
+	}
 
 	// Log the configuration
 	log.Info().Msg("🔄 Test configuration:")
@@ -317,7 +320,7 @@ func (o *Options) setTestEnvironmentVariables(specPath string) error {
 }
 
 func (o *Options) unsetTestEnvironmentVariables() error {
-	for key, _ := range envVars {
+	for key := range envVars {
 		err := os.Unsetenv(key)
 		if err != nil {
 			return fmt.Errorf("failed to unset environment variable: %w", err)
