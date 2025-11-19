@@ -68,9 +68,9 @@ spec:
                 ls .
                 echo "Workspace Source:"
                 ls /workspace/source
-                rm ./jx3-openapi-generation
-                ls /workspace/source
-                cp /workspace/source/jx3-openapi-generation ./jx3-openapi-generation
+                git config --global --add safe.directory /workspace/source
+                git config --global user.name ${GIT_AUTHOR_NAME:-mqube-bot}
+                git config --global user.email ${GIT_AUTHOR_EMAIL:-mqube-bot@mqube.com}
                 jx3-openapi-generation test
   podTemplate: {}
   serviceAccountName: tekton-bot
