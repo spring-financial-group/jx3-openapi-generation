@@ -133,6 +133,17 @@ const defaultTestSwagger = `{
   }
 }`
 
+var envVars = map[string]string{
+	"SwaggerServiceName": getEnvOrDefault("SwaggerServiceName", "test-service"),
+	"VERSION":            getEnvOrDefault("VERSION", "0.0.0-test"),
+	"REPO_OWNER":         getEnvOrDefault("REPO_OWNER", "test-owner"),
+	"REPO_NAME":          getEnvOrDefault("REPO_NAME", "test-repo"),
+	"PackageName":        getEnvOrDefault("PackageName", "TestClient"),
+	"GIT_USER":           getEnvOrDefault("GIT_USER", "test-user"),
+	"GIT_TOKEN":          getEnvOrDefault("GIT_TOKEN", "test-token"),
+	"SKIP_PUSH":          getEnvOrDefault("SKIP_PUSH", "true"),
+}
+
 // NewCmdTest creates a command object for testing package generation
 func NewCmdTest() *cobra.Command {
 	o := &Options{
@@ -200,6 +211,11 @@ func (o *Options) Run() error {
 		return err
 	}
 
+	err = o.unsetTestEnvironmentVariables()
+	if err != nil {
+		return err
+	}
+
 	log.Info().Msg("")
 	log.Info().Msg("✅ All packages generated successfully!")
 	log.Info().Msg("🎉 Package generation test completed!")
@@ -251,30 +267,6 @@ func (o *Options) ensureSwaggerSpec() (string, error) {
 		return absPath, nil
 	}
 
-	// Try to find swagger.json in common locations
-	searchPaths := []string{
-		"./mocks/swagger.json",
-		"./swagger.json",
-		"./test/swagger.json",
-		"./spec/swagger.json",
-	}
-
-	for _, path := range searchPaths {
-		absPath, err := filepath.Abs(path)
-		if err != nil {
-			continue
-		}
-
-		exists, err := o.FileIO.Exists(absPath)
-		if err != nil {
-			continue
-		}
-		if exists {
-			log.Info().Msgf("📋 Found swagger spec at: %s", absPath)
-			return absPath, nil
-		}
-	}
-
 	// No spec found, create a default one
 	log.Info().Msg("📋 No swagger spec found, creating default test spec...")
 
@@ -304,24 +296,14 @@ func (o *Options) setTestEnvironmentVariables(specPath string) error {
 	// Set defaults for all required environment variables
 	// Note: Some generators (e.g., Python) use these values to construct branch names and paths
 	// so we need to ensure they form valid identifiers
-	envVars := map[string]string{
-		"SwaggerServiceName": getEnvOrDefault("SwaggerServiceName", "test-service"),
-		"SpecPath":           specPath,
-		"VERSION":            getEnvOrDefault("VERSION", "0.0.0-test"),
-		"REPO_OWNER":         getEnvOrDefault("REPO_OWNER", "test-owner"),
-		"REPO_NAME":          getEnvOrDefault("REPO_NAME", "test-repo"),
-		"PackageName":        getEnvOrDefault("PackageName", "TestClient"),
-		"GIT_USER":           getEnvOrDefault("GIT_USER", "test-user"),
-		"GIT_TOKEN":          getEnvOrDefault("GIT_TOKEN", "test-token"),
-		"SKIP_PUSH":          getEnvOrDefault("SKIP_PUSH", "true"),
-	}
-
 	for key, value := range envVars {
 		err := os.Setenv(key, value)
 		if err != nil {
 			return fmt.Errorf("failed to set environment variable: %w", err)
 		}
 	}
+
+	os.Setenv("SpecPath", specPath)
 
 	// Log the configuration
 	log.Info().Msg("🔄 Test configuration:")
@@ -330,6 +312,17 @@ func (o *Options) setTestEnvironmentVariables(specPath string) error {
 	log.Info().Msgf("  VERSION: %s", envVars["VERSION"])
 	log.Info().Msgf("  REPO_OWNER: %s", envVars["REPO_OWNER"])
 	log.Info().Msgf("  REPO_NAME: %s", envVars["REPO_NAME"])
+
+	return nil
+}
+
+func (o *Options) unsetTestEnvironmentVariables() error {
+	for key, _ := range envVars {
+		err := os.Unsetenv(key)
+		if err != nil {
+			return fmt.Errorf("failed to unset environment variable: %w", err)
+		}
+	}
 
 	return nil
 }
