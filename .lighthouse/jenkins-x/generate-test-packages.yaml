@@ -52,8 +52,11 @@ spec:
               script: |
                 #!/usr/bin/env bash
                 source .jx/variables.sh
+                echo "Building:"
                 make build
-                mv ./build/jx3-openapi-generation ./mocks/jx3-openapi-generation
+                echo "Copying files:"
+                cp ./mocks/swagger.json /workspace/source/swagger.json
+                cp ./build/jx3-openapi-generation /workspace/source/jx3-openapi-generation
             - image: jx3mqubebuild.azurecr.io/spring-financial-group/jx3-openapi-generation:latest-preview
               name: test-package-generation
               imagePullPolicy: Always
@@ -61,12 +64,10 @@ spec:
               script: |
                 #!/bin/bash
                 source /workspace/source/.jx/variables.sh
-                
-                git config --global user.name ${GIT_AUTHOR_NAME:-jenkins-x-bot}
-                git config --global user.email ${GIT_AUTHOR_EMAIL:-jenkins-x@googlegroups.com}
-                
-                cd ./mocks
-                ./jx3-openapi-generation generate packages go python angular csharp java typescript rust
+                git config --global --add safe.directory /workspace/source
+                git config --global user.name ${GIT_AUTHOR_NAME:-mqube-bot}
+                git config --global user.email ${GIT_AUTHOR_EMAIL:-mqube-bot@mqube.com}
+                jx3-openapi-generation test
   podTemplate: {}
   serviceAccountName: tekton-bot
   timeout: 1h0m0s

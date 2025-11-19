@@ -177,3 +177,6 @@ docs: bin/docs ## update docs
 	@./bin/docs --target=./docs/man/man1 --kind=man
 	@rm -f ./bin/docs
 
+.PHONY: test-packages
+test-packages: build ## Run package generation test using the CLI (dogfood)
+	./build/$(BINARY_NAME) test

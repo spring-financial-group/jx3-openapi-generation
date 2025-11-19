@@ -39,10 +39,18 @@ type Generator struct {
 
 func GetConfigForLanguage(language string) (*Config, error) {
 	cfg := new(Config)
-	configPath := filepath.Join(ConfigsDir, language+"-"+OpenAPIConfigFileName)
+	fileName := language + "-" + OpenAPIConfigFileName
+
+	// Try relative path first (for local development)
+	configPath := filepath.Join("configs", fileName)
 	err := cfg.readFromFile(configPath)
 	if err != nil {
-		return nil, errors.Wrapf(err, "failed to read config from %s", configPath)
+		// Fall back to absolute path (for containerized environments)
+		configPath = filepath.Join(ConfigsDir, fileName)
+		err = cfg.readFromFile(configPath)
+		if err != nil {
+			return nil, errors.Wrapf(err, "failed to read config from %s", configPath)
+		}
 	}
 	return cfg, nil
 }
