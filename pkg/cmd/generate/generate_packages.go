@@ -57,6 +57,17 @@ func NewCmdGeneratePackages(opts *Options) *cobra.Command {
 		Long:    formatLong,
 		Example: formatExample,
 		Args:    cobra.MinimumNArgs(1),
+		// Initialize generators at runtime, not at command creation time
+		// This allows environment variables to be set before initialization
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			if err := o.InitialiseGenerators(); err != nil {
+				return errors.Wrap(err, "failed to initialise generators")
+			}
+			if err := o.ValidateLanguages(args); err != nil {
+				return errors.Wrap(err, "failed to validate languages")
+			}
+			return nil
+		},
 		Run: func(cmd *cobra.Command, args []string) {
 			o.Cmd = cmd
 			o.Args = args
@@ -67,14 +78,6 @@ func NewCmdGeneratePackages(opts *Options) *cobra.Command {
 		Aliases:    []string{"pkg", "pkgs", "packages", "package"},
 	}
 
-	if err := o.InitialiseGenerators(); err != nil {
-		helper.CheckErr(errors.Wrap(err, "failed to initialise generators"))
-		return nil
-	}
-	if err := o.ValidateLanguages(o.Args); err != nil {
-		helper.CheckErr(errors.Wrap(err, "failed to validate languages"))
-		return nil
-	}
 	return cmd
 }
 
@@ -98,10 +101,14 @@ func (o *PackageOptions) Run(languages []string) error {
 			return errors.Wrapf(err, "failed to generate %s package", l)
 		}
 
-		log.Info().Msgf("%sPushing %s package%s", utils.Green, l, utils.Reset)
-		err = o.languageGenerators[l].PushPackage(packageDir)
-		if err != nil {
-			return errors.Wrapf(err, "failed to push %s package", l)
+		if o.SkipPush {
+			log.Info().Msgf("%sSkipping push for %s package (SKIP_PUSH=true)%s", utils.Yellow, l, utils.Reset)
+		} else {
+			log.Info().Msgf("%sPushing %s package%s", utils.Green, l, utils.Reset)
+			err = o.languageGenerators[l].PushPackage(packageDir)
+			if err != nil {
+				return errors.Wrapf(err, "failed to push %s package", l)
+			}
 		}
 	}
 
