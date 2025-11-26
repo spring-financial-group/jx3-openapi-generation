@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	packagingFilesDir = "templates/csharp"
+	packagingFilesDir = "/templates/csharp"
 )
 
 type Generator struct {

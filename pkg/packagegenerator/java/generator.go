@@ -2,15 +2,16 @@ package java
 
 import (
 	"fmt"
+	"path/filepath"
+	"strings"
+
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
-	"path/filepath"
-	"strings"
 )
 
 const (
-	packagingFilesDir = "templates/java"
+	packagingFilesDir = "/templates/java"
 )
 
 type Generator struct {
