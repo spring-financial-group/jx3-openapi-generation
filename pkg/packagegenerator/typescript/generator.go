@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	packagingFilesDir = "templates/typescript"
+	packagingFilesDir = "/templates/typescript"
 )
 
 // Paths for use in generating angular packages
