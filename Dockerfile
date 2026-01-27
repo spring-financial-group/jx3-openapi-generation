@@ -14,7 +14,7 @@ RUN npm --version
 RUN wget -c https://dl.google.com/go/go1.24.4.linux-amd64.tar.gz -O - | tar -xz -C /usr/local
 ENV GOPATH "/usr/local/go"
 ENV PATH "$PATH:$GOPATH/bin"
-RUN go install github.com/vektra/mockery/v2@v2.52.2
+RUN go install github.com/vektra/mockery/v3@v3.6.1
 RUN go version
 
 # Install javascript dependencies
