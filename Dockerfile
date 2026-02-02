@@ -18,9 +18,12 @@ RUN go install github.com/vektra/mockery/v2@v2.52.2
 RUN go version
 
 # Install javascript dependencies
-RUN npm install -g @openapitools/openapi-generator-cli@2.23.1
-RUN npm install -g @angular/compiler-cli@13.3.1 @angular/platform-server@13.3.1 @angular/compiler@13.3.1
-RUN npm install -g typescript@4.6.3
+RUN npm install -g \
+    @openapitools/openapi-generator-cli@2.23.1 \
+    @angular/compiler-cli@13.3.1 \
+    @angular/platform-server@13.3.1 \
+    @angular/compiler@13.3.1 \
+    typescript@4.6.3
 
 # Install dotnet dependencies
 RUN wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
