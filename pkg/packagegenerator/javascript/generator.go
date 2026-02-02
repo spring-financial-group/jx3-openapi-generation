@@ -65,7 +65,15 @@ func (g *Generator) GetPackageName() string {
 }
 
 func (g *Generator) PushPackage(packageDir string) error {
-	out, err := g.Cmd.Execute(packageDir, "npm", "publish")
+	// Determine npm publish args - prerelease versions need a tag
+	var out string
+	var err error
+	if strings.Contains(g.Version, "-") {
+		// This is a prerelease version (e.g., contains -SNAPSHOT, -PR-, -alpha, etc.)
+		out, err = g.Cmd.Execute(packageDir, "npm", "publish", "--tag", "preview")
+	} else {
+		out, err = g.Cmd.Execute(packageDir, "npm", "publish")
+	}
 	log.Info().Msg(out)
 	if err != nil {
 		// NPM returns the error message on STDOUT, so we need to check there for the error
