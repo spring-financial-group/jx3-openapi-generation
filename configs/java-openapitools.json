@@ -10,8 +10,8 @@
         "generatorName": "java",
         "additionalProperties": {
           "dateLibrary": "java8-localdatetime",
-          "library": "okhttp-gson",
-          "serializationLibrary": "gson",
+          "library": "retrofit2",
+          "serializationLibrary": "jackson",
           "enumPropertyNaming": "legacy"
         },
         "globalProperty": {
