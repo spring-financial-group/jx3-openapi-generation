@@ -67,7 +67,7 @@ spec:
                 git config --global --add safe.directory /workspace/source
                 git config --global user.name ${GIT_AUTHOR_NAME:-mqube-bot}
                 git config --global user.email ${GIT_AUTHOR_EMAIL:-mqube-bot@mqube.com}
-                jx3-openapi-generation test
+                /workspace/source/jx3-openapi-generation test
   podTemplate: {}
   serviceAccountName: tekton-bot
   timeout: 1h0m0s
