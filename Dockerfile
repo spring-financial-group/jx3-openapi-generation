@@ -12,14 +12,14 @@ RUN npm --version
 
 # Install Go
 RUN wget -c https://dl.google.com/go/go1.24.4.linux-amd64.tar.gz -O - | tar -xz -C /usr/local
-ENV GOPATH "/usr/local/go"
-ENV PATH "$PATH:$GOPATH/bin"
+ENV GOPATH="/usr/local/go"
+ENV PATH="$PATH:$GOPATH/bin"
 RUN go install github.com/vektra/mockery/v2@v2.52.2
 RUN go version
 
 # Install javascript dependencies
 RUN npm install -g \
-    @openapitools/openapi-generator-cli@2.23.1 \
+    @openapitools/openapi-generator-cli@2.31.0 \
     @angular/compiler-cli@13.3.1 \
     @angular/platform-server@13.3.1 \
     @angular/compiler@13.3.1 \
@@ -42,7 +42,7 @@ ENV PATH=$PATH:/opt/gradle/gradle-7.3.2/bin
 
 ## Copy CLI binary & add to PATH
 COPY ./build/linux /jx3-openapi-generation
-ENV PATH "$PATH:/jx3-openapi-generation"
+ENV PATH="$PATH:/jx3-openapi-generation"
 
 # Copy packaging templates
 COPY ./templates /templates
