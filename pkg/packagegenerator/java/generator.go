@@ -42,6 +42,11 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 func (g *Generator) setDynamicConfigVariables() {
 	g.Cfg.GeneratorCLI.Generators[domain.Java].AdditionalProperties["basePackage"] = g.getModelName()
 	g.Cfg.GeneratorCLI.Generators[domain.Java].AdditionalProperties["modelPackage"] = fmt.Sprintf("%s.models", g.getModelName())
+
+	if g.Cfg.GeneratorCLI.Generators[domain.Java].GlobalProperty == nil {
+		g.Cfg.GeneratorCLI.Generators[domain.Java].GlobalProperty = make(map[string]string)
+	}
+	g.Cfg.GeneratorCLI.Generators[domain.Java].GlobalProperty["supportingFiles"] = "AbstractOpenApiSchema.java:JSON.java:ApiException.java"
 }
 
 func (g *Generator) GetPackageName() string {
