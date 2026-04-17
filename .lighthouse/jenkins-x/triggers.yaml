@@ -27,6 +27,13 @@ spec:
     always_run: true
     optional: false
     source: "generate-test-packages.yaml"
+  - name: lint-pipelines
+    context: "lint-pipelines"
+    run_if_changed: '.lighthouse\/jenkins-x\/.*'
+    optional: false
+    trigger: (?m)^/test( all| lint-pipelines.*),?(s+|$)
+    rerun_command: /test lint-pipelines
+    source: "lint-pipelines.yaml"
   postsubmits:
   - name: release
     context: "release"
