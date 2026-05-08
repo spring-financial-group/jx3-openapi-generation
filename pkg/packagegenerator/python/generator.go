@@ -123,7 +123,7 @@ func (g *Generator) GenerateSchemasPackage(outputDir string) (string, error) {
 		return "", errors.Wrap(err, "failed to add package to Git")
 	}
 
-	err = g.Git.Commit(repoDir, fmt.Sprintf("chore(deps): upgrade %s package -> %s", g.GetPackageName(), g.Version))
+	err = g.Git.Commit(repoDir, fmt.Sprintf("feat(deps): upgrade %s package -> %s", g.GetPackageName(), g.Version))
 	if err != nil {
 		return "", errors.Wrap(err, "failed to commit package")
 	}
@@ -209,7 +209,7 @@ func (g *Generator) createPullRequest(currentBranch, defaultBranch string) error
 	pr, err := g.Scm.CreatePullRequest(
 		context.Background(),
 		&gh.NewPullRequest{
-			Title:               utils.NewPtr(fmt.Sprintf("chore(deps): upgrade %s package -> %s", g.GetPackageName(), g.Version)),
+			Title:               utils.NewPtr(fmt.Sprintf("feat(deps): upgrade %s package -> %s", g.GetPackageName(), g.Version)),
 			Head:                &currentBranch,
 			Base:                utils.NewPtr(strings.TrimPrefix(defaultBranch, "origin/")),
 			Body:                utils.NewPtr(fmt.Sprintf("Automated python schemas update for %s", g.GetPackageName())),
