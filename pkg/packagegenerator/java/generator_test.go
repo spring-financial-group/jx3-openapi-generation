@@ -115,6 +115,7 @@ func TestJavaGeneratorFixesIssues(t *testing.T) {
 		"test-user",
 		specFile,
 		"TestClient",
+		"TestService",
 		cfg,
 	)
 	require.NoError(t, err)

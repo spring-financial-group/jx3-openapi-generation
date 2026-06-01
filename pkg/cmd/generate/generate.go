@@ -30,6 +30,7 @@ type Options struct {
 	GitUser            string
 	GitToken           string
 	SkipPush           bool
+	ServerVariables    string
 
 	FileIO      domain.FileIO
 	PackageName string
@@ -41,6 +42,7 @@ const (
 	repoOwnerKey          = "REPO_OWNER"
 	repoNameKey           = "REPO_NAME"
 	swaggerServiceNameKey = "SwaggerServiceName"
+	serverVariables       = "ServerVariables"
 	specPathKey           = "SpecPath"
 	gitUserKey            = "GIT_USER"
 	gitTokenKey           = "GIT_TOKEN"
@@ -139,6 +141,7 @@ func (o *Options) getVariablesFromEnvironment() error {
 	if o.GitToken = os.Getenv(gitTokenKey); o.GitToken == "" {
 		missingVariables = append(missingVariables, gitTokenKey)
 	}
+	o.ServerVariables = os.Getenv(serverVariables)
 	// Check if SKIP_PUSH is set to "true"
 	if skipPush := os.Getenv(skipPushKey); skipPush == "true" {
 		o.SkipPush = true
