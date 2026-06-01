@@ -137,7 +137,7 @@ func (o *PackageOptions) InitialiseGenerators() error {
 			return errors.Wrapf(err, "failed to get config for language %s", language)
 		}
 
-		baseGenerator, err := packagegenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.GitUser, o.SpecPath, o.PackageName, config)
+		baseGenerator, err := packagegenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.GitUser, o.SpecPath, o.PackageName, o.ServerVariables, config)
 		if err != nil {
 			return errors.Wrapf(err, "failed to create base generator for %s", language)
 		}
