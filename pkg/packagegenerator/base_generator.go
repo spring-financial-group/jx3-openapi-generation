@@ -82,7 +82,7 @@ func (g *BaseGenerator) GeneratePackage(outputDir, language string) (string, err
 	args := []string{"@openapitools/openapi-generator-cli", "generate", "--generator-key", language, "--config", cfgPath}
 
 	if g.ServerVariables != "" {
-		args = append(args, "--server-variables"+g.ServerVariables)
+		args = append(args, "--server-variables="+g.ServerVariables)
 	}
 
 	// Generate Package
