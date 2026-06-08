@@ -1,6 +1,6 @@
 module github.com/spring-financial-group/jx3-openapi-generation
 
-go 1.24.5
+go 1.26.4
 
 require (
 	github.com/Masterminds/semver/v3 v3.4.0
@@ -11,7 +11,7 @@ require (
 	github.com/rs/zerolog v1.34.0
 	github.com/spf13/cobra v1.10.1
 	github.com/spring-financial-group/mqa-helpers v0.0.0-20210207153409-87ea55a7a2e1
-	github.com/spring-financial-group/mqube-go-common v0.23.0
+	github.com/spring-financial-group/mqube-go-common v0.25.0
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/oauth2 v0.34.0
 )
