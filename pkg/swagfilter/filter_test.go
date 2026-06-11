@@ -4,6 +4,7 @@ package swagfilter_test
 
 import (
 	"encoding/json"
+	"strings"
 	"testing"
 
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/swagfilter"
@@ -109,13 +110,7 @@ func TestStripTagFromSpec(t *testing.T) {
 
 			paths := doc["paths"].(map[string]interface{})
 			for key, wantTags := range tc.wantTags {
-				colonIdx := len(key) - 1
-				for i := len(key) - 1; i >= 0; i-- {
-					if key[i] == ':' {
-						colonIdx = i
-						break
-					}
-				}
+				colonIdx := strings.LastIndex(key, ":")
 				pathStr := key[:colonIdx]
 				method := key[colonIdx+1:]
 

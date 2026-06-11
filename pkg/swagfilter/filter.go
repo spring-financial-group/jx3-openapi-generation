@@ -25,7 +25,7 @@ func StripTagFromSpec(data []byte, tagToStrip string) ([]byte, error) {
 		return nil, fmt.Errorf("parse paths: %w", err)
 	}
 
-	for pathKey, pathItem := range paths {
+	for _, pathItem := range paths {
 		for _, method := range httpMethods {
 			opRaw, ok := pathItem[method]
 			if !ok {
@@ -33,6 +33,8 @@ func StripTagFromSpec(data []byte, tagToStrip string) ([]byte, error) {
 			}
 			var op map[string]json.RawMessage
 			if err := json.Unmarshal(opRaw, &op); err != nil {
+				// Skip malformed individual operations rather than failing the whole spec,
+				// as other operations may still be valid.
 				continue
 			}
 			tagsRaw, ok := op["tags"]
@@ -49,19 +51,25 @@ func StripTagFromSpec(data []byte, tagToStrip string) ([]byte, error) {
 					filtered = append(filtered, t)
 				}
 			}
-			if newTagsRaw, err := json.Marshal(filtered); err == nil {
-				op["tags"] = newTagsRaw
+			newTagsRaw, err := json.Marshal(filtered)
+			if err != nil {
+				return nil, err
 			}
-			if newOpRaw, err := json.Marshal(op); err == nil {
-				pathItem[method] = newOpRaw
+			op["tags"] = newTagsRaw
+
+			newOpRaw, err := json.Marshal(op)
+			if err != nil {
+				return nil, err
 			}
+			pathItem[method] = newOpRaw
 		}
-		paths[pathKey] = pathItem
 	}
 
-	if newPathsRaw, err := json.Marshal(paths); err == nil {
-		doc["paths"] = newPathsRaw
+	newPathsRaw, err := json.Marshal(paths)
+	if err != nil {
+		return nil, err
 	}
+	doc["paths"] = newPathsRaw
 
 	return json.MarshalIndent(doc, "", "  ")
 }
