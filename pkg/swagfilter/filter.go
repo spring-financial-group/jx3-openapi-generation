@@ -3,73 +3,41 @@ package swagfilter
 import (
 	"encoding/json"
 	"fmt"
-)
 
-var httpMethods = []string{"get", "post", "put", "delete", "patch", "head", "options"}
+	"github.com/go-openapi/spec"
+)
 
 // StripTagFromSpec removes all occurrences of tagToStrip from every operation's
 // tags array in the swagger JSON, leaving all other fields untouched.
 func StripTagFromSpec(data []byte, tagToStrip string) ([]byte, error) {
-	var doc map[string]json.RawMessage
-	if err := json.Unmarshal(data, &doc); err != nil {
+	var swagger spec.Swagger
+	if err := swagger.UnmarshalJSON(data); err != nil {
 		return nil, fmt.Errorf("parse swagger JSON: %w", err)
 	}
 
-	pathsRaw, ok := doc["paths"]
-	if !ok {
-		return json.MarshalIndent(doc, "", "  ")
-	}
-
-	var paths map[string]map[string]json.RawMessage
-	if err := json.Unmarshal(pathsRaw, &paths); err != nil {
-		return nil, fmt.Errorf("parse paths: %w", err)
-	}
-
-	for _, pathItem := range paths {
-		for _, method := range httpMethods {
-			opRaw, ok := pathItem[method]
-			if !ok {
-				continue
-			}
-			var op map[string]json.RawMessage
-			if err := json.Unmarshal(opRaw, &op); err != nil {
-				// Skip malformed individual operations rather than failing the whole spec,
-				// as other operations may still be valid.
-				continue
-			}
-			tagsRaw, ok := op["tags"]
-			if !ok {
-				continue
-			}
-			var tags []string
-			if err := json.Unmarshal(tagsRaw, &tags); err != nil {
-				continue
-			}
-			filtered := make([]string, 0, len(tags))
-			for _, t := range tags {
-				if t != tagToStrip {
-					filtered = append(filtered, t)
+	if swagger.Paths != nil {
+		for _, pathItem := range swagger.Paths.Paths {
+			for _, op := range pathItemOperations(pathItem) {
+				if op == nil {
+					continue
 				}
+				filtered := make([]string, 0, len(op.Tags))
+				for _, t := range op.Tags {
+					if t != tagToStrip {
+						filtered = append(filtered, t)
+					}
+				}
+				op.Tags = filtered
 			}
-			newTagsRaw, err := json.Marshal(filtered)
-			if err != nil {
-				return nil, err
-			}
-			op["tags"] = newTagsRaw
-
-			newOpRaw, err := json.Marshal(op)
-			if err != nil {
-				return nil, err
-			}
-			pathItem[method] = newOpRaw
 		}
 	}
 
-	newPathsRaw, err := json.Marshal(paths)
-	if err != nil {
-		return nil, err
-	}
-	doc["paths"] = newPathsRaw
+	return json.MarshalIndent(swagger, "", "  ")
+}
 
-	return json.MarshalIndent(doc, "", "  ")
+func pathItemOperations(item spec.PathItem) []*spec.Operation {
+	return []*spec.Operation{
+		item.Get, item.Post, item.Put, item.Delete,
+		item.Patch, item.Head, item.Options,
+	}
 }
