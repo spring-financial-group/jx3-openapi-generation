@@ -3,6 +3,7 @@ package swagfilter
 import (
 	"fmt"
 	"os"
+	"path/filepath"
 
 	"github.com/spf13/cobra"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/rootcmd"
@@ -62,10 +63,13 @@ func (o *Options) Run() error {
 	if output == "" {
 		output = o.Input
 	}
+	output = filepath.Clean(output)
 
-	data, err := os.ReadFile(o.Input)
+	input := filepath.Clean(o.Input)
+
+	data, err := os.ReadFile(input)
 	if err != nil {
-		return fmt.Errorf("error reading %s: %w", o.Input, err)
+		return fmt.Errorf("error reading %s: %w", input, err)
 	}
 
 	result, err := swagfiltercore.StripTagFromSpec(data, o.StripTag)
@@ -73,6 +77,7 @@ func (o *Options) Run() error {
 		return fmt.Errorf("error processing swagger: %w", err)
 	}
 
+	// #nosec G703 - output path is user-controlled via CLI flag, which is intentional for a CLI tool
 	if err := os.WriteFile(output, result, 0o600); err != nil {
 		return fmt.Errorf("error writing %s: %w", output, err)
 	}
