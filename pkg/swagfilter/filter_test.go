@@ -4,6 +4,7 @@ package swagfilter_test
 
 import (
 	"encoding/json"
+	"os"
 	"strings"
 	"testing"
 
@@ -177,4 +178,41 @@ func TestStripTagFromSpec_NoPathsField(t *testing.T) {
 	var doc map[string]interface{}
 	require.NoError(t, json.Unmarshal(result, &doc))
 	assert.Equal(t, "2.0", doc["swagger"])
+}
+
+func TestStripTagFromSpec_MaestroFixture(t *testing.T) {
+	data, err := os.ReadFile("testdata/maestro.json")
+	require.NoError(t, err)
+
+	result, err := swagfilter.StripTagFromSpec(data, "external")
+	require.NoError(t, err)
+
+	require.NoError(t, os.WriteFile("testdata/maestro_filtered.json", result, 0644))
+	t.Log("output written to testdata/maestro_filtered.json")
+
+	var doc map[string]interface{}
+	require.NoError(t, json.Unmarshal(result, &doc))
+
+	paths := doc["paths"].(map[string]interface{})
+	for pathStr, pathItemRaw := range paths {
+		for method, opRaw := range pathItemRaw.(map[string]interface{}) {
+			op, ok := opRaw.(map[string]interface{})
+			if !ok {
+				continue
+			}
+			if rawTags, ok := op["tags"].([]interface{}); ok {
+				for _, tag := range rawTags {
+					assert.NotEqual(t, "external", tag, "%s %s should not have 'external' tag", strings.ToUpper(method), pathStr)
+				}
+			}
+		}
+	}
+
+	announceOp := paths["/api/event_maestro/announce_event"].(map[string]interface{})["post"].(map[string]interface{})
+	rawTags := announceOp["tags"].([]interface{})
+	tags := make([]string, len(rawTags))
+	for i, tag := range rawTags {
+		tags[i] = tag.(string)
+	}
+	assert.Equal(t, []string{"Event Maestro"}, tags, "announce_event should retain 'Event Maestro' after stripping 'external'")
 }
