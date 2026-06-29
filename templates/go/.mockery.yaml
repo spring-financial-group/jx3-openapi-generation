@@ -1,0 +1,7 @@
+# Mockery v3 configuration
+# This file configures mock generation for Go client packages
+
+all: true
+template: "testify"
+formatter: "goimports"
+inpackage: true
