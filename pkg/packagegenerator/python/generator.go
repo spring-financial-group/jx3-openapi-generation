@@ -2,7 +2,6 @@ package python
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -112,13 +111,8 @@ func (g *Generator) GenerateSchemasPackage(outputDir string) (string, error) {
 		return "", err
 	}
 
-	packageJSONPath, err := g.updatePackagesJSON(repoDir)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to update packages.json")
-	}
-
 	readmePath := fmt.Sprintf("%s_README.md", g.GetPackageName())
-	err = g.Git.AddFiles(repoDir, packageJSONPath, g.GetPackageName(), readmePath)
+	err = g.Git.AddFiles(repoDir, g.GetPackageName(), readmePath)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to add package to Git")
 	}
@@ -133,43 +127,6 @@ func (g *Generator) GenerateSchemasPackage(outputDir string) (string, error) {
 
 func (g *Generator) setDynamicConfigVariables() {
 	g.Cfg.GeneratorCLI.Generators[domain.Python].AdditionalProperties["packageName"] = g.GetPackageName()
-}
-
-func (g *Generator) updatePackagesJSON(repoDir string) (string, error) {
-	packagesPath := filepath.Join(repoDir, "packages.json")
-	packages, err := g.getPackages(packagesPath)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to get packages")
-	}
-	newPackage := PackageInfo{
-		Directory: g.GetPackageName(),
-		Name:      g.RepoName,
-		Version:   g.Version,
-	}
-	packages[newPackage.Name] = newPackage
-	data, err := utils.MarshalJSON(packages)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to marshal packages")
-	}
-
-	err = g.FileIO.Write(filepath.Join(repoDir, "packages.json"), data, 0755)
-	if err != nil {
-		return "", errors.Wrap(err, "failed to write packages.json")
-	}
-	return packagesPath, nil
-}
-
-func (g *Generator) getPackages(packagesPath string) (map[string]PackageInfo, error) {
-	data, err := g.FileIO.Read(packagesPath)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to read packages.json")
-	}
-	var packages map[string]PackageInfo
-	err = json.Unmarshal(data, &packages)
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to unmarshal packages.json")
-	}
-	return packages, nil
 }
 
 type PackageInfo struct {
