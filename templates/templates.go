@@ -3,5 +3,5 @@ package templates
 
 import "embed"
 
-//go:embed angular csharp java javascript typescript
+//go:embed all:angular all:csharp all:java all:javascript all:typescript
 var FS embed.FS
