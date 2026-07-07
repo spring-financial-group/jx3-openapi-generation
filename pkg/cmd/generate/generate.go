@@ -137,6 +137,18 @@ func (o *Options) validateRequiredOptions() error {
 		required[versionKey] = o.Version
 		required[repoOwnerKey] = o.RepoOwner
 		required[repoNameKey] = o.RepoName
+	} else {
+		// If skipping push, we can provide default values to avoid requiring them since some generators still rely on
+		// these for naming conventions or other logic but that is not relevant when not pushing.
+		if o.RepoOwner == "" {
+			o.RepoOwner = "test-owner"
+		}
+		if o.RepoName == "" {
+			o.RepoName = "test-repo"
+		}
+		if o.Version == "" {
+			o.Version = "0.0.0"
+		}
 	}
 
 	for envKey, value := range required {
