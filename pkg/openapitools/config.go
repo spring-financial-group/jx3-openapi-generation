@@ -6,12 +6,12 @@ import (
 	"path/filepath"
 
 	"github.com/pkg/errors"
+	"github.com/spring-financial-group/jx3-openapi-generation/configs"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
 )
 
 const (
 	OpenAPIConfigFileName = "openapitools.json"
-	ConfigsDir            = "/configs"
 )
 
 type Config struct {
@@ -41,22 +41,14 @@ func GetConfigForLanguage(language string) (*Config, error) {
 	cfg := new(Config)
 	fileName := language + "-" + OpenAPIConfigFileName
 
-	// Try relative path first (for local development)
-	configPath := filepath.Join("configs", fileName)
-	err := cfg.readFromFile(configPath)
-	if err != nil {
-		// Fall back to absolute path (for containerized environments)
-		configPath = filepath.Join(ConfigsDir, fileName)
-		err = cfg.readFromFile(configPath)
-		if err != nil {
-			return nil, errors.Wrapf(err, "failed to read config from %s", configPath)
-		}
+	if err := cfg.readFromFile(fileName); err != nil {
+		return nil, errors.Wrapf(err, "failed to read config %s", fileName)
 	}
 	return cfg, nil
 }
 
 func (c *Config) readFromFile(path string) error {
-	data, err := os.ReadFile(path)
+	data, err := configs.FS.ReadFile(path)
 	if err != nil {
 		return errors.Wrap(err, "failed to read config file: "+path)
 	}

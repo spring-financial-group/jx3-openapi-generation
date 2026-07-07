@@ -2,6 +2,7 @@ package angular
 
 import (
 	"fmt"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
@@ -13,14 +14,14 @@ import (
 )
 
 const (
-	packagingFilesDir = "/templates/angular"
+	packagingFilesDir = "angular"
 )
 
 // Paths for use in generating angular packages
 var (
-	npmrcPath       = filepath.Join(packagingFilesDir, ".npmrc")
-	packageJSONPath = filepath.Join(packagingFilesDir, "package.json")
-	tsConfigPath    = filepath.Join(packagingFilesDir, "tsconfig.json")
+	npmrcPath       = path.Join(packagingFilesDir, ".npmrc")
+	packageJSONPath = path.Join(packagingFilesDir, "package.json")
+	tsConfigPath    = path.Join(packagingFilesDir, "tsconfig.json")
 )
 
 // Packages installed by the generator

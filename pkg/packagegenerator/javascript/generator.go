@@ -2,6 +2,7 @@ package javascript
 
 import (
 	"fmt"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
@@ -13,13 +14,13 @@ import (
 )
 
 const (
-	packagingFilesDir = "/templates/javascript"
+	packagingFilesDir = "javascript"
 )
 
 // Paths for use in generating angular packages
 var (
-	npmrcPath       = filepath.Join(packagingFilesDir, ".npmrc")
-	packageJSONPath = filepath.Join(packagingFilesDir, "package.json")
+	npmrcPath       = path.Join(packagingFilesDir, ".npmrc")
+	packageJSONPath = path.Join(packagingFilesDir, "package.json")
 )
 
 // Packages installed by the generator
