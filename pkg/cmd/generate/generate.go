@@ -126,8 +126,7 @@ func (o *Options) validateRequiredOptions() error {
 	var missingVariables []string
 
 	required := map[string]string{
-		swaggerServiceNameKey: o.SwaggerServiceName,
-		specPathKey:           o.SpecPath,
+		specPathKey: o.SpecPath,
 	}
 
 	// we only require git credentials and repo info if we're not skipping the push step
@@ -137,18 +136,11 @@ func (o *Options) validateRequiredOptions() error {
 		required[versionKey] = o.Version
 		required[repoOwnerKey] = o.RepoOwner
 		required[repoNameKey] = o.RepoName
+		required[swaggerServiceNameKey] = o.SwaggerServiceName
 	} else {
 		// If skipping push, we can provide default values to avoid requiring them since some generators still rely on
 		// these for naming conventions or other logic but that is not relevant when not pushing.
-		if o.RepoOwner == "" {
-			o.RepoOwner = "test-owner"
-		}
-		if o.RepoName == "" {
-			o.RepoName = "test-repo"
-		}
-		if o.Version == "" {
-			o.Version = "0.0.0"
-		}
+		o.populateNoPushDefaults()
 	}
 
 	for envKey, value := range required {
@@ -161,6 +153,23 @@ func (o *Options) validateRequiredOptions() error {
 		return &domain.EnvironmentVariableNotFoundError{VariableNames: missingVariables}
 	}
 	return nil
+}
+
+// populateNoPushDefaults sets default values for options that are required by some generators but not too relevant when
+// skipping the push step.
+func (o *Options) populateNoPushDefaults() {
+	if o.RepoOwner == "" {
+		o.RepoOwner = "test-owner"
+	}
+	if o.RepoName == "" {
+		o.RepoName = "test-repo"
+	}
+	if o.Version == "" {
+		o.Version = "0.0.0"
+	}
+	if o.SwaggerServiceName == "" {
+		o.SwaggerServiceName = "TestService"
+	}
 }
 
 func (o *Options) validateSpecificationLocation() error {
