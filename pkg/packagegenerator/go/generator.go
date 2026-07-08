@@ -105,7 +105,7 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 		return "", errors.Wrap(err, "failed to create package version file")
 	}
 
-	err = g.Git.AddFiles(repoDir, packageDir)
+	err = g.Git.AddFiles(repoDir, g.GetPackageName())
 	if err != nil {
 		return "", errors.Wrap(err, "failed to add files to Git")
 	}
