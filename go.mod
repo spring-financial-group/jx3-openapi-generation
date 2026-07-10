@@ -5,13 +5,14 @@ go 1.26.4
 require (
 	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/getkin/kin-openapi v0.133.0
+	github.com/go-openapi/spec v0.22.5
 	github.com/google/go-github/v47 v47.1.0
 	github.com/oapi-codegen/oapi-codegen/v2 v2.5.0
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.34.0
 	github.com/spf13/cobra v1.10.1
 	github.com/spring-financial-group/mqa-helpers v0.0.0-20210207153409-87ea55a7a2e1
-	github.com/spring-financial-group/mqube-go-common v0.26.0
+	github.com/spring-financial-group/mqube-go-common v0.27.0
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/oauth2 v0.34.0
 )
@@ -30,8 +31,6 @@ require (
 	github.com/gin-gonic/gin v1.11.0 // indirect
 	github.com/go-openapi/jsonpointer v0.23.1 // indirect
 	github.com/go-openapi/jsonreference v0.21.5 // indirect
-	github.com/go-openapi/spec v0.22.5 // indirect
-	github.com/go-openapi/swag v0.23.0 // indirect
 	github.com/go-openapi/swag/conv v0.26.0 // indirect
 	github.com/go-openapi/swag/jsonname v0.26.0 // indirect
 	github.com/go-openapi/swag/jsonutils v0.26.0 // indirect
