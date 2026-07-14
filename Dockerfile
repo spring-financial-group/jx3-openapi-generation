@@ -44,8 +44,3 @@ ENV PATH=$PATH:/opt/gradle/gradle-7.3.2/bin
 COPY ./build/linux /jx3-openapi-generation
 ENV PATH "$PATH:/jx3-openapi-generation"
 
-# Copy packaging templates
-COPY ./templates /templates
-
-# Copy individual language configuration files
-COPY ./configs /configs
