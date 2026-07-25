@@ -28,6 +28,8 @@ import (
 type PackageOptions struct {
 	*Options
 
+	OutputDir string
+
 	languageGenerators map[string]domain.PackageGenerator
 	CmdRunner          domain.CommandRunner
 }
@@ -78,16 +80,20 @@ func NewCmdGeneratePackages(opts *Options) *cobra.Command {
 		Aliases:    []string{"pkg", "pkgs", "packages", "package"},
 	}
 
+	cmd.Flags().StringVar(&o.OutputDir, "out", "", "Directory to generate packages into (defaults to a temp directory)")
+
 	return cmd
 }
 
 // Run implements this command
 func (o *PackageOptions) Run(languages []string) error {
-	tmpDir, err := o.SetupEnvironment()
+	tmpDir, isTemp, err := o.SetupEnvironment()
 	if err != nil {
 		return errors.Wrap(err, "failed to setup environment")
 	}
-	defer o.FileIO.DeferRemove(tmpDir)
+	if isTemp {
+		defer o.FileIO.DeferRemove(tmpDir)
+	}
 
 	for _, l := range languages {
 		log.Info().Msgf("%sGenerating %s client package%s", utils.Green, l, utils.Reset)
@@ -137,7 +143,7 @@ func (o *PackageOptions) InitialiseGenerators() error {
 			return errors.Wrapf(err, "failed to get config for language %s", language)
 		}
 
-		baseGenerator, err := packagegenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.GitUser, o.SpecPath, o.PackageName, config)
+		baseGenerator, err := packagegenerator.NewBaseGenerator(o.Version, o.SwaggerServiceName, o.RepoOwner, o.RepoName, o.GitToken, o.GitUser, o.SpecPath, o.PackageName, o.ServerVariables, config)
 		if err != nil {
 			return errors.Wrapf(err, "failed to create base generator for %s", language)
 		}
@@ -165,11 +171,21 @@ func (o *PackageOptions) InitialiseGenerators() error {
 	return nil
 }
 
-// SetupEnvironment creates the output directory and copies the required files into it
-func (o *PackageOptions) SetupEnvironment() (string, error) {
+// SetupEnvironment creates the output directory to generate packages into. If OutputDir is set,
+// that directory is created/used and left in place; otherwise a temp directory is created and the
+// returned bool indicates it should be cleaned up by the caller once generation is complete.
+func (o *PackageOptions) SetupEnvironment() (string, bool, error) {
+	if o.OutputDir != "" {
+		outputDir, err := o.FileIO.MkdirAll(o.OutputDir, 0700)
+		if err != nil {
+			return "", false, errors.Wrap(err, "failed to make output dir")
+		}
+		return outputDir, false, nil
+	}
+
 	tmpDir, err := o.FileIO.MkTmpDir("package-generator")
 	if err != nil {
-		return "", errors.Wrap(err, "failed to make tmp dir")
+		return "", false, errors.Wrap(err, "failed to make tmp dir")
 	}
-	return tmpDir, nil
+	return tmpDir, true, nil
 }

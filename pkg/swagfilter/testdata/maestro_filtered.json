@@ -1,0 +1,137 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "mini orchestration service for handling events",
+    "title": "Maestro Service API",
+    "contact": {},
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "4.7.8-dev+0fc1b97"
+  },
+  "paths": {
+    "/api/event_maestro/announce_event": {
+      "post": {
+        "description": "Announces an event for a case to maestro",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Event Maestro"
+        ],
+        "summary": "Announces an event for a case to maestro",
+        "operationId": "AnnounceEvent",
+        "parameters": [
+          {
+            "description": "Event to announce",
+            "name": "announceRequest",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AnnounceEventRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/AnnounceEventResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/Response"
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "AnnounceEventRequest": {
+      "type": "object",
+      "required": [
+        "name",
+        "producedBy"
+      ],
+      "properties": {
+        "actionedBy": {
+          "description": "Who actioned the event (userId if applicable - optional)",
+          "type": "string"
+        },
+        "annotations": {
+          "description": "Annotations associated with the event",
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "name": {
+          "description": "Name of the event to be announced",
+          "type": "string"
+        },
+        "producedBy": {
+          "description": "Which service produced the event",
+          "type": "string"
+        }
+      }
+    },
+    "AnnounceEventResponse": {
+      "type": "object",
+      "properties": {
+        "errorDescription": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "received": {
+          "type": "boolean"
+        },
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Response": {
+      "type": "object",
+      "properties": {
+        "errorDescription": {
+          "type": "string",
+          "x-nullable": true
+        },
+        "success": {
+          "type": "boolean"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "ApiKeyAuth": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

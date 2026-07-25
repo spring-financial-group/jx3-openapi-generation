@@ -3,7 +3,9 @@ package file
 import (
 	"fmt"
 	"io"
+	"io/fs"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 	"text/template"
@@ -12,6 +14,7 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/domain"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
+	"github.com/spring-financial-group/jx3-openapi-generation/templates"
 )
 
 type FileIO struct{}
@@ -145,7 +148,7 @@ func (f FileIO) TemplateFiles(dstDir string, obj any, filePaths ...string) error
 }
 
 func (f FileIO) TemplateFilesInDir(srcDir, dstDir string, obj any) error {
-	files, err := os.ReadDir(srcDir)
+	files, err := fs.ReadDir(templates.FS, srcDir)
 	if err != nil {
 		return errors.Wrap(err, "failed to read directory")
 	}
@@ -155,7 +158,7 @@ func (f FileIO) TemplateFilesInDir(srcDir, dstDir string, obj any) error {
 			continue
 		}
 
-		if err = f.templateFile(dstDir, obj, filepath.Join(srcDir, file.Name())); err != nil {
+		if err = f.templateFile(dstDir, obj, path.Join(srcDir, file.Name())); err != nil {
 			return err
 		}
 	}
@@ -163,8 +166,8 @@ func (f FileIO) TemplateFilesInDir(srcDir, dstDir string, obj any) error {
 }
 
 func (f FileIO) templateFile(dstDir string, obj any, filePath string) error {
-	name := filepath.Base(filePath)
-	tmpl, err := template.ParseFiles(filePath)
+	name := path.Base(filePath)
+	tmpl, err := template.ParseFS(templates.FS, filePath)
 	if err != nil {
 		return errors.Wrapf(err, "failed to create template for %s", name)
 	}

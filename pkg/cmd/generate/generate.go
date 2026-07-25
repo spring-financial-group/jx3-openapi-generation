@@ -30,6 +30,7 @@ type Options struct {
 	GitUser            string
 	GitToken           string
 	SkipPush           bool
+	ServerVariables    string
 
 	FileIO      domain.FileIO
 	PackageName string
@@ -41,6 +42,7 @@ const (
 	repoOwnerKey          = "REPO_OWNER"
 	repoNameKey           = "REPO_NAME"
 	swaggerServiceNameKey = "SwaggerServiceName"
+	serverVariables       = "ServerVariables"
 	specPathKey           = "SpecPath"
 	gitUserKey            = "GIT_USER"
 	gitTokenKey           = "GIT_TOKEN"
@@ -85,12 +87,22 @@ func NewCmdGenerate() *cobra.Command {
 		},
 		SuggestFor: []string{"genarate, genorate"},
 		Aliases:    []string{"gen"},
-		// Initialize environment variables at execution time, not creation time
-		// Use PersistentPreRunE so it runs before subcommands' PreRunE
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-			return o.initialise()
+			o.Cmd = cmd
+			return o.validateOptions()
 		},
 	}
+
+	cmd.PersistentFlags().StringVar(&o.Version, "version", os.Getenv(versionKey), fmt.Sprintf("Package version (env %s)", versionKey))
+	cmd.PersistentFlags().StringVar(&o.RepoOwner, "repo-owner", os.Getenv(repoOwnerKey), fmt.Sprintf("Repository owner (env %s)", repoOwnerKey))
+	cmd.PersistentFlags().StringVar(&o.RepoName, "repo-name", os.Getenv(repoNameKey), fmt.Sprintf("Repository name (env %s)", repoNameKey))
+	cmd.PersistentFlags().StringVar(&o.SwaggerServiceName, "swagger-service-name", os.Getenv(swaggerServiceNameKey), fmt.Sprintf("Service name for package generation (env %s)", swaggerServiceNameKey))
+	cmd.PersistentFlags().StringVar(&o.ServerVariables, "server-variables", os.Getenv(serverVariables), fmt.Sprintf("Server variables (env %s)", serverVariables))
+	cmd.PersistentFlags().StringVar(&o.SpecPath, "spec-path", os.Getenv(specPathKey), fmt.Sprintf("Path to OpenAPI spec file (env %s)", specPathKey))
+	cmd.PersistentFlags().StringVar(&o.GitUser, "git-user", os.Getenv(gitUserKey), fmt.Sprintf("Git username (env %s)", gitUserKey))
+	cmd.PersistentFlags().StringVar(&o.GitToken, "git-token", os.Getenv(gitTokenKey), fmt.Sprintf("Git authentication token (env %s)", gitTokenKey))
+	cmd.PersistentFlags().StringVar(&o.PackageName, "package-name", utils.FirstNonEmpty(os.Getenv(packageNameKey), "Client"), fmt.Sprintf("Package name (env %s, defaults to \"Client\")", packageNameKey))
+	cmd.PersistentFlags().BoolVar(&o.SkipPush, "skip-push", os.Getenv(skipPushKey) == "true", fmt.Sprintf("Skip pushing generated packages (env %s)", skipPushKey))
 
 	cmd.AddCommand(NewCmdGeneratePackages(o))
 	return cmd
@@ -101,52 +113,63 @@ func (o *Options) Run() error {
 	return o.Cmd.Help()
 }
 
-func (o *Options) initialise() error {
-	err := o.getVariablesFromEnvironment()
-	if err != nil {
+func (o *Options) validateOptions() error {
+	if err := o.validateRequiredOptions(); err != nil {
 		return err
 	}
-	err = o.validateSpecificationLocation()
-	if err != nil {
-		return err
-	}
-	return nil
+	return o.validateSpecificationLocation()
 }
 
-func (o *Options) getVariablesFromEnvironment() error {
+// validateRequiredOptions checks that options backed by a required flag/env var have been
+// resolved to a non-empty value, whether set via CLI flag or the flag's env-derived default.
+func (o *Options) validateRequiredOptions() error {
 	var missingVariables []string
-	if o.Version = os.Getenv(versionKey); o.Version == "" {
-		missingVariables = append(missingVariables, versionKey)
+
+	required := map[string]string{
+		specPathKey: o.SpecPath,
 	}
-	if o.RepoOwner = os.Getenv(repoOwnerKey); o.RepoOwner == "" {
-		missingVariables = append(missingVariables, repoOwnerKey)
+
+	// we only require git credentials and repo info if we're not skipping the push step
+	if !o.SkipPush {
+		required[gitUserKey] = o.GitUser
+		required[gitTokenKey] = o.GitToken
+		required[versionKey] = o.Version
+		required[repoOwnerKey] = o.RepoOwner
+		required[repoNameKey] = o.RepoName
+		required[swaggerServiceNameKey] = o.SwaggerServiceName
+	} else {
+		// If skipping push, we can provide default values to avoid requiring them since some generators still rely on
+		// these for naming conventions or other logic but that is not relevant when not pushing.
+		o.populateNoPushDefaults()
 	}
-	if o.RepoName = os.Getenv(repoNameKey); o.RepoName == "" {
-		missingVariables = append(missingVariables, repoNameKey)
+
+	for envKey, value := range required {
+		if value == "" {
+			missingVariables = append(missingVariables, envKey)
+		}
 	}
-	if o.SwaggerServiceName = os.Getenv(swaggerServiceNameKey); o.SwaggerServiceName == "" {
-		missingVariables = append(missingVariables, swaggerServiceNameKey)
-	}
-	if o.PackageName = os.Getenv(packageNameKey); o.PackageName == "" {
-		o.PackageName = "Client"
-	}
-	if o.SpecPath = os.Getenv(specPathKey); o.SpecPath == "" {
-		missingVariables = append(missingVariables, specPathKey)
-	}
-	if o.GitUser = os.Getenv(gitUserKey); o.GitUser == "" {
-		missingVariables = append(missingVariables, gitUserKey)
-	}
-	if o.GitToken = os.Getenv(gitTokenKey); o.GitToken == "" {
-		missingVariables = append(missingVariables, gitTokenKey)
-	}
-	// Check if SKIP_PUSH is set to "true"
-	if skipPush := os.Getenv(skipPushKey); skipPush == "true" {
-		o.SkipPush = true
-	}
+
 	if len(missingVariables) > 0 {
 		return &domain.EnvironmentVariableNotFoundError{VariableNames: missingVariables}
 	}
 	return nil
+}
+
+// populateNoPushDefaults sets default values for options that are required by some generators but not too relevant when
+// skipping the push step.
+func (o *Options) populateNoPushDefaults() {
+	if o.RepoOwner == "" {
+		o.RepoOwner = "test-owner"
+	}
+	if o.RepoName == "" {
+		o.RepoName = "test-repo"
+	}
+	if o.Version == "" {
+		o.Version = "0.0.0"
+	}
+	if o.SwaggerServiceName == "" {
+		o.SwaggerServiceName = "TestService"
+	}
 }
 
 func (o *Options) validateSpecificationLocation() error {

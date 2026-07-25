@@ -2,6 +2,7 @@ package angular
 
 import (
 	"fmt"
+	"path"
 	"path/filepath"
 	"strings"
 	"time"
@@ -13,14 +14,14 @@ import (
 )
 
 const (
-	packagingFilesDir = "/templates/angular"
+	packagingFilesDir = "angular"
 )
 
 // Paths for use in generating angular packages
 var (
-	npmrcPath       = filepath.Join(packagingFilesDir, ".npmrc")
-	packageJSONPath = filepath.Join(packagingFilesDir, "package.json")
-	tsConfigPath    = filepath.Join(packagingFilesDir, "tsconfig.json")
+	npmrcPath       = path.Join(packagingFilesDir, ".npmrc")
+	packageJSONPath = path.Join(packagingFilesDir, "package.json")
+	tsConfigPath    = path.Join(packagingFilesDir, "tsconfig.json")
 )
 
 // Packages installed by the generator
@@ -85,7 +86,15 @@ func (g *Generator) GetPackageName() string {
 }
 
 func (g *Generator) PushPackage(packageDir string) error {
-	out, err := g.Cmd.Execute(packageDir, "npm", "publish")
+	// Determine npm publish args - prerelease versions need a tag
+	var out string
+	var err error
+	if strings.Contains(g.Version, "-") {
+		// This is a prerelease version (e.g., contains -SNAPSHOT, -PR-, -alpha, etc.)
+		out, err = g.Cmd.Execute(packageDir, "npm", "publish", "--tag", "preview")
+	} else {
+		out, err = g.Cmd.Execute(packageDir, "npm", "publish")
+	}
 	log.Info().Msg(out)
 	if err != nil {
 		// NPM returns the error message on STDOUT, so we need to check there for the error

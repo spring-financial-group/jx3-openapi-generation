@@ -2,7 +2,7 @@ FROM ghcr.io/astral-sh/uv:python3.10-bookworm
 
 RUN apt-get update
 
-ENV NODE_VERSION=22.21.0
+ENV NODE_VERSION=24.13.0
 
 # Install NodeJS
 RUN wget -qO- https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz | tar -xJ -C /usr/local --strip-components=1
@@ -18,9 +18,12 @@ RUN go install github.com/vektra/mockery/v3@v3.6.1
 RUN go version
 
 # Install javascript dependencies
-RUN npm install -g @openapitools/openapi-generator-cli@2.23.1
-RUN npm install -g @angular/compiler-cli@13.3.1 @angular/platform-server@13.3.1 @angular/compiler@13.3.1
-RUN npm install -g typescript@4.6.3
+RUN npm install -g \
+    @openapitools/openapi-generator-cli@2.23.1 \
+    @angular/compiler-cli@13.3.1 \
+    @angular/platform-server@13.3.1 \
+    @angular/compiler@13.3.1 \
+    typescript@4.6.3
 
 # Install dotnet dependencies
 RUN wget https://packages.microsoft.com/config/ubuntu/21.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb \
@@ -41,8 +44,3 @@ ENV PATH=$PATH:/opt/gradle/gradle-7.3.2/bin
 COPY ./build/linux /jx3-openapi-generation
 ENV PATH "$PATH:/jx3-openapi-generation"
 
-# Copy packaging templates
-COPY ./templates /templates
-
-# Copy individual language configuration files
-COPY ./configs /configs

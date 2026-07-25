@@ -9,33 +9,35 @@ import (
 )
 
 type BaseGenerator struct {
-	Version     string
-	ServiceName string
-	RepoOwner   string
-	RepoName    string
-	GitToken    string
-	GitUser     string
-	SpecPath    string
-	PackageName string
+	Version         string
+	ServiceName     string
+	RepoOwner       string
+	RepoName        string
+	GitToken        string
+	GitUser         string
+	SpecPath        string
+	PackageName     string
+	ServerVariables string
 
 	Cfg    *openapitools.Config
 	Cmd    domain.CommandRunner
 	FileIO domain.FileIO
 }
 
-func NewBaseGenerator(version, serviceName, repoOwner, repoName, gitToken, gitUser, specPath string, packageName string, cfg *openapitools.Config) (*BaseGenerator, error) {
+func NewBaseGenerator(version, serviceName, repoOwner, repoName, gitToken, gitUser, specPath, packageName, serverVariables string, cfg *openapitools.Config) (*BaseGenerator, error) {
 	gen := &BaseGenerator{
-		Version:     version,
-		ServiceName: serviceName,
-		RepoOwner:   repoOwner,
-		RepoName:    repoName,
-		GitUser:     gitUser,
-		GitToken:    gitToken,
-		SpecPath:    specPath,
-		PackageName: packageName,
-		Cmd:         commandrunner.NewCommandRunner(),
-		FileIO:      file.NewFileIO(),
-		Cfg:         cfg,
+		Version:         version,
+		ServiceName:     serviceName,
+		RepoOwner:       repoOwner,
+		RepoName:        repoName,
+		GitUser:         gitUser,
+		GitToken:        gitToken,
+		SpecPath:        specPath,
+		PackageName:     packageName,
+		ServerVariables: serverVariables,
+		Cmd:             commandrunner.NewCommandRunner(),
+		FileIO:          file.NewFileIO(),
+		Cfg:             cfg,
 	}
 
 	// Set dynamic config variables
@@ -78,7 +80,15 @@ func (g *BaseGenerator) GeneratePackage(outputDir, language string) (string, err
 	defer g.FileIO.DeferRemove(cfgPath)
 
 	// Generate Package
-	err = g.Cmd.ExecuteAndLog("", "npx", "@openapitools/openapi-generator-cli", "generate", "--generator-key", language, "--config", cfgPath)
+
+	args := []string{"@openapitools/openapi-generator-cli", "generate", "--generator-key", language, "--config", cfgPath}
+
+	if g.ServerVariables != "" {
+		args = append(args, "--server-variables="+g.ServerVariables)
+	}
+
+	// Generate Package
+	err = g.Cmd.ExecuteAndLog("", "npx", args...)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to generate package")
 	}
