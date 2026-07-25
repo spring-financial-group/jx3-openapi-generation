@@ -78,6 +78,9 @@ spec:
         - image: jx3mqubebuild.azurecr.io/spring-financial-group/jx3-openapi-generation:$(tasks.build.results.image-tag)
           name: test-package-generation
           resources: {}
+          env:
+          - name: SwaggerServiceName
+            value: OpenAPIPkgGenerationMock
           script: |
             #!/bin/bash
             git config --global user.name ${GIT_AUTHOR_NAME:-mqube-bot}
