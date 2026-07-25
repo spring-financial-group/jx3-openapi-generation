@@ -1,7 +1,12 @@
 # Mockery v3 configuration
 # This file configures mock generation for Go client packages
 
-all: true
 template: "testify"
 formatter: "goimports"
-inpackage: true
+packages:
+  __MODULE_NAME__:
+    config:
+      all: true
+      inpackage: true
+      include-auto-generated: true
+      filename: "{{.InterfaceName | snakecase}}_mock.go"
