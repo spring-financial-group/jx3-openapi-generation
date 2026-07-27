@@ -243,8 +243,8 @@ func (o *Options) getLanguages() []string {
 		return o.Languages
 	}
 
-	// Default to all supported languages except go (which requires git operations)
-	return []string{"angular", "csharp", "java", "typescript", "python", "rust"}
+	// Default to all supported languages
+	return []string{"angular", "csharp", "java", "typescript", "python", "rust", "go"}
 }
 
 func (o *Options) ensureSwaggerSpec() (string, error) {

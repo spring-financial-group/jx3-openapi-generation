@@ -22,11 +22,6 @@ spec:
     run_if_changed: ^.*\.(go|mod)$
     optional: false
     source: "tests.yaml"
-  - name: generate-test-packages
-    context: "generate-test-packages"
-    always_run: true
-    optional: false
-    source: "generate-test-packages.yaml"
   - name: lint-pipelines
     context: "lint-pipelines"
     run_if_changed: '.lighthouse\/jenkins-x\/.*'

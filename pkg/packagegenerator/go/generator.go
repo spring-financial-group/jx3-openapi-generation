@@ -23,18 +23,26 @@ import (
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/packagegenerator"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/scmClient/github"
 	"github.com/spring-financial-group/jx3-openapi-generation/pkg/utils"
+	"github.com/spring-financial-group/jx3-openapi-generation/templates"
 )
 
 const (
-	PushRepositoryURL  = "https://github.com/spring-financial-group/mqube-go-packages.git"
-	PushRepositoryName = "mqube-go-packages"
-	updateBotLabel     = "updatebot"
+	PushRepositoryURL            = "https://github.com/spring-financial-group/mqube-go-packages.git"
+	PushRepositoryName           = "mqube-go-packages"
+	updateBotLabel               = "updatebot"
+	packagingFilesDir            = "go"
+	mockeryModuleNamePlaceholder = "__MODULE_NAME__"
+)
+
+var (
+	mockeryConfigPath = filepath.Join(packagingFilesDir, ".mockery.yaml")
 )
 
 type Generator struct {
 	*packagegenerator.BaseGenerator
-	Git domain.Gitter
-	Scm domain.ScmClient
+	Git        domain.Gitter
+	Scm        domain.ScmClient
+	ModuleName string
 }
 
 func NewGenerator(baseGenerator *packagegenerator.BaseGenerator) *Generator {
@@ -86,6 +94,12 @@ func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 	err = g.goModTidy(packageDir)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to run go mod tidy")
+	}
+
+	// Copy mockery configuration to package directory before generating mocks
+	err = g.copyMockeryConfig(packageDir)
+	if err != nil {
+		return "", errors.Wrap(err, "failed to copy mockery configuration")
 	}
 
 	err = g.generateMocks(packageDir)
@@ -143,8 +157,8 @@ func (g *Generator) goModInit(dir string) error {
 		return errors.Wrap(err, "failed to get major version string")
 	}
 
-	newModuleName := fmt.Sprintf("github.com/spring-financial-group/%s/%s%s", PushRepositoryName, g.GetPackageName(), versionString)
-	return g.Cmd.ExecuteAndLog(dir, "go", "mod", "init", newModuleName)
+	g.ModuleName = fmt.Sprintf("github.com/spring-financial-group/%s/%s%s", PushRepositoryName, g.GetPackageName(), versionString)
+	return g.Cmd.ExecuteAndLog(dir, "go", "mod", "init", g.ModuleName)
 }
 
 func (g *Generator) goModTidy(dir string) error {
@@ -273,8 +287,22 @@ func (g *Generator) generateCode() (string, error) {
 }
 
 func (g *Generator) generateMocks(dir string) error {
-	err := g.Cmd.ExecuteAndLog(dir, "mockery", "--all", "--inpackage-suffix", "--inpackage", "--case", "snake")
+	// mockery v3 reads configuration from .mockery.yaml in the working directory
+	err := g.Cmd.ExecuteAndLog(dir, "mockery")
 	return err
+}
+
+func (g *Generator) copyMockeryConfig(packageDir string) error {
+	config, err := templates.FS.ReadFile(mockeryConfigPath)
+	if err != nil {
+		return errors.Wrap(err, "failed to read mockery config template")
+	}
+
+	// NOTE: we do this rather than templating because mockery does its own templating and there are conflicts
+	config = bytes.ReplaceAll(config, []byte(mockeryModuleNamePlaceholder), []byte(g.ModuleName))
+
+	dst := filepath.Join(packageDir, filepath.Base(mockeryConfigPath))
+	return g.FileIO.Write(dst, config, 0600)
 }
 
 func (g *Generator) convertSwaggerV2toV3(data []byte) ([]byte, error) {
