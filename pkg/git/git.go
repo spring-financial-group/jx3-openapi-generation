@@ -28,7 +28,7 @@ func (c *Client) Clone(dir, repositoryURL string) (string, error) {
 		return "", errors.Wrap(err, "failed to parse repository URL")
 	}
 
-	out, err := c.git(dir, "clone", repositoryURL)
+	out, err := c.git(dir, "clone", "--depth", "1", repositoryURL)
 	c.log(out)
 	return filepath.Join(dir, strings.TrimSuffix(filepath.Base(url.Path), ".git")), err
 }
