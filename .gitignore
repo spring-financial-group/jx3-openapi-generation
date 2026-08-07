@@ -2,4 +2,4 @@
 /build.sh
 /build
 *.env
-/tmp
+/tmp-pkg
