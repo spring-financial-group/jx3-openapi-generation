@@ -119,45 +119,22 @@ status: {}
 
 ## Running Locally
 
-To run the package locally you will need to do few prep steps before you can run the generation.
+To generate packages locally you only need an OpenAPI specification file for the service you wish to generate packages for — no environment variables, credential setup, or repository cloning is required.
 
-Open the service you wish to generate the packages for and ensure you have an OpenAPI specification file.
-
-Then set the required environment variables in your shell (or use an `.envrc` file with [direnv](https://direnv.net/) in the target repo folder).
-
-The following environment variables are required:
-
-```
-VERSION="1.0.0"
-REPO_OWNER="spring-financial-group"
-REPO_NAME="mqube-something-service"
-SwaggerServiceName="SomethingService"
-SpecPath="./docs/openapi.json"
-GIT_USER="your-git-username"
-GIT_TOKEN="your-git-token"
-```
-
-Then copy the `configs` directory from this repository to the root of the service repository.
-
-Next, open the `pkg/openapitools/config.go` and change the `ConfigsDir` to `"./configs"`.
-Since you want to run it locally you most likely want to view the generated packages, to do that you will need to comment out a line in `pkg/cmd/generate/generate_packages.go` that removes the temporary directory after generation look for `defer o.FileIO.DeferRemove(tmpDir)` in the `Run()` function.
-
-Each language generator has its own push logic, which will use your credentials to create a commit and push the generated package to the relevant repository. You want to ensure you have that code commented out before running the package generation locally, otherwise you will end up pushing - possibly - incompatible packages to the repositories.
-
-FINALLY. You are now ready to build the CLI. Run the following command to build the CLI in this repository folder:
+First, build the CLI from this repository:
 
 ```bash
 make build
 ```
 
-This will create the `jx3-openapi-generation` binary in the `build` directory.
+This creates the `jx3-openapi-generation` binary in the `build` directory.
 
-Copy the `jx3-openapi-generation` to the root folder of the target repository.
-
-Then run the following command to generate the packages:
+Then generate packages for the languages you want, skipping the push step and writing the output to a local directory:
 
 ```bash
-./jx3-openapi-generation generate pkg python
+./build/jx3-openapi-generation generate packages [generators] --skip-push --spec-path=path/to/openapi.json --out=./tmp-pkg
 ```
 
-You may need to run `chmod +x ./jx3-openapi-generation` to make the binary executable first.
+where `[generators]` is a space-separated list of languages to generate packages for (e.g. `csharp java go`). The generated packages are written into the relative `./tmp-pkg` directory, grouped by language.
+
+With `--skip-push` set, only `--spec-path` is required — no Git credentials or repository environment variables are needed, and nothing is pushed to any remote. The configs are bundled with the CLI, so there is no need to copy a `configs` directory or edit any source files.

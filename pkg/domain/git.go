@@ -15,7 +15,7 @@ type ScmClient interface {
 }
 
 type Gitter interface {
-	// Clone clones a repo to the local env given the repo url and the directory to clone to
+	// Clone shallow-clones a repo (--depth 1) to the local env given the repo url and the directory to clone to
 	Clone(dir, repositoryURL string) (string, error)
 	// GetCurrentBranch gets the current branch name from the local env
 	GetCurrentBranch(dir string) (string, error)
