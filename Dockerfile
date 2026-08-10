@@ -1,8 +1,9 @@
 FROM ghcr.io/astral-sh/uv:python3.10-bookworm
 
-RUN apt-get update
+ARG GO_VERSION=1.26.5
+ARG NODE_VERSION=24.13.0
 
-ENV NODE_VERSION=24.13.0
+RUN apt-get update
 
 # Install NodeJS
 RUN wget -qO- https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.xz | tar -xJ -C /usr/local --strip-components=1
@@ -11,7 +12,7 @@ RUN node --version
 RUN npm --version
 
 # Install Go
-RUN wget -c https://dl.google.com/go/go1.24.4.linux-amd64.tar.gz -O - | tar -xz -C /usr/local
+RUN wget -c https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz -O - | tar -xz -C /usr/local
 ENV GOPATH "/usr/local/go"
 ENV PATH "$PATH:$GOPATH/bin"
 RUN go install github.com/vektra/mockery/v3@v3.7.2
