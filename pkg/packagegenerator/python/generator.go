@@ -26,10 +26,6 @@ const (
 	uvIndexName = "pyx"
 )
 
-var (
-	reviewers = []string{"Reton2"}
-)
-
 type Generator struct {
 	*packagegenerator.BaseGenerator
 	Git domain.Gitter
@@ -178,10 +174,6 @@ func (g *Generator) createPullRequest(currentBranch, defaultBranch string) error
 	}
 
 	// Add Reviewers & auto-merge labels
-	_, err = g.Scm.RequestReviewers(context.Background(), reviewers, pr.GetNumber())
-	if err != nil {
-		return errors.Wrap(err, "failed to add reviewers to pull request")
-	}
 	_, err = g.Scm.AddLabels(context.Background(), []string{updateBotLabel}, pr.GetNumber())
 	if err != nil {
 		return errors.Wrap(err, "failed to add labels pull request")
