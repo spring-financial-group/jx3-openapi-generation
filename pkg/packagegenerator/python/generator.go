@@ -22,8 +22,6 @@ const (
 	PipelineSchemasName = "mqube-ml-doc-pipeline-schemas"
 
 	updateBotLabel = "updatebot"
-
-	uvIndexName = "pyx"
 )
 
 type Generator struct {
@@ -45,49 +43,11 @@ func NewGenerator(baseGenerator *packagegenerator.BaseGenerator) *Generator {
 func (g *Generator) GeneratePackage(outputDir string) (string, error) {
 	g.setDynamicConfigVariables()
 
-	// For now we ignore the packageDir since this is purely for POC
-	// err := g.GeneratePyxPackage(outputDir)
-	// if err != nil {
-	// 	return "", err
-	// }
-
 	packageDir, err := g.GenerateSchemasPackage(outputDir)
 	if err != nil {
 		return "", err
 	}
 	return packageDir, nil
-}
-
-func (g *Generator) GeneratePyxPackage(outputDir string) error {
-	pyxDir, err := g.FileIO.MkdirAll(filepath.Join(outputDir, g.GetPackageName()), 0700)
-	if err != nil {
-		return errors.Wrap(err, "failed to create package directory")
-	}
-
-	packageDir, err := g.BaseGenerator.GeneratePackage(pyxDir, domain.Python)
-	if err != nil {
-		return err
-	}
-
-	err = g.Uvc.GeneratePyProjectFile(pyxDir, g.GetPackageName(), g.Version)
-	if err != nil {
-		return errors.Wrap(err, "failed to create pyproject.toml file")
-	}
-
-	err = g.Uvc.BuildProject(packageDir)
-	if err != nil {
-		return errors.Wrap(err, "failed to build UV project")
-	}
-
-	// Because this is running in parallel with schemas repo, for now the publish step will have to live in here
-	// When we move to pyx we can move this to the publish step of the pipeline
-	err = g.Uvc.PublishProject(packageDir, uvIndexName)
-	if err != nil {
-		return errors.Wrap(err, "failed to publish UV project")
-	}
-	log.Info().Msgf("Published UV project from %s to index %s", packageDir, uvIndexName)
-
-	return nil
 }
 
 func (g *Generator) GenerateSchemasPackage(outputDir string) (string, error) {
@@ -100,6 +60,12 @@ func (g *Generator) GenerateSchemasPackage(outputDir string) (string, error) {
 	err = g.Git.CheckoutBranch(repoDir, branchName)
 	if err != nil {
 		return "", errors.Wrap(err, "failed to checkout branch")
+	}
+
+	// Start from a clean slate so that files removed from the spec don't linger from the previous generation
+	err = g.createFreshDir(filepath.Join(repoDir, g.GetPackageName()))
+	if err != nil {
+		return "", errors.Wrap(err, "failed to create fresh package directory")
 	}
 
 	packageDir, err := g.BaseGenerator.GeneratePackage(repoDir, domain.Python)
@@ -119,6 +85,26 @@ func (g *Generator) GenerateSchemasPackage(outputDir string) (string, error) {
 	}
 
 	return packageDir, nil
+}
+
+func (g *Generator) createFreshDir(packageDir string) error {
+	exists, err := g.FileIO.Exists(packageDir)
+	if err != nil {
+		return errors.Wrapf(err, "failed to check if directory exists: %s", packageDir)
+	}
+	if exists {
+		if err := g.FileIO.Remove(packageDir); err != nil {
+			return errors.Wrapf(err, "failed to remove existing directory: %s", packageDir)
+		}
+		log.Info().Msgf("Removed existing directory: %s", packageDir)
+	}
+
+	if _, err := g.FileIO.MkdirAll(packageDir, 0750); err != nil {
+		return errors.Wrapf(err, "failed to create directory: %s", packageDir)
+	}
+	log.Info().Msgf("Created directory: %s", packageDir)
+
+	return nil
 }
 
 func (g *Generator) setDynamicConfigVariables() {
