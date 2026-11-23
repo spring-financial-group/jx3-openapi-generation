@@ -1,5 +1,5 @@
 {
-  "name": "@spring-financial-group/{{ .GetPackageName }}",
+  "name": "@{{ .RepoOwner }}/{{ .GetPackageName }}",
   "version": "{{ .Version }}",
   "description": "Dynamically generated {{ .RepoName }} API Library for Angular",
   "main": "index.js",
@@ -7,11 +7,11 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
-    "node": ">=24.13.0 <25",
-    "npm": ">=11.6.2 <12"
+    "node": ">=24.13.0",
+    "npm": ">=11.6.2"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",  
-  "repository": "git://github.com/spring-financial-group/{{ .RepoName }}.git"
+  "repository": "git://github.com/{{ .RepoOwner }}/{{ .RepoName }}.git"
 }
